@@ -1,6 +1,6 @@
 import { LoggerType } from './logger.type';
 
-export interface ILoggerService {
+export interface LoggerServiceInterface {
   debug(loggerDebug: LoggerType): void;
   log(loggerLog: LoggerType): void;
   error(loggerError: LoggerType): void;
