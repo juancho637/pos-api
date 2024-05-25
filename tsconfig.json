@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "paths": {
+      // Common
+      "@common/helpers/*": ["./src/common/helpers/*"],
+      "@common/adapters/configuration/*": ["./src/common/adapters/configuration/*"],
+      "@common/adapters/database/*": ["./src/common/adapters/database/*"],
+      "@common/adapters/logger/*": ["./src/common/adapters/logger/*"],
+      "@common/adapters/exception/*": ["./src/common/adapters/exception/*"],
+      "@common/adapters/hash/*": ["./src/common/adapters/hash/*"],
+
+      // Modules
+      "@modules/users/*": ["./src/modules/users/*"],
+      "@modules/auth/*": ["./src/modules/auth/*"],
+      "@modules/categories/*": ["./src/modules/categories/*"],
+
+      // Tests
+      "@test/mocks": ["./test/mocks"],
+      "@test/utils": ["./test/utils"]
+    }
+  }
+}

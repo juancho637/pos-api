@@ -1,0 +1,33 @@
+version: '3'
+services:
+  pg:
+    container_name: pg
+    restart: unless-stopped
+    env_file: .env
+    image: 'postgres:13'
+    ports:
+      - '${DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - 'pgsql:/var/lib/postgresql/data'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'pg_isready',
+          '-q',
+          '-d',
+          '${DB_DATABASE}',
+          '-U',
+          '${DB_USERNAME}',
+        ]
+      retries: 3
+      timeout: 5s
+
+volumes:
+  pgsql:
+    driver: local
