@@ -9,7 +9,7 @@ import { CreateUserType } from './create-user.type';
 import { UpdateUserType } from './update-user.type';
 import { UserFilterType } from './user-filter.type';
 
-export interface IUserRepository<Entity extends UserType = UserType> {
+export interface UserRepositoryInterface<Entity extends UserType = UserType> {
   findOneBy(fields: UserFilterType): Promise<Entity>;
   findAll(
     pagination: PaginationType,

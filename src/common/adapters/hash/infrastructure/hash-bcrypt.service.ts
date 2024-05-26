@@ -1,11 +1,13 @@
-import { hash, compare } from 'bcrypt';
+import { Injectable } from '@nestjs/common';
+import { hash, compare, genSalt } from 'bcrypt';
 import { HashServiceInterface } from '../domain';
 
+@Injectable()
 export class HashBcryptService implements HashServiceInterface {
-  rounds: number = 10;
-
   async hash(hashString: string): Promise<string> {
-    return await hash(hashString, this.rounds);
+    const salt = await genSalt();
+
+    return await hash(hashString, salt);
   }
 
   async compare(password: string, hashPassword: string): Promise<boolean> {

@@ -13,13 +13,13 @@ export class CreateUsersTable1715004781671 implements MigrationInterface {
             isGenerated: true,
           },
           {
-            name: 'full_name',
+            name: 'name',
             type: 'varchar',
-            length: '50',
+            length: '100',
             isNullable: false,
           },
           {
-            name: 'nick_name',
+            name: 'username',
             type: 'varchar',
             length: '50',
             isNullable: false,
