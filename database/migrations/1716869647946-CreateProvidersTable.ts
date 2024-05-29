@@ -21,6 +21,7 @@ export class CreateProvidersTable1716869647946 implements MigrationInterface {
             name: 'status',
             type: 'varchar',
             isNullable: false,
+            default: true,
           },
           {
             name: 'created_at',
