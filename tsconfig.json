@@ -25,6 +25,8 @@
       "@modules/users/*": ["./src/modules/users/*"],
       "@modules/auth/*": ["./src/modules/auth/*"],
       "@modules/categories/*": ["./src/modules/categories/*"],
+      "@modules/providers/*": ["./src/modules/providers/*"],
+
 
       // Tests
       "@test/mocks": ["./test/mocks"],
