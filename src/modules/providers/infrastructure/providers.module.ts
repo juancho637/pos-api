@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import {
-//   HashProvidersEnum,
-//   HashServiceInterface,
-// } from '@common/adapters/hash/domain';
+import {
+  HashProvidersEnum,
+  HashServiceInterface,
+} from '@common/adapters/hash/domain';
 import { HashModule } from '@common/adapters/hash/infrastructure';
 import {
   LoggerProvidersEnum,
@@ -20,7 +20,7 @@ import {
   FindAllProvidersUseCase,
   // DeleteProviderUseCase,
   // FindByProviderUseCase,
-  // StoreProviderUseCase,
+  StoreProviderUseCase,
   // UpdateProviderUseCase,
 } from '../application';
 import { ProviderEntity, ProviderTypeOrmRepository } from './persistence';
@@ -28,7 +28,7 @@ import {
   FindAllProvidersController,
   // DeleteProviderController,
   // FindByProviderController,
-  // StoreProviderController,
+  StoreProviderController,
   // UpdateProviderController,
 } from './api';
 
@@ -42,7 +42,7 @@ import {
   controllers: [
     FindAllProvidersController,
     // FindByProviderController,
-    // StoreProviderController,
+    StoreProviderController,
     // UpdateProviderController,
     // DeleteProviderController,
   ],
@@ -87,27 +87,27 @@ import {
     //       exceptionService,
     //     ),
     // },
-    // {
-    //   inject: [
-    //     ProviderProvidersEnum.PROVIDER_REPOSITORY,
-    //     HashProvidersEnum.HASH_SERVICE,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: ProviderProvidersEnum.STORE_PROVIDER_USE_CASE,
-    //   useFactory: (
-    //     providerRepositoy: ProviderRepositoryInterface,
-    //     hashService: HashServiceInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new StoreProviderUseCase(
-    //       providerRepositoy,
-    //       hashService,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        ProviderProvidersEnum.PROVIDER_REPOSITORY,
+        HashProvidersEnum.HASH_SERVICE,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: ProviderProvidersEnum.STORE_PROVIDER_USE_CASE,
+      useFactory: (
+        providerRepositoy: ProviderRepositoryInterface,
+        hashService: HashServiceInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new StoreProviderUseCase(
+          providerRepositoy,
+          hashService,
+          loggerService,
+          exceptionService,
+        ),
+    },
     // {
     //   inject: [
     //     ProviderProvidersEnum.PROVIDER_REPOSITORY,

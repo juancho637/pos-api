@@ -8,13 +8,9 @@ export class CreateProvidersTable1716869647946 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'integer',
             isPrimary: true,
-          },
-          {
-            name: 'status',
-            type: 'varchar',
-            isNullable: false,
+            isGenerated: true,
           },
           {
             name: 'name',
@@ -22,20 +18,25 @@ export class CreateProvidersTable1716869647946 implements MigrationInterface {
             isNullable: false,
           },
           {
+            name: 'status',
+            type: 'varchar',
+            isNullable: false,
+          },
+          {
             name: 'created_at',
-            type: 'timestamp',
+            type: 'timestamp with time zone',
             isNullable: false,
             default: 'now()',
           },
           {
             name: 'updated_at',
-            type: 'timestamp',
+            type: 'timestamp with time zone',
             isNullable: false,
             default: 'now()',
           },
           {
             name: 'deleted_at',
-            type: 'timestamp',
+            type: 'timestamp with time zone',
             isNullable: true,
           },
         ],
