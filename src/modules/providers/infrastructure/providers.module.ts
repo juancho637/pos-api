@@ -21,7 +21,7 @@ import {
   // DeleteProviderUseCase,
   // FindByProviderUseCase,
   StoreProviderUseCase,
-  // UpdateProviderUseCase,
+  UpdateProviderUseCase,
 } from '../application';
 import { ProviderEntity, ProviderTypeOrmRepository } from './persistence';
 import {
@@ -29,7 +29,7 @@ import {
   // DeleteProviderController,
   // FindByProviderController,
   StoreProviderController,
-  // UpdateProviderController,
+  UpdateProviderController,
 } from './api';
 
 @Module({
@@ -43,7 +43,7 @@ import {
     FindAllProvidersController,
     // FindByProviderController,
     StoreProviderController,
-    // UpdateProviderController,
+    UpdateProviderController,
     // DeleteProviderController,
   ],
   providers: [
@@ -108,24 +108,24 @@ import {
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     ProviderProvidersEnum.PROVIDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: ProviderProvidersEnum.UPDATE_PROVIDER_USE_CASE,
-    //   useFactory: (
-    //     providerRepositoy: ProviderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new UpdateProviderUseCase(
-    //       providerRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        ProviderProvidersEnum.PROVIDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: ProviderProvidersEnum.UPDATE_PROVIDER_USE_CASE,
+      useFactory: (
+        providerRepositoy: ProviderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new UpdateProviderUseCase(
+          providerRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
     // {
     //   inject: [
     //     ProviderProvidersEnum.PROVIDER_REPOSITORY,
