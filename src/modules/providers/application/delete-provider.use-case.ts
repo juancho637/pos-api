@@ -1,30 +1,24 @@
-import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
-  CreateProviderType,
   ProviderRepositoryInterface,
   ProviderType,
   providerErrorsCodes,
 } from '../domain';
 
-export class StoreProviderUseCase {
-  private readonly context = StoreProviderUseCase.name;
+export class DeleteProviderUseCase {
+  private readonly context = DeleteProviderUseCase.name;
 
   constructor(
     private readonly providerRepository: ProviderRepositoryInterface,
-    private readonly hashService: HashServiceInterface,
     private readonly logger: LoggerServiceInterface,
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run({ name, ...fields }: CreateProviderType): Promise<ProviderType> {
+  async run(id: number): Promise<ProviderType> {
     try {
-      const newName = `${name} hehe`;
-      const provider = await this.providerRepository.store({
-        name: newName,
-        ...fields,
-      });
+      const provider = await this.providerRepository.delete(id);
+
       return provider;
     } catch (error) {
       this.logger.error({
@@ -33,7 +27,7 @@ export class StoreProviderUseCase {
       });
 
       throw this.exception.internalServerErrorException({
-        message: providerErrorsCodes.PM031,
+        message: providerErrorsCodes.PM051,
         context: this.context,
         error,
       });

@@ -139,7 +139,7 @@ export class ProviderTypeOrmRepository
     try {
       const provider = await this.findOneBy({ id });
 
-      await this.providersRepository.remove(provider);
+      await this.providersRepository.softRemove(provider);
 
       return { ...provider, id };
     } catch (error) {

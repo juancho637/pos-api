@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { ProviderType } from '../../domain';
 
 @Entity({ name: 'providers' })
@@ -20,25 +27,20 @@ export class ProviderEntity implements ProviderType {
   })
   status: string;
 
-  @Column({
+  @CreateDateColumn({
     name: 'created_at',
-    type: 'timestamp with time zone',
     nullable: false,
-    default: () => 'now()',
   })
   createdAt: Date;
 
-  @Column({
+  @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp with time zone',
     nullable: false,
-    default: () => 'now()',
   })
   updatedAt: Date;
 
-  @Column({
+  @DeleteDateColumn({
     name: 'deleted_at',
-    type: 'timestamp with time zone',
     nullable: true,
   })
   deletedAt?: Date;

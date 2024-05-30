@@ -18,7 +18,7 @@ import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { ProviderProvidersEnum, ProviderRepositoryInterface } from '../domain';
 import {
   FindAllProvidersUseCase,
-  // DeleteProviderUseCase,
+  DeleteProviderUseCase,
   FindByProviderUseCase,
   StoreProviderUseCase,
   UpdateProviderUseCase,
@@ -26,7 +26,7 @@ import {
 import { ProviderEntity, ProviderTypeOrmRepository } from './persistence';
 import {
   FindAllProvidersController,
-  // DeleteProviderController,
+  DeleteProviderController,
   FindByProviderController,
   StoreProviderController,
   UpdateProviderController,
@@ -44,7 +44,7 @@ import {
     FindByProviderController,
     StoreProviderController,
     UpdateProviderController,
-    // DeleteProviderController,
+    DeleteProviderController,
   ],
   providers: [
     {
@@ -126,24 +126,24 @@ import {
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     ProviderProvidersEnum.PROVIDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: ProviderProvidersEnum.DELETE_PROVIDER_USE_CASE,
-    //   useFactory: (
-    //     providerRepositoy: ProviderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new DeleteProviderUseCase(
-    //       providerRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        ProviderProvidersEnum.PROVIDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: ProviderProvidersEnum.DELETE_PROVIDER_USE_CASE,
+      useFactory: (
+        providerRepositoy: ProviderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new DeleteProviderUseCase(
+          providerRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
   ],
   exports: [
     ProviderProvidersEnum.FIND_ALL_PROVIDERS_USE_CASE,
