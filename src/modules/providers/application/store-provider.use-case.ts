@@ -1,4 +1,3 @@
-import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
@@ -13,14 +12,13 @@ export class StoreProviderUseCase {
 
   constructor(
     private readonly providerRepository: ProviderRepositoryInterface,
-    private readonly hashService: HashServiceInterface,
     private readonly logger: LoggerServiceInterface,
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
   async run({ name, ...fields }: CreateProviderType): Promise<ProviderType> {
     try {
-      const newName = `${name} hehe`;
+      const newName = `${name}`;
       const provider = await this.providerRepository.store({
         name: newName,
         ...fields,

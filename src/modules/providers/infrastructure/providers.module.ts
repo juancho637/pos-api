@@ -1,9 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  HashProvidersEnum,
-  HashServiceInterface,
-} from '@common/adapters/hash/domain';
 import { HashModule } from '@common/adapters/hash/infrastructure';
 import {
   LoggerProvidersEnum,
@@ -90,20 +86,17 @@ import {
     {
       inject: [
         ProviderProvidersEnum.PROVIDER_REPOSITORY,
-        HashProvidersEnum.HASH_SERVICE,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
       provide: ProviderProvidersEnum.STORE_PROVIDER_USE_CASE,
       useFactory: (
         providerRepositoy: ProviderRepositoryInterface,
-        hashService: HashServiceInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreProviderUseCase(
           providerRepositoy,
-          hashService,
           loggerService,
           exceptionService,
         ),
@@ -150,7 +143,7 @@ import {
     ProviderProvidersEnum.FIND_BY_PROVIDER_USE_CASE,
     ProviderProvidersEnum.STORE_PROVIDER_USE_CASE,
     ProviderProvidersEnum.UPDATE_PROVIDER_USE_CASE,
-    // ProviderProvidersEnum.DELETE_PROVIDER_USE_CASE,
+    ProviderProvidersEnum.DELETE_PROVIDER_USE_CASE,
   ],
 })
 export class ProviderModule {}
