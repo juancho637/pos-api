@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })
@@ -42,25 +49,20 @@ export class UserEntity implements UserType {
   })
   status: string;
 
-  @Column({
+  @CreateDateColumn({
     name: 'created_at',
-    type: 'timestamp with time zone',
     nullable: false,
-    default: () => 'now()',
   })
   createdAt: Date;
 
-  @Column({
+  @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp with time zone',
     nullable: false,
-    default: () => 'now()',
   })
   updatedAt: Date;
 
-  @Column({
+  @DeleteDateColumn({
     name: 'deleted_at',
-    type: 'timestamp with time zone',
     nullable: true,
   })
   deletedAt?: Date;

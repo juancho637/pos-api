@@ -1,4 +1,5 @@
 export * from './create-user.type';
+export * from './interfaces';
 export * from './update-user.type';
 export * from './user-errors.codes';
 export * from './user-filter.type';

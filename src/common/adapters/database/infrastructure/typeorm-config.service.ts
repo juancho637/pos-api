@@ -17,7 +17,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     const typeOrm = this.configService.get<TypeOrmConfigType>('typeOrm');
 
     return {
-      type: 'postgres',
+      type: database.type,
       host: database.host,
       port: database.port,
       username: database.username,

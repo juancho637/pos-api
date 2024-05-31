@@ -27,7 +27,7 @@ export class FindByUserController {
   @Get('api/users/:id')
   async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
     try {
-      const user = await this.findByUserUseCase.run(id);
+      const user = await this.findByUserUseCase.run({ id });
 
       return new UserPresenter(user);
     } catch (error) {

@@ -134,7 +134,7 @@ export class UserTypeOrmRepository
     try {
       const user = await this.findOneBy({ id });
 
-      await this.usersRepository.remove(user);
+      await this.usersRepository.softRemove(user);
 
       return { ...user, id };
     } catch (error) {
