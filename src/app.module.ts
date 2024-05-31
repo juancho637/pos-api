@@ -4,7 +4,9 @@ import { ConfigurationModule } from '@common/adapters/configuration/infrastructu
 import { DatabaseModule } from '@common/adapters/database/infrastructure';
 import { LoggerModule } from '@common/adapters/logger/infrastructure';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import { TokenModule } from '@common/adapters/token/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
+import { AuthModule } from '@modules/auth/infrastructure';
 
 @Module({
   imports: [
@@ -14,9 +16,11 @@ import { UserModule } from '@modules/users/infrastructure';
     LoggerModule,
     ExceptionModule,
     HashModule,
+    TokenModule,
 
     // Modules
     UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

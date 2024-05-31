@@ -20,6 +20,7 @@
       "@common/adapters/logger/*": ["./src/common/adapters/logger/*"],
       "@common/adapters/exception/*": ["./src/common/adapters/exception/*"],
       "@common/adapters/hash/*": ["./src/common/adapters/hash/*"],
+      "@common/adapters/token/*": ["./src/common/adapters/token/*"],
 
       // Modules
       "@modules/users/*": ["./src/modules/users/*"],
