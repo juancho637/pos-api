@@ -1,13 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  DeleteUserController,
-  FindAllUsersController,
-  FindByUserController,
-  StoreUserController,
-  UpdateUserController,
-} from './api';
-import { UserEntity, UserTypeOrmRepository } from './persistence';
+  HashProvidersEnum,
+  HashServiceInterface,
+} from '@common/adapters/hash/domain';
+import { HashModule } from '@common/adapters/hash/infrastructure';
+import {
+  LoggerProvidersEnum,
+  LoggerServiceInterface,
+} from '@common/adapters/logger/domain';
+import { LoggerModule } from '@common/adapters/logger/infrastructure';
+import {
+  ExceptionProvidersEnum,
+  ExceptionServiceInterface,
+} from '@common/adapters/exception/domain';
+import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import { UserProvidersEnum, UserRepositoryInterface } from '../domain';
 import {
   DeleteUserUseCase,
   FindAllUsersUseCase,
@@ -15,29 +23,20 @@ import {
   StoreUserUseCase,
   UpdateUserUseCase,
 } from '../application';
+import { UserEntity, UserTypeOrmRepository } from './persistence';
 import {
-  ILoggerService,
-  LoggerModule,
-  LoggerProviders,
-} from '@ecommerce/common/logger';
-import {
-  HashModule,
-  HashProviders,
-  IHashService,
-} from '@ecommerce/common/hash';
-import {
-  ExceptionModule,
-  ExceptionProviders,
-  IExceptionService,
-} from '@ecommerce/common/exception';
-import { IUserRepository, UserProviders } from '../domain';
-import { HashProvidersEnum } from '@common/adapters/hash/domain';
+  DeleteUserController,
+  FindAllUsersController,
+  FindByUserController,
+  StoreUserController,
+  UpdateUserController,
+} from './api';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([UserEntity]),
     LoggerModule,
     ExceptionModule,
-    TypeOrmModule.forFeature([UserEntity]),
     HashModule,
   ],
   controllers: [
@@ -49,50 +48,50 @@ import { HashProvidersEnum } from '@common/adapters/hash/domain';
   ],
   providers: [
     {
-      provide: UserProviders.IUserRepository,
+      provide: UserProvidersEnum.USER_REPOSITORY,
       useClass: UserTypeOrmRepository,
     },
     {
       inject: [
-        UserProviders.IUserRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        UserProvidersEnum.USER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: FindAllUsersUseCase,
+      provide: UserProvidersEnum.FIND_ALL_USERS_USE_CASE,
       useFactory: (
-        userRepositoy: IUserRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: UserRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new FindAllUsersUseCase(userRepositoy, loggerService, exceptionService),
     },
     {
       inject: [
-        UserProviders.IUserRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        UserProvidersEnum.USER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: FindByUserUseCase,
+      provide: UserProvidersEnum.FIND_BY_USER_USE_CASE,
       useFactory: (
-        userRepositoy: IUserRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: UserRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new FindByUserUseCase(userRepositoy, loggerService, exceptionService),
     },
     {
       inject: [
-        UserProviders.IUserRepository,
+        UserProvidersEnum.USER_REPOSITORY,
         HashProvidersEnum.HASH_SERVICE,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: StoreUserUseCase,
+      provide: UserProvidersEnum.STORE_USER_USE_CASE,
       useFactory: (
-        userRepositoy: IUserRepository,
-        hashService: HashProvidersEnum.HASH_SERVICE,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: UserRepositoryInterface,
+        hashService: HashServiceInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreUserUseCase(
           userRepositoy,
@@ -103,33 +102,39 @@ import { HashProvidersEnum } from '@common/adapters/hash/domain';
     },
     {
       inject: [
-        UserProviders.IUserRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        UserProvidersEnum.USER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: UpdateUserUseCase,
+      provide: UserProvidersEnum.UPDATE_USER_USE_CASE,
       useFactory: (
-        userRepositoy: IUserRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: UserRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new UpdateUserUseCase(userRepositoy, loggerService, exceptionService),
     },
     {
       inject: [
-        UserProviders.IUserRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        UserProvidersEnum.USER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: DeleteUserUseCase,
+      provide: UserProvidersEnum.DELETE_USER_USE_CASE,
       useFactory: (
-        userRepositoy: IUserRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: UserRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new DeleteUserUseCase(userRepositoy, loggerService, exceptionService),
     },
   ],
-  exports: [UserProviders.IUserRepository],
+  exports: [
+    UserProvidersEnum.FIND_ALL_USERS_USE_CASE,
+    UserProvidersEnum.FIND_BY_USER_USE_CASE,
+    UserProvidersEnum.STORE_USER_USE_CASE,
+    UserProvidersEnum.UPDATE_USER_USE_CASE,
+    UserProvidersEnum.DELETE_USER_USE_CASE,
+  ],
 })
 export class UserModule {}

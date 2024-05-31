@@ -6,8 +6,8 @@ export class JwtConfig {
 
   private constructor() {
     this._config = {
-      jwtSecret: process.env.JWT_SECRET ?? '4CGSs83iRYfF9nnJtQQCnNLgG95uPMA1',
-      jwtExpirationTime: process.env.JWT_EXPIRATION_TIME ?? '3600',
+      jwtSecret: process.env.JWT_SECRET,
+      jwtExpirationTime: process.env.JWT_EXPIRATION_TIME ?? '1h',
     };
   }
 

@@ -7,7 +7,7 @@ export class TypeOrmConfig {
   private constructor() {
     this._config = {
       logging: process.env.TYPEORM_LOGGING === 'true',
-      synchronize: false,
+      synchronize: process.env.TYPEORM_SINC === 'true',
     };
   }
 
