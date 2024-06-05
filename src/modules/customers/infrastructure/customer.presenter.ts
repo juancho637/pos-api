@@ -3,7 +3,7 @@ import { CustomerType } from '../domain';
 export class CustomerPresenter {
   id: number;
   status: string;
-  typeIdentification: string;
+  type_identification: string;
   identification: string;
   full_name: string;
   email: string;
@@ -19,7 +19,7 @@ export class CustomerPresenter {
   constructor(customer: Partial<CustomerType>) {
     this.id = customer.id;
     this.status = customer.status;
-    this.typeIdentification = customer.type_identification;
+    this.type_identification = customer.type_identification;
     this.identification = customer.identification;
     this.full_name = customer.full_name;
     this.email = customer.email;

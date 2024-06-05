@@ -1,9 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  HashProvidersEnum,
-  HashServiceInterface,
-} from '@common/adapters/hash/domain';
 import { HashModule } from '@common/adapters/hash/infrastructure';
 import {
   LoggerProvidersEnum,
@@ -15,126 +11,142 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
-import { UserProvidersEnum, UserRepositoryInterface } from '../domain';
+import { CustomerProvidersEnum, CustomerRepositoryInterface } from '../domain';
 import {
-  DeleteUserUseCase,
-  FindAllUsersUseCase,
-  FindByUserUseCase,
-  StoreUserUseCase,
-  UpdateUserUseCase,
+  FindAllCustomersUseCase,
+  // DeleteCustomerUseCase,
+  // FindByCustomerUseCase,
+  // StoreCustomerUseCase,
+  // UpdateCustomerUseCase,
 } from '../application';
-import { UserEntity, UserTypeOrmRepository } from './persistence';
+import { CustomerEntity, CustomerTypeOrmRepository } from './persistence';
 import {
-  DeleteUserController,
-  FindAllUsersController,
-  FindByUserController,
-  StoreUserController,
-  UpdateUserController,
+  FindAllCustomersController,
+  // DeleteCustomerController,
+  // FindByCustomerController,
+  // StoreCustomerController,
+  // UpdateCustomerController,
 } from './api';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([CustomerEntity]),
     LoggerModule,
     ExceptionModule,
     HashModule,
   ],
   controllers: [
-    FindAllUsersController,
-    FindByUserController,
-    StoreUserController,
-    UpdateUserController,
-    DeleteUserController,
+    FindAllCustomersController,
+    // FindByCustomerController,
+    // StoreCustomerController,
+    // UpdateCustomerController,
+    // DeleteCustomerController,
   ],
   providers: [
     {
-      provide: UserProvidersEnum.CUSTOMER_REPOSITORY,
-      useClass: UserTypeOrmRepository,
+      provide: CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+      useClass: CustomerTypeOrmRepository,
     },
     {
       inject: [
-        UserProvidersEnum.CUSTOMER_REPOSITORY,
+        CustomerProvidersEnum.CUSTOMER_REPOSITORY,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: UserProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,
+      provide: CustomerProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,
       useFactory: (
-        userRepositoy: UserRepositoryInterface,
+        customerRepositoy: CustomerRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindAllUsersUseCase(userRepositoy, loggerService, exceptionService),
-    },
-    {
-      inject: [
-        UserProvidersEnum.CUSTOMER_REPOSITORY,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-        ExceptionProvidersEnum.EXCEPTION_SERVICE,
-      ],
-      provide: UserProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
-      useFactory: (
-        userRepositoy: UserRepositoryInterface,
-        loggerService: LoggerServiceInterface,
-        exceptionService: ExceptionServiceInterface,
-      ) =>
-        new FindByUserUseCase(userRepositoy, loggerService, exceptionService),
-    },
-    {
-      inject: [
-        UserProvidersEnum.CUSTOMER_REPOSITORY,
-        HashProvidersEnum.HASH_SERVICE,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-        ExceptionProvidersEnum.EXCEPTION_SERVICE,
-      ],
-      provide: UserProvidersEnum.STORE_CUSTOMER_USE_CASE,
-      useFactory: (
-        userRepositoy: UserRepositoryInterface,
-        hashService: HashServiceInterface,
-        loggerService: LoggerServiceInterface,
-        exceptionService: ExceptionServiceInterface,
-      ) =>
-        new StoreUserUseCase(
-          userRepositoy,
-          hashService,
+        new FindAllCustomersUseCase(
+          customerRepositoy,
           loggerService,
           exceptionService,
         ),
     },
-    {
-      inject: [
-        UserProvidersEnum.CUSTOMER_REPOSITORY,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-        ExceptionProvidersEnum.EXCEPTION_SERVICE,
-      ],
-      provide: UserProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
-      useFactory: (
-        userRepositoy: UserRepositoryInterface,
-        loggerService: LoggerServiceInterface,
-        exceptionService: ExceptionServiceInterface,
-      ) =>
-        new UpdateUserUseCase(userRepositoy, loggerService, exceptionService),
-    },
-    {
-      inject: [
-        UserProvidersEnum.CUSTOMER_REPOSITORY,
-        LoggerProvidersEnum.LOGGER_SERVICE,
-        ExceptionProvidersEnum.EXCEPTION_SERVICE,
-      ],
-      provide: UserProvidersEnum.DELETE_CUSTOMER_USE_CASE,
-      useFactory: (
-        userRepositoy: UserRepositoryInterface,
-        loggerService: LoggerServiceInterface,
-        exceptionService: ExceptionServiceInterface,
-      ) =>
-        new DeleteUserUseCase(userRepositoy, loggerService, exceptionService),
-    },
+    // {
+    //   inject: [
+    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+    //     LoggerProvidersEnum.LOGGER_SERVICE,
+    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
+    //   ],
+    //   provide: CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
+    //   useFactory: (
+    //     customerRepositoy: CustomerRepositoryInterface,
+    //     loggerService: LoggerServiceInterface,
+    //     exceptionService: ExceptionServiceInterface,
+    //   ) =>
+    //     new FindByCustomerUseCase(
+    //       customerRepositoy,
+    //       loggerService,
+    //       exceptionService,
+    //     ),
+    // },
+    // {
+    //   inject: [
+    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+    //     HashProvidersEnum.HASH_SERVICE,
+    //     LoggerProvidersEnum.LOGGER_SERVICE,
+    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
+    //   ],
+    //   provide: CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
+    //   useFactory: (
+    //     customerRepositoy: CustomerRepositoryInterface,
+    //     hashService: HashServiceInterface,
+    //     loggerService: LoggerServiceInterface,
+    //     exceptionService: ExceptionServiceInterface,
+    //   ) =>
+    //     new StoreCustomerUseCase(
+    //       customerRepositoy,
+    //       hashService,
+    //       loggerService,
+    //       exceptionService,
+    //     ),
+    // },
+    // {
+    //   inject: [
+    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+    //     LoggerProvidersEnum.LOGGER_SERVICE,
+    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
+    //   ],
+    //   provide: CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
+    //   useFactory: (
+    //     customerRepositoy: CustomerRepositoryInterface,
+    //     loggerService: LoggerServiceInterface,
+    //     exceptionService: ExceptionServiceInterface,
+    //   ) =>
+    //     new UpdateCustomerUseCase(
+    //       customerRepositoy,
+    //       loggerService,
+    //       exceptionService,
+    //     ),
+    // },
+    // {
+    //   inject: [
+    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+    //     LoggerProvidersEnum.LOGGER_SERVICE,
+    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
+    //   ],
+    //   provide: CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
+    //   useFactory: (
+    //     customerRepositoy: CustomerRepositoryInterface,
+    //     loggerService: LoggerServiceInterface,
+    //     exceptionService: ExceptionServiceInterface,
+    //   ) =>
+    //     new DeleteCustomerUseCase(
+    //       customerRepositoy,
+    //       loggerService,
+    //       exceptionService,
+    //     ),
+    // },
   ],
   exports: [
-    UserProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,
-    UserProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
-    UserProvidersEnum.STORE_CUSTOMER_USE_CASE,
-    UserProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
-    UserProvidersEnum.DELETE_CUSTOMER_USE_CASE,
+    CustomerProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,
+    // CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
+    // CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
+    // CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
+    // CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
   ],
 })
-export class UserModule {}
+export class CustomerModule {}
