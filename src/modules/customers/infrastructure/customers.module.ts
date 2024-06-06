@@ -16,7 +16,7 @@ import {
   FindByCustomerUseCase,
   DeleteCustomerUseCase,
   StoreCustomerUseCase,
-  // UpdateCustomerUseCase,
+  UpdateCustomerUseCase,
 } from '../application';
 import { CustomerEntity, CustomerTypeOrmRepository } from './persistence';
 import {
@@ -24,7 +24,7 @@ import {
   DeleteCustomerController,
   FindByCustomerController,
   StoreCustomerController,
-  // UpdateCustomerController,
+  UpdateCustomerController,
 } from './api';
 
 @Module({
@@ -37,7 +37,7 @@ import {
     FindAllCustomersController,
     FindByCustomerController,
     StoreCustomerController,
-    // UpdateCustomerController,
+    UpdateCustomerController,
     DeleteCustomerController,
   ],
   providers: [
@@ -99,24 +99,24 @@ import {
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
-    //   useFactory: (
-    //     customerRepositoy: CustomerRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new UpdateCustomerUseCase(
-    //       customerRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
+      useFactory: (
+        customerRepositoy: CustomerRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new UpdateCustomerUseCase(
+          customerRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
     {
       inject: [
         CustomerProvidersEnum.CUSTOMER_REPOSITORY,
@@ -140,8 +140,8 @@ import {
     CustomerProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,
     CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
     CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
-    // CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
-    // CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
+    CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
+    CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
   ],
 })
 export class CustomerModule {}

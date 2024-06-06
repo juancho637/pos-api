@@ -22,7 +22,7 @@ import {
 import {
   CustomerRepositoryInterface,
   CustomerFilterType,
-  // UpdateCustomerType,
+  UpdateCustomerType,
   CreateCustomerType,
   customerErrorsCodes,
 } from '../../domain';
@@ -113,27 +113,27 @@ export class CustomerTypeOrmRepository
     }
   }
 
-  // async update(
-  //   id: number,
-  //   updateCustomerFields: UpdateCustomerType,
-  // ): Promise<CustomerEntity> {
-  //   try {
-  //     const customer = await this.findOneBy({ id });
+  async update(
+    id: number,
+    updateCustomerFields: UpdateCustomerType,
+  ): Promise<CustomerEntity> {
+    try {
+      const customer = await this.findOneBy({ id });
 
-  //     return await this.customersRepository.save({
-  //       ...customer,
-  //       ...updateCustomerFields,
-  //     });
-  //   } catch (error) {
-  //     this.logger.error({ message: error, context: this.context });
+      return await this.customersRepository.save({
+        ...customer,
+        ...updateCustomerFields,
+      });
+    } catch (error) {
+      this.logger.error({ message: error, context: this.context });
 
-  //     throw this.exception.internalServerErrorException({
-  //       message: customerErrorsCodes.CUSM040,
-  //       context: this.context,
-  //       error,
-  //     });
-  //   }
-  // }
+      throw this.exception.internalServerErrorException({
+        message: customerErrorsCodes.CUSM040,
+        context: this.context,
+        error,
+      });
+    }
+  }
 
   async delete(id: number): Promise<CustomerEntity> {
     try {

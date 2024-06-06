@@ -5,3 +5,4 @@ export * from './customer-provider.enums';
 export * from './customer-repository.interface';
 export * from './customer.type';
 export * from './interfaces';
+export * from './update-customer.type';
