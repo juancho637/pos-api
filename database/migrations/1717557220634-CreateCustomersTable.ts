@@ -8,13 +8,15 @@ export class CreateCutomersTable1717557220634 implements MigrationInterface {
         columns: [
           {
             name: 'id',
-            type: 'varchar',
+            type: 'integer',
             isPrimary: true,
+            isGenerated: true,
           },
           {
             name: 'status',
             type: 'varchar',
             isNullable: false,
+            default: true,
           },
           {
             name: 'type_identification',
@@ -39,7 +41,7 @@ export class CreateCutomersTable1717557220634 implements MigrationInterface {
           {
             name: 'phone',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'cell_phone',
@@ -49,17 +51,17 @@ export class CreateCutomersTable1717557220634 implements MigrationInterface {
           {
             name: 'address',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'birthdate',
             type: 'timestamp',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'gender',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'updated_at',

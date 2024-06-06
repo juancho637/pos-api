@@ -5,11 +5,11 @@ export type CustomerType = {
   identification: string;
   full_name: string;
   email: string;
-  phone: string;
+  phone?: string;
   cell_phone: string;
-  address: string;
-  birthdate: Date;
-  gender: string;
+  address?: string;
+  birthdate?: Date;
+  gender?: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;

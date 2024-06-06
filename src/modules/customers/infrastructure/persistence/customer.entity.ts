@@ -8,10 +8,18 @@ import {
 } from 'typeorm';
 import { CustomerType } from '../../domain';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'customers' })
 export class CustomerEntity implements CustomerType {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: false,
+    default: 'active',
+  })
+  status: string;
 
   @Column({
     type: 'varchar',
@@ -32,24 +40,16 @@ export class CustomerEntity implements CustomerType {
     type: 'varchar',
     length: 100,
     nullable: false,
-    unique: true,
   })
-  email: string;
-
-  @Column({
-    type: 'varchar',
-    length: 20,
-    nullable: false,
-    default: 'active',
-  })
-  status: string;
+  full_name: string;
 
   @Column({
     type: 'varchar',
     length: 100,
     nullable: false,
+    unique: true,
   })
-  full_name: string;
+  email: string;
 
   @Column({
     type: 'varchar',
@@ -85,17 +85,17 @@ export class CustomerEntity implements CustomerType {
   })
   gender: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    nullable: false,
-  })
-  createdAt: Date;
-
   @UpdateDateColumn({
     name: 'updated_at',
     nullable: false,
   })
   updatedAt: Date;
+
+  @CreateDateColumn({
+    name: 'created_at',
+    nullable: false,
+  })
+  createdAt: Date;
 
   @DeleteDateColumn({
     name: 'deleted_at',

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HashModule } from '@common/adapters/hash/infrastructure';
 import {
   LoggerProvidersEnum,
   LoggerServiceInterface,
@@ -14,9 +13,9 @@ import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { CustomerProvidersEnum, CustomerRepositoryInterface } from '../domain';
 import {
   FindAllCustomersUseCase,
-  // DeleteCustomerUseCase,
   // FindByCustomerUseCase,
-  // StoreCustomerUseCase,
+  // DeleteCustomerUseCase,
+  StoreCustomerUseCase,
   // UpdateCustomerUseCase,
 } from '../application';
 import { CustomerEntity, CustomerTypeOrmRepository } from './persistence';
@@ -24,7 +23,7 @@ import {
   FindAllCustomersController,
   // DeleteCustomerController,
   // FindByCustomerController,
-  // StoreCustomerController,
+  StoreCustomerController,
   // UpdateCustomerController,
 } from './api';
 
@@ -33,12 +32,11 @@ import {
     TypeOrmModule.forFeature([CustomerEntity]),
     LoggerModule,
     ExceptionModule,
-    HashModule,
   ],
   controllers: [
     FindAllCustomersController,
     // FindByCustomerController,
-    // StoreCustomerController,
+    StoreCustomerController,
     // UpdateCustomerController,
     // DeleteCustomerController,
   ],
@@ -83,27 +81,24 @@ import {
     //       exceptionService,
     //     ),
     // },
-    // {
-    //   inject: [
-    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
-    //     HashProvidersEnum.HASH_SERVICE,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
-    //   useFactory: (
-    //     customerRepositoy: CustomerRepositoryInterface,
-    //     hashService: HashServiceInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new StoreCustomerUseCase(
-    //       customerRepositoy,
-    //       hashService,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
+      useFactory: (
+        customerRepositoy: CustomerRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new StoreCustomerUseCase(
+          customerRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
     // {
     //   inject: [
     //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,

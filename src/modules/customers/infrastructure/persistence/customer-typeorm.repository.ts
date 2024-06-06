@@ -23,7 +23,7 @@ import {
   CustomerRepositoryInterface,
   // CustomerFilterType,
   // UpdateCustomerType,
-  // CreateCustomerType,
+  CreateCustomerType,
   customerErrorsCodes,
 } from '../../domain';
 import { CustomerEntity } from './customer.entity';
@@ -97,21 +97,21 @@ export class CustomerTypeOrmRepository
     }
   }
 
-  // async store(
-  //   createCustomerFields: CreateCustomerType,
-  // ): Promise<CustomerEntity> {
-  //   try {
-  //     return this.customersRepository.save(createCustomerFields);
-  //   } catch (error) {
-  //     this.logger.error({ message: error, context: this.context });
+  async store(
+    createCustomerFields: CreateCustomerType,
+  ): Promise<CustomerEntity> {
+    try {
+      return this.customersRepository.save(createCustomerFields);
+    } catch (error) {
+      this.logger.error({ message: error, context: this.context });
 
-  //     throw this.exception.internalServerErrorException({
-  //       message: customerErrorsCodes.CUSM030,
-  //       context: this.context,
-  //       error,
-  //     });
-  //   }
-  // }
+      throw this.exception.internalServerErrorException({
+        message: customerErrorsCodes.CUSM030,
+        context: this.context,
+        error,
+      });
+    }
+  }
 
   // async update(
   //   id: number,

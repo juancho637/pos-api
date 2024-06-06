@@ -28,8 +28,8 @@ export class CustomerPresenter {
     this.address = customer.address;
     this.birthdate = customer.birthdate;
     this.gender = customer.gender;
-    this.createdAt = customer.createdAt;
     this.updatedAt = customer.updatedAt;
+    this.createdAt = customer.createdAt;
     this.deletedAt = customer.deletedAt;
   }
 }
