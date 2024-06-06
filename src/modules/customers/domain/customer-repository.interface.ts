@@ -20,5 +20,5 @@ export interface CustomerRepositoryInterface<
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createCustomerFields: CreateCustomerType): Promise<Entity>;
   // update(id: number, updateCustomerFields: UpdateCustomerType): Promise<Entity>;
-  // delete(id: number): Promise<Entity>;
+  delete(id: number): Promise<Entity>;
 }

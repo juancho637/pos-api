@@ -14,14 +14,14 @@ import { CustomerProvidersEnum, CustomerRepositoryInterface } from '../domain';
 import {
   FindAllCustomersUseCase,
   FindByCustomerUseCase,
-  // DeleteCustomerUseCase,
+  DeleteCustomerUseCase,
   StoreCustomerUseCase,
   // UpdateCustomerUseCase,
 } from '../application';
 import { CustomerEntity, CustomerTypeOrmRepository } from './persistence';
 import {
   FindAllCustomersController,
-  // DeleteCustomerController,
+  DeleteCustomerController,
   FindByCustomerController,
   StoreCustomerController,
   // UpdateCustomerController,
@@ -38,7 +38,7 @@ import {
     FindByCustomerController,
     StoreCustomerController,
     // UpdateCustomerController,
-    // DeleteCustomerController,
+    DeleteCustomerController,
   ],
   providers: [
     {
@@ -117,24 +117,24 @@ import {
     //       exceptionService,
     //     ),
     // },
-    // {
-    //   inject: [
-    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
-    //   useFactory: (
-    //     customerRepositoy: CustomerRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new DeleteCustomerUseCase(
-    //       customerRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
+      useFactory: (
+        customerRepositoy: CustomerRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new DeleteCustomerUseCase(
+          customerRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
   ],
   exports: [
     CustomerProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,

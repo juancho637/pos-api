@@ -135,21 +135,21 @@ export class CustomerTypeOrmRepository
   //   }
   // }
 
-  // async delete(id: number): Promise<CustomerEntity> {
-  //   try {
-  //     const customer = await this.findOneBy({ id });
+  async delete(id: number): Promise<CustomerEntity> {
+    try {
+      const customer = await this.findOneBy({ id });
 
-  //     await this.customersRepository.softRemove(customer);
+      await this.customersRepository.softRemove(customer);
 
-  //     return { ...customer, id };
-  //   } catch (error) {
-  //     this.logger.error({ message: error, context: this.context });
+      return { ...customer, id };
+    } catch (error) {
+      this.logger.error({ message: error, context: this.context });
 
-  //     throw this.exception.internalServerErrorException({
-  //       message: customerErrorsCodes.CUSM050,
-  //       context: this.context,
-  //       error,
-  //     });
-  //   }
-  // }
+      throw this.exception.internalServerErrorException({
+        message: customerErrorsCodes.CUSM050,
+        context: this.context,
+        error,
+      });
+    }
+  }
 }
