@@ -7,12 +7,12 @@ import {
 import { CustomerType } from './customer.type';
 import { CreateCustomerType } from './create-customer.type';
 // import { UpdateCustomerType } from './update-customer.type';
-// import { CustomerFilterType } from './customer-filter.type';
+import { CustomerFilterType } from './customer-filter.type';
 
 export interface CustomerRepositoryInterface<
   Entity extends CustomerType = CustomerType,
 > {
-  // findOneBy(fields: CustomerFilterType): Promise<Entity>;
+  findOneBy(fields: CustomerFilterType): Promise<Entity>;
   findAll(
     pagination: PaginationType,
     sort: SortingType,

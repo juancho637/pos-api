@@ -21,7 +21,7 @@ import {
 } from '@common/adapters/exception/domain';
 import {
   CustomerRepositoryInterface,
-  // CustomerFilterType,
+  CustomerFilterType,
   // UpdateCustomerType,
   CreateCustomerType,
   customerErrorsCodes,
@@ -42,23 +42,23 @@ export class CustomerTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  // async findOneBy(fields: CustomerFilterType): Promise<CustomerEntity> {
-  //   try {
-  //     const customer = await this.customersRepository.findOneOrFail({
-  //       where: { ...fields },
-  //     });
+  async findOneBy(fields: CustomerFilterType): Promise<CustomerEntity> {
+    try {
+      const customer = await this.customersRepository.findOneOrFail({
+        where: { ...fields },
+      });
 
-  //     return customer;
-  //   } catch (error) {
-  //     this.logger.error({ message: error, context: this.context });
+      return customer;
+    } catch (error) {
+      this.logger.error({ message: error, context: this.context });
 
-  //     throw this.exception.internalServerErrorException({
-  //       message: customerErrorsCodes.CUSM010,
-  //       context: this.context,
-  //       error,
-  //     });
-  //   }
-  // }
+      throw this.exception.internalServerErrorException({
+        message: customerErrorsCodes.CUSM010,
+        context: this.context,
+        error,
+      });
+    }
+  }
 
   async findAll(
     pagination: PaginationType,

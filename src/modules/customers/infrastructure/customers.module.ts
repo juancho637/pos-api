@@ -13,7 +13,7 @@ import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { CustomerProvidersEnum, CustomerRepositoryInterface } from '../domain';
 import {
   FindAllCustomersUseCase,
-  // FindByCustomerUseCase,
+  FindByCustomerUseCase,
   // DeleteCustomerUseCase,
   StoreCustomerUseCase,
   // UpdateCustomerUseCase,
@@ -22,7 +22,7 @@ import { CustomerEntity, CustomerTypeOrmRepository } from './persistence';
 import {
   FindAllCustomersController,
   // DeleteCustomerController,
-  // FindByCustomerController,
+  FindByCustomerController,
   StoreCustomerController,
   // UpdateCustomerController,
 } from './api';
@@ -35,7 +35,7 @@ import {
   ],
   controllers: [
     FindAllCustomersController,
-    // FindByCustomerController,
+    FindByCustomerController,
     StoreCustomerController,
     // UpdateCustomerController,
     // DeleteCustomerController,
@@ -63,24 +63,24 @@ import {
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     CustomerProvidersEnum.CUSTOMER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
-    //   useFactory: (
-    //     customerRepositoy: CustomerRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new FindByCustomerUseCase(
-    //       customerRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
+      useFactory: (
+        customerRepositoy: CustomerRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new FindByCustomerUseCase(
+          customerRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
     {
       inject: [
         CustomerProvidersEnum.CUSTOMER_REPOSITORY,
@@ -138,8 +138,8 @@ import {
   ],
   exports: [
     CustomerProvidersEnum.FIND_ALL_CUSTOMERS_USE_CASE,
-    // CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
-    // CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
+    CustomerProvidersEnum.FIND_BY_CUSTOMER_USE_CASE,
+    CustomerProvidersEnum.STORE_CUSTOMER_USE_CASE,
     // CustomerProvidersEnum.UPDATE_CUSTOMER_USE_CASE,
     // CustomerProvidersEnum.DELETE_CUSTOMER_USE_CASE,
   ],
