@@ -1,13 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  DeleteCounterController,
-  FindAllCountersController,
-  FindByCounterController,
-  StoreCounterController,
-  UpdateCounterController,
-} from './api';
-import { CounterEntity, CounterTypeOrmRepository } from './persistence';
+  HashProvidersEnum,
+  HashServiceInterface,
+} from '@common/adapters/hash/domain';
+import { HashModule } from '@common/adapters/hash/infrastructure';
+import {
+  LoggerProvidersEnum,
+  LoggerServiceInterface,
+} from '@common/adapters/logger/domain';
+import { LoggerModule } from '@common/adapters/logger/infrastructure';
+import {
+  ExceptionProvidersEnum,
+  ExceptionServiceInterface,
+} from '@common/adapters/exception/domain';
+import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import { CounterProvidersEnum, CounterRepositoryInterface } from '../domain';
 import {
   DeleteCounterUseCase,
   FindAllCountersUseCase,
@@ -15,29 +23,20 @@ import {
   StoreCounterUseCase,
   UpdateCounterUseCase,
 } from '../application';
+import { CounterEntity, CounterTypeOrmRepository } from './persistence';
 import {
-  ILoggerService,
-  LoggerModule,
-  LoggerProviders,
-} from '@ecommerce/common/logger';
-import {
-  HashModule,
-  HashProviders,
-  IHashService,
-} from '@ecommerce/common/hash';
-import {
-  ExceptionModule,
-  ExceptionProviders,
-  IExceptionService,
-} from '@ecommerce/common/exception';
-import { ICounterRepository, CounterProviders } from '../domain';
-import { HashProvidersEnum } from '@common/adapters/hash/domain';
+  DeleteCounterController,
+  FindAllCountersController,
+  FindByCounterController,
+  StoreCounterController,
+  UpdateCounterController,
+} from './api';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([CounterEntity]),
     LoggerModule,
     ExceptionModule,
-    TypeOrmModule.forFeature([CounterEntity]),
     HashModule,
   ],
   controllers: [
@@ -49,53 +48,61 @@ import { HashProvidersEnum } from '@common/adapters/hash/domain';
   ],
   providers: [
     {
-      provide: CounterProviders.ICounterRepository,
+      provide: CounterProvidersEnum.COUNTER_REPOSITORY,
       useClass: CounterTypeOrmRepository,
     },
     {
       inject: [
-        CounterProviders.ICounterRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CounterProvidersEnum.COUNTER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: FindAllCountersUseCase,
+      provide: CounterProvidersEnum.FIND_ALL_COUNTERS_USE_CASE,
       useFactory: (
-        counterRepositoy: ICounterRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CounterRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindAllCountersUseCase(counterRepositoy, loggerService, exceptionService),
+        new FindAllCountersUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
-        CounterProviders.ICounterRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CounterProvidersEnum.COUNTER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: FindByCounterUseCase,
+      provide: CounterProvidersEnum.FIND_BY_COUNTER_USE_CASE,
       useFactory: (
-        counterRepositoy: ICounterRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CounterRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindByCounterUseCase(counterRepositoy, loggerService, exceptionService),
+        new FindByCounterUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
-        CounterProviders.ICounterRepository,
+        CounterProvidersEnum.COUNTER_REPOSITORY,
         HashProvidersEnum.HASH_SERVICE,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: StoreCounterUseCase,
+      provide: CounterProvidersEnum.STORE_COUNTER_USE_CASE,
       useFactory: (
-        counterRepositoy: ICounterRepository,
-        hashService: HashProvidersEnum.HASH_SERVICE,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CounterRepositoryInterface,
+        hashService: HashServiceInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreCounterUseCase(
-          counterRepositoy,
+          userRepositoy,
           hashService,
           loggerService,
           exceptionService,
@@ -103,33 +110,47 @@ import { HashProvidersEnum } from '@common/adapters/hash/domain';
     },
     {
       inject: [
-        CounterProviders.ICounterRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CounterProvidersEnum.COUNTER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: UpdateCounterUseCase,
+      provide: CounterProvidersEnum.UPDATE_COUNTER_USE_CASE,
       useFactory: (
-        counterRepositoy: ICounterRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CounterRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new UpdateCounterUseCase(counterRepositoy, loggerService, exceptionService),
+        new UpdateCounterUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
-        CounterProviders.ICounterRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CounterProvidersEnum.COUNTER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: DeleteCounterUseCase,
+      provide: CounterProvidersEnum.DELETE_COUNTER_USE_CASE,
       useFactory: (
-        counterRepositoy: ICounterRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CounterRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new DeleteCounterUseCase(counterRepositoy, loggerService, exceptionService),
+        new DeleteCounterUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
   ],
-  exports: [CounterProviders.ICounterRepository],
+  exports: [
+    CounterProvidersEnum.FIND_ALL_COUNTERS_USE_CASE,
+    CounterProvidersEnum.FIND_BY_COUNTER_USE_CASE,
+    CounterProvidersEnum.STORE_COUNTER_USE_CASE,
+    CounterProvidersEnum.UPDATE_COUNTER_USE_CASE,
+    CounterProvidersEnum.DELETE_COUNTER_USE_CASE,
+  ],
 })
 export class CounterModule {}
