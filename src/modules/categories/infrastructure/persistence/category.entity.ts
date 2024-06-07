@@ -29,7 +29,7 @@ export class CategoryEntity implements CategoryType {
   description: string;
 
   @Column({
-    type: 'string',
+    type: 'varchar',
     length: 400,
     nullable: false,
     unique: true,

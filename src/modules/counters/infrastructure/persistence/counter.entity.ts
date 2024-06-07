@@ -21,21 +21,21 @@ export class CounterEntity implements CounterType {
   branch_id: number;
 
   @Column({
-    type: 'int',
+    type: 'integer',
     nullable: false,
     unique: true,
   })
   user_id: number;
 
   @Column({
-    type: 'int',
+    type: 'integer',
     nullable: false,
     unique: true,
   })
   base: number;
 
   @Column({
-    type: 'double',
+    type: 'real',
     nullable: false,
     unique: true,
   })
