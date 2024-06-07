@@ -21,19 +21,16 @@ export class CreateCountersTable1717729457600 implements MigrationInterface {
             name: 'user_id',
             type: 'integer',
             isNullable: false,
-            default: true,
           },
           {
             name: 'base',
             type: 'real',
             isNullable: false,
-            default: true,
           },
           {
             name: 'status',
             type: 'varchar',
             isNullable: false,
-            default: true,
           },
           {
             name: 'created_at',

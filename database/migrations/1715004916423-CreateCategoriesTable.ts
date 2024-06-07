@@ -21,13 +21,11 @@ export class CreateCategoriesTable1715004916423 implements MigrationInterface {
             name: 'description',
             type: 'varchar',
             isNullable: false,
-            default: true,
           },
           {
             name: 'status',
             type: 'varchar',
             isNullable: false,
-            default: true,
           },
           {
             name: 'created_at',

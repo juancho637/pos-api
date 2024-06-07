@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { CategoryType } from '../../domain';
 
-@Entity({ name: 'counters' })
+@Entity({ name: 'categories' })
 export class CategoryEntity implements CategoryType {
   @PrimaryGeneratedColumn()
   id: number;
