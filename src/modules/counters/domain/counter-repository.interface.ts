@@ -9,7 +9,9 @@ import { CreateCounterType } from './create-counter.type';
 import { UpdateCounterType } from './update-counter.type';
 import { CounterFilterType } from './counter-filter.type';
 
-export interface ICounterRepository<Entity extends CounterType = CounterType> {
+export interface CounterRepositoryInterface<
+  Entity extends CounterType = CounterType,
+> {
   findOneBy(fields: CounterFilterType): Promise<Entity>;
   findAll(
     pagination: PaginationType,

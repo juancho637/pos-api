@@ -9,7 +9,9 @@ import { CreateCategoryType } from './create-category.type';
 import { UpdateCategoryType } from './update-category.type';
 import { CategoryFilterType } from './category-filter.type';
 
-export interface ICategoryRepository<Entity extends CategoryType = CategoryType> {
+export interface CategoryRepositoryInterface<
+  Entity extends CategoryType = CategoryType,
+> {
   findOneBy(fields: CategoryFilterType): Promise<Entity>;
   findAll(
     pagination: PaginationType,
