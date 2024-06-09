@@ -12,6 +12,7 @@ export class DataBaseConfig {
       username: process.env.DB_USERNAME ?? 'postgres',
       password: process.env.DB_PASSWORD ?? 'password',
       database: process.env.DB_DATABASE ?? 'postgres',
+      type: 'postgres',
     };
   }
 

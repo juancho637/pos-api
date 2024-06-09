@@ -9,6 +9,8 @@ import { UserModule } from '@modules/users/infrastructure';
 import { ProviderModule } from '@modules/providers/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
 import { CustomerModule } from '@modules/customers/infrastructure';
+import { CategoryModule } from '@modules/categories/infrastructure';
+import { CounterModule } from './modules/counters/infrastructure';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { CustomerModule } from '@modules/customers/infrastructure';
     ProviderModule,
     AuthModule,
     CustomerModule,
+    CategoryModule,
+    CounterModule,
   ],
 })
 export class AppModule {}
