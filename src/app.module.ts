@@ -11,6 +11,7 @@ import { AuthModule } from '@modules/auth/infrastructure';
 import { CustomerModule } from '@modules/customers/infrastructure';
 import { CategoryModule } from '@modules/categories/infrastructure';
 import { CounterModule } from './modules/counters/infrastructure';
+import { ProductModule } from '@modules/products/infrastructure';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CounterModule } from './modules/counters/infrastructure';
     CustomerModule,
     CategoryModule,
     CounterModule,
+    ProductModule,
   ],
 })
 export class AppModule {}
