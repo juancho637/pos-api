@@ -4,6 +4,11 @@ import {
   ConfigurationModule,
   ConfigurationService,
 } from '@common/adapters/configuration/infrastructure';
+import {
+  GetDatabaseConnectionFactory,
+  PostgresConfigStrategy,
+  SqliteConfigStrategy,
+} from '../application';
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 @Module({
@@ -11,6 +16,11 @@ import { TypeOrmConfigService } from './typeorm-config.service';
     TypeOrmModule.forRootAsync({
       imports: [ConfigurationModule],
       inject: [ConfigurationService],
+      extraProviders: [
+        GetDatabaseConnectionFactory,
+        SqliteConfigStrategy,
+        PostgresConfigStrategy,
+      ],
       useClass: TypeOrmConfigService,
     }),
   ],

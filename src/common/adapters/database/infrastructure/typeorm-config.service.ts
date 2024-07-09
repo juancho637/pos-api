@@ -1,43 +1,24 @@
-import { join } from 'path';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import {
   ConfigurationType,
   DataBaseConfigType,
-  TypeOrmConfigType,
 } from '@common/adapters/configuration/domain';
+import { GetDatabaseConnectionFactory } from '../application';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
-  constructor(private configService: ConfigService<ConfigurationType>) {}
+  constructor(
+    private configService: ConfigService<ConfigurationType>,
+    private getDatabaseConnectionFactory: GetDatabaseConnectionFactory,
+  ) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     const database = this.configService.get<DataBaseConfigType>('database');
-    const typeOrm = this.configService.get<TypeOrmConfigType>('typeOrm');
 
-    return {
-      type: database.type,
-      host: database.host,
-      port: database.port,
-      username: database.username,
-      password: database.password,
-      database: database.database,
-      logging: typeOrm.logging,
-      synchronize: typeOrm.synchronize,
-      entities: [
-        join(
-          __dirname,
-          '../',
-          '../',
-          '../',
-          '../',
-          'modules',
-          '**',
-          '*.entity.{ts,js}',
-        ),
-      ],
-      autoLoadEntities: true,
-    };
+    return this.getDatabaseConnectionFactory
+      .run(database.type)
+      .createTypeOrmOptions();
   }
 }

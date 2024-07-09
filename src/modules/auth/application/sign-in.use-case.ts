@@ -23,6 +23,7 @@ export class SignInUseCase implements SignInUseCaseInterface {
 
   async run({ username, password }: SignInType): Promise<AuthType> {
     const usernameType = this.isValidEmail(username) ? 'email' : 'username';
+
     try {
       const user = await this.findByUserUseCase.run({
         [usernameType]: username,
@@ -35,7 +36,7 @@ export class SignInUseCase implements SignInUseCaseInterface {
         });
       }
 
-      if (!this.hashService.compare(password, user.password)) {
+      if (!(await this.hashService.compare(password, user.password))) {
         throw this.exception.badRequestException({
           message: authErrorsCodes.AM012,
           context: this.context,
