@@ -15,13 +15,11 @@ export class CreateCategoriesTable1715004916423 implements MigrationInterface {
           {
             name: 'name',
             type: 'varchar',
-            length: '50',
             isNullable: false,
           },
           {
-            name: 'slug',
+            name: 'description',
             type: 'varchar',
-            length: '100',
             isNullable: false,
           },
           {
@@ -31,19 +29,19 @@ export class CreateCategoriesTable1715004916423 implements MigrationInterface {
           },
           {
             name: 'created_at',
-            type: 'timestamp with time zone',
+            type: 'timestamp',
             isNullable: false,
             default: 'now()',
           },
           {
             name: 'updated_at',
-            type: 'timestamp with time zone',
+            type: 'timestamp',
             isNullable: false,
             default: 'now()',
           },
           {
             name: 'deleted_at',
-            type: 'timestamp with time zone',
+            type: 'timestamp',
             isNullable: true,
           },
         ],

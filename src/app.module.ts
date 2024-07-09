@@ -8,6 +8,9 @@ import { TokenModule } from '@common/adapters/token/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
 import { ProviderModule } from '@modules/providers/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
+import { CustomerModule } from '@modules/customers/infrastructure';
+import { CategoryModule } from '@modules/categories/infrastructure';
+import { CounterModule } from './modules/counters/infrastructure';
 
 @Module({
   imports: [
@@ -23,6 +26,9 @@ import { AuthModule } from '@modules/auth/infrastructure';
     UserModule,
     ProviderModule,
     AuthModule,
+    CustomerModule,
+    CategoryModule,
+    CounterModule,
   ],
 })
 export class AppModule {}

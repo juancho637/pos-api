@@ -1,47 +1,46 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  DeleteCategoryController,
-  FindAllCategorysController,
-  FindByCategoryController,
-  StoreCategoryController,
-  UpdateCategoryController,
-} from './api';
-import { CategoryEntity, CategoryTypeOrmRepository } from './persistence';
+  HashProvidersEnum,
+  HashServiceInterface,
+} from '@common/adapters/hash/domain';
+import { HashModule } from '@common/adapters/hash/infrastructure';
+import {
+  LoggerProvidersEnum,
+  LoggerServiceInterface,
+} from '@common/adapters/logger/domain';
+import { LoggerModule } from '@common/adapters/logger/infrastructure';
+import {
+  ExceptionProvidersEnum,
+  ExceptionServiceInterface,
+} from '@common/adapters/exception/domain';
+import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import { CategoryProvidersEnum, CategoryRepositoryInterface } from '../domain';
 import {
   DeleteCategoryUseCase,
-  FindAllCategorysUseCase,
+  FindAllCategoriesUseCase,
   FindByCategoryUseCase,
   StoreCategoryUseCase,
   UpdateCategoryUseCase,
 } from '../application';
+import { CategoryEntity, CategoryTypeOrmRepository } from './persistence';
 import {
-  ILoggerService,
-  LoggerModule,
-  LoggerProviders,
-} from '@ecommerce/common/logger';
-import {
-  HashModule,
-  HashProviders,
-  IHashService,
-} from '@ecommerce/common/hash';
-import {
-  ExceptionModule,
-  ExceptionProviders,
-  IExceptionService,
-} from '@ecommerce/common/exception';
-import { ICategoryRepository, CategoryProviders } from '../domain';
-import { HashProvidersEnum } from '@common/adapters/hash/domain';
+  DeleteCategoryController,
+  FindAllCategoriesController,
+  FindByCategoryController,
+  StoreCategoryController,
+  UpdateCategoryController,
+} from './api';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([CategoryEntity]),
     LoggerModule,
     ExceptionModule,
-    TypeOrmModule.forFeature([CategoryEntity]),
     HashModule,
   ],
   controllers: [
-    FindAllCategorysController,
+    FindAllCategoriesController,
     FindByCategoryController,
     StoreCategoryController,
     UpdateCategoryController,
@@ -49,53 +48,61 @@ import { HashProvidersEnum } from '@common/adapters/hash/domain';
   ],
   providers: [
     {
-      provide: CategoryProviders.ICategoryRepository,
+      provide: CategoryProvidersEnum.CATEGORY_REPOSITORY,
       useClass: CategoryTypeOrmRepository,
     },
     {
       inject: [
-        CategoryProviders.ICategoryRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CategoryProvidersEnum.CATEGORY_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: FindAllCategorysUseCase,
+      provide: CategoryProvidersEnum.FIND_ALL_CATEGORIES_USE_CASE,
       useFactory: (
-        categoryRepositoy: ICategoryRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CategoryRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindAllCategorysUseCase(categoryRepositoy, loggerService, exceptionService),
+        new FindAllCategoriesUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
-        CategoryProviders.ICategoryRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CategoryProvidersEnum.CATEGORY_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: FindByCategoryUseCase,
+      provide: CategoryProvidersEnum.FIND_BY_CATEGORY_USE_CASE,
       useFactory: (
-        categoryRepositoy: ICategoryRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CategoryRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindByCategoryUseCase(categoryRepositoy, loggerService, exceptionService),
+        new FindByCategoryUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
-        CategoryProviders.ICategoryRepository,
+        CategoryProvidersEnum.CATEGORY_REPOSITORY,
         HashProvidersEnum.HASH_SERVICE,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: StoreCategoryUseCase,
+      provide: CategoryProvidersEnum.STORE_CATEGORY_USE_CASE,
       useFactory: (
-        categoryRepositoy: ICategoryRepository,
-        hashService: HashProvidersEnum.HASH_SERVICE,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CategoryRepositoryInterface,
+        hashService: HashServiceInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreCategoryUseCase(
-          categoryRepositoy,
+          userRepositoy,
           hashService,
           loggerService,
           exceptionService,
@@ -103,33 +110,47 @@ import { HashProvidersEnum } from '@common/adapters/hash/domain';
     },
     {
       inject: [
-        CategoryProviders.ICategoryRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CategoryProvidersEnum.CATEGORY_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: UpdateCategoryUseCase,
+      provide: CategoryProvidersEnum.UPDATE_CATEGORY_USE_CASE,
       useFactory: (
-        categoryRepositoy: ICategoryRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CategoryRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new UpdateCategoryUseCase(categoryRepositoy, loggerService, exceptionService),
+        new UpdateCategoryUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
-        CategoryProviders.ICategoryRepository,
-        LoggerProviders.ILoggerService,
-        ExceptionProviders.IExceptionService,
+        CategoryProvidersEnum.CATEGORY_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: DeleteCategoryUseCase,
+      provide: CategoryProvidersEnum.DELETE_CATEGORY_USE_CASE,
       useFactory: (
-        categoryRepositoy: ICategoryRepository,
-        loggerService: ILoggerService,
-        exceptionService: IExceptionService,
+        userRepositoy: CategoryRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
       ) =>
-        new DeleteCategoryUseCase(categoryRepositoy, loggerService, exceptionService),
+        new DeleteCategoryUseCase(
+          userRepositoy,
+          loggerService,
+          exceptionService,
+        ),
     },
   ],
-  exports: [CategoryProviders.ICategoryRepository],
+  exports: [
+    CategoryProvidersEnum.FIND_ALL_CATEGORIES_USE_CASE,
+    CategoryProvidersEnum.FIND_BY_CATEGORY_USE_CASE,
+    CategoryProvidersEnum.STORE_CATEGORY_USE_CASE,
+    CategoryProvidersEnum.UPDATE_CATEGORY_USE_CASE,
+    CategoryProvidersEnum.DELETE_CATEGORY_USE_CASE,
+  ],
 })
 export class CategoryModule {}

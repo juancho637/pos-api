@@ -1,6 +1,6 @@
-export type CreateCounterType = {  
-  branch_id: number;
-  user_id: number;
-  status: boolean;
-  base: number;  
-};
+import { CounterType } from './counter.type';
+
+export type CreateCounterType = Omit<
+  CounterType,
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'status'
+>;
