@@ -8,42 +8,27 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserType } from '../../domain';
-import { RoleEntity } from '@modules/roles/infrastructure';
+import { PermissionEntity } from '@modules/permissions/infrastructure';
+import { RoleType } from '../../domain';
+import { UserEntity } from '@modules/users/infrastructure';
 
-@Entity({ name: 'users' })
-export class UserEntity implements UserType {
+@Entity({ name: 'roles' })
+export class RoleEntity implements RoleType {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
-    length: 50,
+    length: 100,
     nullable: false,
   })
   name: string;
 
   @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-    unique: true,
-  })
-  username: string;
-
-  @Column({
-    type: 'varchar',
-    length: 100,
+    type: 'text',
     nullable: true,
   })
-  email: string;
-
-  @Column({
-    type: 'varchar',
-    length: 128,
-    nullable: false,
-  })
-  password: string;
+  description: string;
 
   @Column({
     type: 'varchar',
@@ -70,17 +55,31 @@ export class UserEntity implements UserType {
   })
   deletedAt?: Date;
 
-  @ManyToMany(() => RoleEntity, (role) => role.users)
+  @ManyToMany(() => PermissionEntity, (permission) => permission.roles)
   @JoinTable({
-    name: 'role_user',
+    name: 'permission_role',
     joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
       name: 'role_id',
       referencedColumnName: 'id',
     },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+    },
   })
-  roles: RoleEntity[];
+  permissions: PermissionEntity[];
+
+  @ManyToMany(() => UserEntity, (user) => user.roles)
+  @JoinTable({
+    name: 'role_user',
+    joinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  users: UserEntity[];
 }

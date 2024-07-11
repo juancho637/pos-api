@@ -5,6 +5,8 @@ import { DatabaseModule } from '@common/adapters/database/infrastructure';
 import { LoggerModule } from '@common/adapters/logger/infrastructure';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { TokenModule } from '@common/adapters/token/infrastructure';
+import { PermissionModule } from '@modules/permissions/infrastructure';
+import { RoleModule } from '@modules/roles/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
 import { ProviderModule } from '@modules/providers/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
@@ -23,6 +25,8 @@ import { CounterModule } from './modules/counters/infrastructure';
     TokenModule,
 
     // Modules
+    PermissionModule,
+    RoleModule,
     UserModule,
     ProviderModule,
     AuthModule,
