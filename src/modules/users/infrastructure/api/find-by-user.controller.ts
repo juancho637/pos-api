@@ -7,7 +7,12 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { UserProvidersEnum, userErrorsCodes } from '../../domain';
+import { Auth } from '@modules/auth/infrastructure';
+import {
+  UserPermissionsEnum,
+  UserProvidersEnum,
+  userErrorsCodes,
+} from '../../domain';
 import { FindByUserUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
 
@@ -25,6 +30,7 @@ export class FindByUserController {
   ) {}
 
   @Get('api/users/:id')
+  @Auth(UserPermissionsEnum.READ_USER)
   async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
     try {
       const user = await this.findByUserUseCase.run({ id });

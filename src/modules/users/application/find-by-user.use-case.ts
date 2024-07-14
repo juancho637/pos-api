@@ -17,9 +17,15 @@ export class FindByUserUseCase implements FindByUserUseCaseInterface {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(userFilters: UserFilterType): Promise<UserType> {
+  async run(
+    userFilters: UserFilterType,
+    relations?: string[],
+  ): Promise<UserType> {
     try {
-      const user = await this.userRepository.findOneBy({ ...userFilters });
+      const user = await this.userRepository.findOneBy(
+        { ...userFilters },
+        relations,
+      );
 
       return user;
     } catch (error) {

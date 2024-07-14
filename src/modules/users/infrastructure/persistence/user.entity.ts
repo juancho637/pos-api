@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserType } from '../../domain';
 import { RoleEntity } from '@modules/roles/infrastructure';
+import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })
 export class UserEntity implements UserType {

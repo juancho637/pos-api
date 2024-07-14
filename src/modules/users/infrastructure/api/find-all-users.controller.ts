@@ -18,7 +18,13 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { UserProvidersEnum, UserType, userErrorsCodes } from '../../domain';
+import { Auth } from '@modules/auth/infrastructure';
+import {
+  UserPermissionsEnum,
+  UserProvidersEnum,
+  UserType,
+  userErrorsCodes,
+} from '../../domain';
 import { FindAllUsersUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
 
@@ -36,6 +42,7 @@ export class FindAllUsersController {
   ) {}
 
   @Get('api/users')
+  @Auth(UserPermissionsEnum.LIST_USER)
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,

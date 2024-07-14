@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import {
   FindByUserUseCaseInterface,
   UserProvidersEnum,
@@ -29,7 +29,13 @@ import { SignInUseCase } from '../application';
 import { SignInController } from './api';
 
 @Module({
-  imports: [UserModule, TokenModule, LoggerModule, ExceptionModule, HashModule],
+  imports: [
+    forwardRef(() => UserModule),
+    forwardRef(() => TokenModule),
+    LoggerModule,
+    ExceptionModule,
+    HashModule,
+  ],
   controllers: [SignInController],
   providers: [
     {

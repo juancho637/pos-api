@@ -9,8 +9,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PermissionEntity } from '@modules/permissions/infrastructure';
-import { RoleType } from '../../domain';
 import { UserEntity } from '@modules/users/infrastructure';
+import { RoleType } from '../../domain';
 
 @Entity({ name: 'roles' })
 export class RoleEntity implements RoleType {

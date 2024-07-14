@@ -4,5 +4,5 @@ import { UserType } from '../user.type';
 export interface FindByUserUseCaseInterface<
   Entity extends UserType = UserType,
 > {
-  run(userFilters: UserFilterType): Promise<Entity>;
+  run(userFilters: UserFilterType, relations?: string[]): Promise<Entity>;
 }

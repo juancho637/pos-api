@@ -42,10 +42,14 @@ export class UserTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: UserFilterType): Promise<UserEntity> {
+  async findOneBy(
+    fields: UserFilterType,
+    relations?: string[],
+  ): Promise<UserEntity> {
     try {
-      const user = await this.usersRepository.findOneOrFail({
+      const user = await this.usersRepository.findOne({
         where: { ...fields },
+        relations: relations || [],
       });
 
       return user;

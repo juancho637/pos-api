@@ -7,7 +7,12 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { UserProvidersEnum, userErrorsCodes } from '../../domain';
+import { Auth } from '@modules/auth/infrastructure';
+import {
+  UserPermissionsEnum,
+  UserProvidersEnum,
+  userErrorsCodes,
+} from '../../domain';
 import { StoreUserUseCase } from '../../application';
 import { CreateUserDto } from '../dto';
 import { UserPresenter } from '../user.presenter';
@@ -26,6 +31,7 @@ export class StoreUserController {
   ) {}
 
   @Post('api/users')
+  @Auth(UserPermissionsEnum.CREATE_USER)
   async run(@Body() createUserDto: CreateUserDto): Promise<UserPresenter> {
     try {
       const user = await this.storeUserUseCase.run(createUserDto);

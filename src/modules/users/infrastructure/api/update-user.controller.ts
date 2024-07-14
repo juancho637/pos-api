@@ -14,7 +14,12 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { UserProvidersEnum, userErrorsCodes } from '../../domain';
+import { Auth } from '@modules/auth/infrastructure';
+import {
+  UserPermissionsEnum,
+  UserProvidersEnum,
+  userErrorsCodes,
+} from '../../domain';
 import { UpdateUserUseCase } from '../../application';
 import { UpdateUserDto } from '../dto';
 import { UserPresenter } from '../user.presenter';
@@ -33,6 +38,7 @@ export class UpdateUserController {
   ) {}
 
   @Put('api/users/:id')
+  @Auth(UserPermissionsEnum.UPDATE_USER)
   async run(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,

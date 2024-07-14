@@ -20,7 +20,7 @@ import {
 } from '@common/adapters/exception/domain';
 import { TokenPayloadType } from '../../domain';
 
-export class JwtPassportStrategy extends PassportStrategy(Strategy) {
+export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
   private readonly context = JwtPassportStrategy.name;
 
   constructor(
@@ -42,11 +42,14 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy) {
 
   async validate({ sub }: TokenPayloadType) {
     try {
-      const user = await this.findByUserUseCase.run({
-        id: sub as number,
-      });
+      const { roles, ...userData } = await this.findByUserUseCase.run(
+        {
+          id: sub as number,
+        },
+        ['roles.permissions'],
+      );
 
-      if (!user) {
+      if (!userData) {
         throw this.exception.UnauthorizedException({
           message: {
             codeError: 'TKN012',
@@ -56,7 +59,7 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy) {
         });
       }
 
-      if (user.deletedAt) {
+      if (userData.deletedAt) {
         throw this.exception.UnauthorizedException({
           message: {
             codeError: 'TKN013',
@@ -66,7 +69,12 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy) {
         });
       }
 
-      return user;
+      const permissions = roles.reduce(
+        (acc, role) => [...acc, ...role.permissions],
+        [],
+      );
+
+      return { data: userData, permissions };
     } catch (error) {
       this.logger.error({
         message: error,
