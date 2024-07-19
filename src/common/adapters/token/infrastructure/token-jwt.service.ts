@@ -6,8 +6,16 @@ import { TokenPayloadType, TokenServiceInterface } from '../domain';
 export class TokenJwtService implements TokenServiceInterface {
   constructor(private readonly jwtService: JwtService) {}
 
-  generateToken(payload: TokenPayloadType): string {
-    return this.jwtService.sign(payload);
+  generateToken(payload: TokenPayloadType): {
+    token: string;
+    tokenExpiration: number;
+  } {
+    const token = this.jwtService.sign(payload);
+    const expiration = this.jwtService.decode(token).exp;
+
+    console.log(expiration);
+
+    return { token, tokenExpiration: expiration * 1000 };
   }
 
   verifyToken(token: string): any {

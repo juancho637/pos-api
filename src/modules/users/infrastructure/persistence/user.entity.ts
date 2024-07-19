@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { RoleEntity } from '@modules/roles/infrastructure';
+import { PermissionEntity } from '@modules/permissions/infrastructure';
 import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })
@@ -83,4 +84,18 @@ export class UserEntity implements UserType {
     },
   })
   roles: RoleEntity[];
+
+  @ManyToMany(() => PermissionEntity, (permission) => permission.users)
+  @JoinTable({
+    name: 'permission_user',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+    },
+  })
+  permissions: PermissionEntity[];
 }

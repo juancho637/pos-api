@@ -19,6 +19,8 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import { TokenPayloadType } from '../../domain';
+import { PermissionType } from '@modules/permissions/domain';
+import { RoleType } from '@modules/roles/domain';
 
 export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
   private readonly context = JwtPassportStrategy.name;
@@ -42,12 +44,13 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate({ sub }: TokenPayloadType) {
     try {
-      const { roles, ...userData } = await this.findByUserUseCase.run(
-        {
-          id: sub as number,
-        },
-        ['roles.permissions'],
-      );
+      const { roles, permissions, ...userData } =
+        await this.findByUserUseCase.run(
+          {
+            id: sub as number,
+          },
+          ['roles.permissions', 'permissions'],
+        );
 
       if (!userData) {
         throw this.exception.UnauthorizedException({
@@ -69,12 +72,9 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
         });
       }
 
-      const permissions = roles.reduce(
-        (acc, role) => [...acc, ...role.permissions],
-        [],
-      );
+      const userPermissions = this.getUniquePermissions(roles, permissions);
 
-      return { data: userData, permissions };
+      return { data: userData, permissions: userPermissions };
     } catch (error) {
       this.logger.error({
         message: error,
@@ -83,5 +83,25 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
 
       throw error;
     }
+  }
+
+  private getUniquePermissions(
+    roles: RoleType[],
+    permissions: PermissionType[],
+  ): PermissionType[] {
+    const rolesPermissions = roles.reduce(
+      (acc, role) => [...acc, ...role.permissions],
+      [],
+    );
+
+    const mergedPermissions = [...permissions, ...rolesPermissions];
+
+    const uniqueEntitiesMap = new Map<number, PermissionType>();
+
+    mergedPermissions.forEach((entity) => {
+      uniqueEntitiesMap.set(entity.id, entity);
+    });
+
+    return Array.from(uniqueEntitiesMap.values());
   }
 }

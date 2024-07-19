@@ -1,14 +1,15 @@
+import { AuthUserType } from '@modules/auth/domain';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 
 export const GetAuthUser = createParamDecorator(
-  (data, ctx: ExecutionContext) => {
+  (data, ctx: ExecutionContext): AuthUserType => {
     const request = ctx.switchToHttp().getRequest();
-    const user = request.user.data;
+    const userInfo = request.user;
 
-    if (!user) {
+    if (!userInfo) {
       throw new Error('User not found');
     }
 
-    return user;
+    return userInfo;
   },
 );

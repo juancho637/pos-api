@@ -43,10 +43,13 @@ export class SignInUseCase implements SignInUseCaseInterface {
         });
       }
 
-      const token = this.tokenService.generateToken({ sub: user.id });
+      const { token, tokenExpiration } = this.tokenService.generateToken({
+        sub: user.id,
+      });
 
       return {
         accessToken: token,
+        expiresIn: tokenExpiration,
         tokenType: 'Bearer',
       };
     } catch (error) {

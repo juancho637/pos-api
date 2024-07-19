@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { RoleEntity } from '@modules/roles/infrastructure';
+import { UserEntity } from '@modules/users/infrastructure';
 import { PermissionType } from '../../domain';
 
 @Entity({ name: 'permissions' })
@@ -47,17 +48,17 @@ export class PermissionEntity implements PermissionType {
   })
   roles: RoleEntity[];
 
-  // @ManyToMany(() => UserEntity, (user) => user.permissions)
-  // @JoinTable({
-  //   name: 'permission_user',
-  //   joinColumn: {
-  //     name: 'permission_id',
-  //     referencedColumnName: 'id',
-  //   },
-  //   inverseJoinColumn: {
-  //     name: 'user_id',
-  //     referencedColumnName: 'id',
-  //   },
-  // })
-  // users: UserEntity[];
+  @ManyToMany(() => UserEntity, (user) => user.permissions)
+  @JoinTable({
+    name: 'permission_user',
+    joinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+  })
+  users: UserEntity[];
 }
