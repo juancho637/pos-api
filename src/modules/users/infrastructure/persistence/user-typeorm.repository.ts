@@ -42,10 +42,14 @@ export class UserTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: UserFilterType): Promise<UserEntity> {
+  async findOneBy(
+    fields: UserFilterType,
+    relations?: string[],
+  ): Promise<UserEntity> {
     try {
-      const user = await this.usersRepository.findOneOrFail({
+      const user = await this.usersRepository.findOne({
         where: { ...fields },
+        relations: relations || [],
       });
 
       return user;
@@ -63,7 +67,7 @@ export class UserTypeOrmRepository
   async findAll(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<UserEntity>>> {
     try {
       const { page, size } = pagination;
@@ -97,8 +101,14 @@ export class UserTypeOrmRepository
     }
   }
 
-  async store(createUserFields: CreateUserType): Promise<UserEntity> {
+  async store(
+    createUserFields: CreateUserType | CreateUserType[],
+  ): Promise<UserEntity | UserEntity[]> {
     try {
+      if (Array.isArray(createUserFields)) {
+        return this.usersRepository.save(createUserFields);
+      }
+
       return this.usersRepository.save(createUserFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.context });

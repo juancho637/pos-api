@@ -28,6 +28,8 @@
       "@common/adapters/token/*": ["./src/common/adapters/token/*"],
 
       // Modules
+      "@modules/permissions/*": ["./src/modules/permissions/*"],
+      "@modules/roles/*": ["./src/modules/roles/*"],
       "@modules/users/*": ["./src/modules/users/*"],
       "@modules/auth/*": ["./src/modules/auth/*"],
       "@modules/categories/*": ["./src/modules/categories/*"],

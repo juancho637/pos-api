@@ -63,7 +63,7 @@ export class ProviderTypeOrmRepository
   async findAll(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<ProviderFilterType>[],
   ): Promise<PaginatedResourceType<Partial<ProviderEntity>>> {
     try {
       const { page, size } = pagination;

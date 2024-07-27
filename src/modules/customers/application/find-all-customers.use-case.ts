@@ -7,6 +7,7 @@ import {
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
+  CustomerFilterType,
   CustomerRepositoryInterface,
   CustomerType,
   customerErrorsCodes,
@@ -24,7 +25,7 @@ export class FindAllCustomersUseCase {
   async run(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<CustomerFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CustomerType>>> {
     try {
       const providerResource = await this.customerRepository.findAll(

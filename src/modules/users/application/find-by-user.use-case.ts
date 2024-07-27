@@ -2,11 +2,11 @@ import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
   FindByUserUseCaseInterface,
-  UserFilterType,
   UserRepositoryInterface,
   UserType,
   userErrorsCodes,
 } from '../domain';
+import { FindByUserUseCaseDto } from '../domain/types';
 
 export class FindByUserUseCase implements FindByUserUseCaseInterface {
   private readonly context = FindByUserUseCase.name;
@@ -17,9 +17,15 @@ export class FindByUserUseCase implements FindByUserUseCaseInterface {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(userFilters: UserFilterType): Promise<UserType> {
+  async run({
+    userFilters,
+    relations,
+  }: FindByUserUseCaseDto): Promise<UserType> {
     try {
-      const user = await this.userRepository.findOneBy({ ...userFilters });
+      const user = await this.userRepository.findOneBy(
+        { ...userFilters },
+        relations,
+      );
 
       return user;
     } catch (error) {

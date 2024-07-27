@@ -1,8 +1,8 @@
-import { UserFilterType } from '../user-filter.type';
+import { FindByUserUseCaseDto } from '../types';
 import { UserType } from '../user.type';
 
 export interface FindByUserUseCaseInterface<
   Entity extends UserType = UserType,
 > {
-  run(userFilters: UserFilterType): Promise<Entity>;
+  run(findByUserUseCaseDto: FindByUserUseCaseDto): Promise<Entity>;
 }

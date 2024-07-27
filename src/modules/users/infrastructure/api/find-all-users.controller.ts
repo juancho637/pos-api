@@ -18,7 +18,14 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { UserProvidersEnum, UserType, userErrorsCodes } from '../../domain';
+import { Auth } from '@modules/auth/infrastructure';
+import {
+  UserFilterType,
+  UserPermissionsEnum,
+  UserProvidersEnum,
+  UserType,
+  userErrorsCodes,
+} from '../../domain';
 import { FindAllUsersUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
 
@@ -36,10 +43,12 @@ export class FindAllUsersController {
   ) {}
 
   @Get('api/users')
+  @Auth(UserPermissionsEnum.LIST_ANY_USER)
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
-    @FilteringParams(['id', 'name', 'email']) filterParams?: FilteringType[],
+    @FilteringParams(['id', 'name', 'email'])
+    filterParams?: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<UserType>>> {
     try {
       const users = await this.findAllUsersUseCase.run(

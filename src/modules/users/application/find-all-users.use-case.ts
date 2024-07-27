@@ -6,7 +6,12 @@ import {
 } from '@common/helpers/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
-import { UserRepositoryInterface, UserType, userErrorsCodes } from '../domain';
+import {
+  UserFilterType,
+  UserRepositoryInterface,
+  UserType,
+  userErrorsCodes,
+} from '../domain';
 
 export class FindAllUsersUseCase {
   private readonly context = FindAllUsersUseCase.name;
@@ -20,7 +25,7 @@ export class FindAllUsersUseCase {
   async run(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<UserType>>> {
     try {
       const userResource = await this.userRepository.findAll(

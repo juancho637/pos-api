@@ -3,9 +3,15 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+// import { PermissionEntity } from '../../../permissions/infrastructure';
+// import { RoleEntity } from '../../../roles/infrastructure';
+import { PermissionEntity } from '@modules/permissions/infrastructure';
+import { RoleEntity } from '@modules/roles/infrastructure';
 import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })
@@ -66,4 +72,32 @@ export class UserEntity implements UserType {
     nullable: true,
   })
   deletedAt?: Date;
+
+  @ManyToMany(() => RoleEntity, (role) => role.users)
+  @JoinTable({
+    name: 'role_user',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+    },
+  })
+  roles: RoleEntity[];
+
+  @ManyToMany(() => PermissionEntity, (permission) => permission.users)
+  @JoinTable({
+    name: 'permission_user',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+    },
+  })
+  permissions: PermissionEntity[];
 }

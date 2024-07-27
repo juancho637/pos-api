@@ -63,7 +63,7 @@ export class CategoryTypeOrmRepository
   async findAll(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<CategoryFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CategoryEntity>>> {
     try {
       const { page, size } = pagination;

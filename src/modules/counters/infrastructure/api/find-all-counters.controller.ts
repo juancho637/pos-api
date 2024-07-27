@@ -19,6 +19,7 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import {
+  CounterFilterType,
   CounterProvidersEnum,
   CounterType,
   counterErrorsCodes,
@@ -44,7 +45,7 @@ export class FindAllCountersController {
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'branch_id', 'user_id']) sortParams?: SortingType,
     @FilteringParams(['id', 'branch_id', 'user_id'])
-    filterParams?: FilteringType[],
+    filterParams?: FilteringType<CounterFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CounterType>>> {
     try {
       const counters = await this.findAllCountersUseCase.run(

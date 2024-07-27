@@ -1,3 +1,6 @@
+import { PermissionType } from '@modules/permissions/domain';
+import { RoleType } from '@modules/roles/domain';
+
 export type UserType = {
   id: number;
   name: string;
@@ -8,4 +11,6 @@ export type UserType = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
+  roles?: RoleType[];
+  permissions?: PermissionType[];
 };
