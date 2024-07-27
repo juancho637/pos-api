@@ -45,12 +45,12 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate({ sub }: TokenPayloadType) {
     try {
       const { roles, permissions, ...userData } =
-        await this.findByUserUseCase.run(
-          {
+        await this.findByUserUseCase.run({
+          userFilters: {
             id: sub as number,
           },
-          ['roles.permissions', 'permissions'],
-        );
+          relations: ['roles.permissions', 'permissions'],
+        });
 
       if (!userData) {
         throw this.exception.UnauthorizedException({
@@ -88,7 +88,7 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
   private getUniquePermissions(
     roles: RoleType[],
     permissions: PermissionType[],
-  ): PermissionType[] {
+  ): string[] {
     const rolesPermissions = roles.reduce(
       (acc, role) => [...acc, ...role.permissions],
       [],
@@ -102,6 +102,8 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
       uniqueEntitiesMap.set(entity.id, entity);
     });
 
-    return Array.from(uniqueEntitiesMap.values());
+    return Array.from(uniqueEntitiesMap.values()).map(
+      (permission) => permission.name,
+    );
   }
 }

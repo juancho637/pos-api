@@ -63,7 +63,7 @@ export class CounterTypeOrmRepository
   async findAll(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<CounterFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CounterEntity>>> {
     try {
       const { page, size } = pagination;

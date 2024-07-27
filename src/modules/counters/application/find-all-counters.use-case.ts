@@ -7,6 +7,7 @@ import {
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
+  CounterFilterType,
   CounterRepositoryInterface,
   CounterType,
   counterErrorsCodes,
@@ -24,7 +25,7 @@ export class FindAllCountersUseCase {
   async run(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<CounterFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CounterType>>> {
     try {
       const counterResource = await this.counterRepository.findAll(

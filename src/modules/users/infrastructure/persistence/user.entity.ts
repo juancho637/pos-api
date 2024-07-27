@@ -8,8 +8,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { RoleEntity } from '@modules/roles/infrastructure';
+// import { PermissionEntity } from '../../../permissions/infrastructure';
+// import { RoleEntity } from '../../../roles/infrastructure';
 import { PermissionEntity } from '@modules/permissions/infrastructure';
+import { RoleEntity } from '@modules/roles/infrastructure';
 import { UserType } from '../../domain';
 
 @Entity({ name: 'users' })

@@ -6,9 +6,7 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
+  FindAllFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import {
@@ -23,6 +21,7 @@ import {
   PermissionRepositoryInterface,
   PermissionFilterType,
   permissionErrorsCodes,
+  CreatePermissionType,
 } from '../../domain';
 import { PermissionEntity } from './permission.entity';
 
@@ -33,7 +32,7 @@ export class PermissionTypeOrmRepository
 
   constructor(
     @InjectRepository(PermissionEntity)
-    private readonly PermissionsRepository: Repository<PermissionEntity>,
+    private readonly permissionsRepository: Repository<PermissionEntity>,
     @Inject(LoggerProvidersEnum.LOGGER_SERVICE)
     private readonly logger: LoggerServiceInterface,
     @Inject(ExceptionProvidersEnum.EXCEPTION_SERVICE)
@@ -42,7 +41,7 @@ export class PermissionTypeOrmRepository
 
   async findOneBy(fields: PermissionFilterType): Promise<PermissionEntity> {
     try {
-      const Permission = await this.PermissionsRepository.findOneOrFail({
+      const Permission = await this.permissionsRepository.findOneOrFail({
         where: { ...fields },
       });
 
@@ -60,7 +59,7 @@ export class PermissionTypeOrmRepository
 
   async findByIds(ids: number[]): Promise<PermissionEntity[]> {
     try {
-      const Permission = await this.PermissionsRepository.find({
+      const Permission = await this.permissionsRepository.find({
         where: { id: In(ids) },
       });
 
@@ -76,18 +75,20 @@ export class PermissionTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<PermissionEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<PermissionFilterType>): Promise<
+    PaginatedResourceType<PermissionEntity>
+  > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
       const order = getOrderTypeOrmHelper(sort);
 
       const [Permissions, count] =
-        await this.PermissionsRepository.findAndCount({
+        await this.permissionsRepository.findAndCount({
           where,
           order,
           skip: (page - 1) * size,
@@ -108,6 +109,26 @@ export class PermissionTypeOrmRepository
 
       throw this.exception.internalServerErrorException({
         message: permissionErrorsCodes.PRM020,
+        context: this.context,
+        error,
+      });
+    }
+  }
+
+  async store(
+    createPermissionsFields: CreatePermissionType | CreatePermissionType[],
+  ): Promise<PermissionEntity | PermissionEntity[]> {
+    try {
+      if (Array.isArray(createPermissionsFields)) {
+        return this.permissionsRepository.save(createPermissionsFields);
+      }
+
+      return this.permissionsRepository.save(createPermissionsFields);
+    } catch (error) {
+      this.logger.error({ message: error, context: this.context });
+
+      throw this.exception.internalServerErrorException({
+        message: permissionErrorsCodes.PRM030,
         context: this.context,
         error,
       });

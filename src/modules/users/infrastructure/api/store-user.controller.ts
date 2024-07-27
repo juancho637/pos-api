@@ -31,7 +31,7 @@ export class StoreUserController {
   ) {}
 
   @Post('api/users')
-  @Auth(UserPermissionsEnum.CREATE_USER)
+  @Auth(UserPermissionsEnum.CREATE_ANY_USER)
   async run(@Body() createUserDto: CreateUserDto): Promise<UserPresenter> {
     try {
       const user = await this.storeUserUseCase.run(createUserDto);

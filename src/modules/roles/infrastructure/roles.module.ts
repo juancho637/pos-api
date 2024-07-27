@@ -1,25 +1,23 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HashModule } from '@common/adapters/hash/infrastructure';
-// import {
-//   LoggerProvidersEnum,
-//   LoggerServiceInterface,
-// } from '@common/adapters/logger/domain';
-import { LoggerModule } from '@common/adapters/logger/infrastructure';
-// import {
-//   ExceptionProvidersEnum,
-//   ExceptionServiceInterface,
-// } from '@common/adapters/exception/domain';
-import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import {
-  RoleProvidersEnum,
-  // RoleRepositoryInterface,
-} from '../domain';
-// import {
-//   FindAllRolesUseCase,
-//   FindByRoleUseCase,
-// } from '../application';
+  LoggerProvidersEnum,
+  LoggerServiceInterface,
+} from '@common/adapters/logger/domain';
+import { LoggerModule } from '@common/adapters/logger/infrastructure';
+import {
+  ExceptionProvidersEnum,
+  ExceptionServiceInterface,
+} from '@common/adapters/exception/domain';
+import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import { RoleProvidersEnum, RoleRepositoryInterface } from '../domain';
+import {
+  FindAllRolesUseCase,
+  // FindByRoleUseCase,
+} from '../application';
 import { RoleEntity, RoleTypeOrmRepository } from './persistence';
+import { RolesSeeder } from './seeders';
+// import { PermissionModule } from '@modules/permissions/infrastructure';
 // import {
 //   FindAllRolesController,
 //   FindByRoleController,
@@ -28,9 +26,9 @@ import { RoleEntity, RoleTypeOrmRepository } from './persistence';
 @Module({
   imports: [
     TypeOrmModule.forFeature([RoleEntity]),
+    // forwardRef(() => PermissionModule),
     LoggerModule,
     ExceptionModule,
-    HashModule,
   ],
   // controllers: [FindAllRolesController, FindByRoleController],
   providers: [
@@ -38,24 +36,31 @@ import { RoleEntity, RoleTypeOrmRepository } from './persistence';
       provide: RoleProvidersEnum.ROLE_REPOSITORY,
       useClass: RoleTypeOrmRepository,
     },
-    // {
-    //   inject: [
-    //     RoleProvidersEnum.ROLE_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
-    //   useFactory: (
-    //     RoleRepositoy: RoleRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new FindAllRolesUseCase(
-    //       RoleRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      provide: RoleProvidersEnum.ROLE_SEEDER,
+      inject: [
+        RoleProvidersEnum.ROLE_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+      ],
+      useFactory: (
+        roleRepositoy: RoleRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+      ) => new RolesSeeder(roleRepositoy, loggerService),
+    },
+    {
+      inject: [
+        RoleProvidersEnum.ROLE_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
+      useFactory: (
+        RoleRepositoy: RoleRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new FindAllRolesUseCase(RoleRepositoy, loggerService, exceptionService),
+    },
     // {
     //   inject: [
     //     RoleProvidersEnum.ROLE_REPOSITORY,
@@ -76,7 +81,7 @@ import { RoleEntity, RoleTypeOrmRepository } from './persistence';
     // },
   ],
   exports: [
-    // RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
+    RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
     // RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
   ],
 })

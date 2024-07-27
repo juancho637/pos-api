@@ -1,8 +1,6 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { RoleType } from './role.type';
 import { RoleFilterType } from './role-filter.type';
@@ -12,11 +10,11 @@ import { UpdateRoleType } from './update-role.type';
 export interface RoleRepositoryInterface<Entity extends RoleType = RoleType> {
   findOneBy(fields: RoleFilterType): Promise<Entity>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<Entity>>>;
-  store(createRoleFields: CreateRoleType): Promise<Entity>;
+    findAllFieldsDto: FindAllFieldsDto<RoleFilterType>,
+  ): Promise<PaginatedResourceType<Entity>>;
+  store(
+    createRoleFields: CreateRoleType | CreateRoleType[],
+  ): Promise<Entity | Entity[]>;
   update(id: number, updateRoleFields: UpdateRoleType): Promise<Entity>;
   delete(id: number): Promise<Entity>;
 }

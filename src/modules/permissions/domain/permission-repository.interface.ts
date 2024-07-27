@@ -1,11 +1,12 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
-import { PermissionType } from './permission.type';
-import { PermissionFilterType } from './permission-filter.type';
+import {
+  CreatePermissionType,
+  PermissionFilterType,
+  PermissionType,
+} from './types';
 
 export interface PermissionRepositoryInterface<
   Entity extends PermissionType = PermissionType,
@@ -13,8 +14,9 @@ export interface PermissionRepositoryInterface<
   findOneBy(fields: PermissionFilterType): Promise<Entity>;
   findByIds(ids: number[]): Promise<Entity[]>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<Entity>>>;
+    findAllFieldsDto: FindAllFieldsDto<PermissionFilterType>,
+  ): Promise<PaginatedResourceType<Entity>>;
+  store(
+    createUsersFields: CreatePermissionType | CreatePermissionType[],
+  ): Promise<Entity | Entity[]>;
 }

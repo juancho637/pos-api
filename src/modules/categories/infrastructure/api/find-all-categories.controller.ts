@@ -19,6 +19,7 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import {
+  CategoryFilterType,
   CategoryProvidersEnum,
   CategoryType,
   categoryErrorsCodes,
@@ -44,7 +45,7 @@ export class FindAllCategoriesController {
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'branch_id', 'user_id']) sortParams?: SortingType,
     @FilteringParams(['id', 'branch_id', 'user_id'])
-    filterParams?: FilteringType[],
+    filterParams?: FilteringType<CategoryFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CategoryType>>> {
     try {
       const categories = await this.findAllCategoriesUseCase.run(

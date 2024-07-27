@@ -7,7 +7,7 @@ import { Request } from 'express';
 import { FilterRuleEnum, FilteringType } from '../../domain';
 
 export const FilteringParams = createParamDecorator(
-  (data, ctx: ExecutionContext): FilteringType[] => {
+  <T>(data: string[], ctx: ExecutionContext): FilteringType<T>[] => {
     const req: Request = ctx.switchToHttp().getRequest();
     const filter = req.query;
 

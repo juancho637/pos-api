@@ -3,3 +3,5 @@ export type PermissionFilterType = {
   name?: string;
   module?: string;
 };
+
+export type PermissionPropertiesType = keyof PermissionFilterType;

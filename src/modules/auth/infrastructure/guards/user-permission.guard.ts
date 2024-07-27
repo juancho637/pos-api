@@ -4,8 +4,8 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { PermissionType } from '@modules/permissions/domain';
 import { META_PERMISSIONS } from '../decorators';
+import { generalPolicyHelper } from '@common/helpers/application';
 
 export class UserPermissionGuard implements CanActivate {
   private readonly context = UserPermissionGuard.name;
@@ -27,15 +27,11 @@ export class UserPermissionGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest();
-    const userPermissions = request.user.permissions as PermissionType[];
 
-    const permissionsNames = userPermissions.map(
-      (permission) => permission.name,
-    );
-
-    const hasPermission = validPermissions.some((permission) =>
-      permissionsNames.includes(permission),
-    );
+    const hasPermission = generalPolicyHelper({
+      userPermissions: request.user.permissions,
+      validPermissions,
+    });
 
     if (!hasPermission) {
       throw this.exception.forbiddenException({

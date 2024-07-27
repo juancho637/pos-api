@@ -16,7 +16,7 @@ export interface ProviderRepositoryInterface<
   findAll(
     pagination: PaginationType,
     sort: SortingType,
-    filters: FilteringType[],
+    filters: FilteringType<ProviderFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createProviderFields: CreateProviderType): Promise<Entity>;
   update(id: number, updateProviderFields: UpdateProviderType): Promise<Entity>;

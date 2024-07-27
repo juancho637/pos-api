@@ -13,8 +13,6 @@ export class TokenJwtService implements TokenServiceInterface {
     const token = this.jwtService.sign(payload);
     const expiration = this.jwtService.decode(token).exp;
 
-    console.log(expiration);
-
     return { token, tokenExpiration: expiration * 1000 };
   }
 

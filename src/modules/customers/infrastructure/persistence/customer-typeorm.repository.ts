@@ -63,7 +63,7 @@ export class CustomerTypeOrmRepository
   async findAll(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<CustomerFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CustomerEntity>>> {
     try {
       const { page, size } = pagination;

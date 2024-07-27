@@ -10,44 +10,47 @@ import {
 } from 'typeorm';
 import { FilterRuleEnum, FilteringType } from '../domain';
 
-export const getWhereTypeOrmHelper = (filters: FilteringType[]) => {
+export const getWhereTypeOrmHelper = <T>(filters: FilteringType<T>[]) => {
   if (!filters) return {};
 
   return filters.map((filter) => {
-    if (filter.rule == FilterRuleEnum.IS_NULL)
-      return { [filter.property]: IsNull() };
+    const { property, rule, value } = filter;
+    const propertyString = property as string;
+    const ruleString = rule.toString();
 
-    if (filter.rule == FilterRuleEnum.IS_NOT_NULL)
-      return { [filter.property]: Not(IsNull()) };
+    if (ruleString == FilterRuleEnum.IS_NULL)
+      return { [propertyString]: IsNull() };
 
-    if (filter.rule == FilterRuleEnum.EQUALS)
-      return { [filter.property]: filter.value };
+    if (ruleString == FilterRuleEnum.IS_NOT_NULL)
+      return { [propertyString]: Not(IsNull()) };
 
-    if (filter.rule == FilterRuleEnum.NOT_EQUALS)
-      return { [filter.property]: Not(filter.value) };
+    if (ruleString == FilterRuleEnum.EQUALS) return { [propertyString]: value };
 
-    if (filter.rule == FilterRuleEnum.GREATER_THAN)
-      return { [filter.property]: MoreThan(filter.value) };
+    if (ruleString == FilterRuleEnum.NOT_EQUALS)
+      return { [propertyString]: Not(value) };
 
-    if (filter.rule == FilterRuleEnum.GREATER_THAN_OR_EQUALS)
-      return { [filter.property]: MoreThanOrEqual(filter.value) };
+    if (ruleString == FilterRuleEnum.GREATER_THAN)
+      return { [propertyString]: MoreThan(value) };
 
-    if (filter.rule == FilterRuleEnum.LESS_THAN)
-      return { [filter.property]: LessThan(filter.value) };
+    if (ruleString == FilterRuleEnum.GREATER_THAN_OR_EQUALS)
+      return { [propertyString]: MoreThanOrEqual(value) };
 
-    if (filter.rule == FilterRuleEnum.LESS_THAN_OR_EQUALS)
-      return { [filter.property]: LessThanOrEqual(filter.value) };
+    if (ruleString == FilterRuleEnum.LESS_THAN)
+      return { [propertyString]: LessThan(value) };
 
-    if (filter.rule == FilterRuleEnum.LIKE)
-      return { [filter.property]: ILike(`%${filter.value}%`) };
+    if (ruleString == FilterRuleEnum.LESS_THAN_OR_EQUALS)
+      return { [propertyString]: LessThanOrEqual(value) };
 
-    if (filter.rule == FilterRuleEnum.NOT_LIKE)
-      return { [filter.property]: Not(ILike(`%${filter.value}%`)) };
+    if (ruleString == FilterRuleEnum.LIKE)
+      return { [propertyString]: ILike(`%${value}%`) };
 
-    if (filter.rule == FilterRuleEnum.IN)
-      return { [filter.property]: In(filter.value.split(',')) };
+    if (ruleString == FilterRuleEnum.NOT_LIKE)
+      return { [propertyString]: Not(ILike(`%${value}%`)) };
 
-    if (filter.rule == FilterRuleEnum.NOT_IN)
-      return { [filter.property]: Not(In(filter.value.split(','))) };
+    if (ruleString == FilterRuleEnum.IN)
+      return { [propertyString]: In(value.split(',')) };
+
+    if (ruleString == FilterRuleEnum.NOT_IN)
+      return { [propertyString]: Not(In(value.split(','))) };
   });
 };

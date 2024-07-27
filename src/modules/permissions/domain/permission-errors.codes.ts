@@ -23,4 +23,8 @@ export const permissionErrorsCodes = {
     codeError: 'PRM022',
     message: 'controller findAll',
   },
+  PRM030: {
+    codeError: 'PRM030',
+    message: 'repo store',
+  },
 };

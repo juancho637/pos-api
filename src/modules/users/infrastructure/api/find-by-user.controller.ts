@@ -7,7 +7,7 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { Auth } from '@modules/auth/infrastructure';
+import { Auth, GetAuthUser } from '@modules/auth/infrastructure';
 import {
   UserPermissionsEnum,
   UserProvidersEnum,
@@ -15,6 +15,7 @@ import {
 } from '../../domain';
 import { FindByUserUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
+import { AuthUserType } from '@modules/auth/domain';
 
 @Controller()
 export class FindByUserController {
@@ -30,10 +31,16 @@ export class FindByUserController {
   ) {}
 
   @Get('api/users/:id')
-  @Auth(UserPermissionsEnum.READ_USER)
-  async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
+  @Auth(UserPermissionsEnum.READ_ANY_USER)
+  async run(
+    @Param('id', ParseIntPipe) id: number,
+    @GetAuthUser() authUser: AuthUserType,
+  ): Promise<UserPresenter> {
     try {
-      const user = await this.findByUserUseCase.run({ id });
+      const user = await this.findByUserUseCase.run({
+        userFilters: { id },
+        authUser,
+      });
 
       return new UserPresenter(user);
     } catch (error) {

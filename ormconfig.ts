@@ -5,16 +5,21 @@ import { DatabasesTypes } from '@common/adapters/configuration/domain';
 
 dotenv.config();
 
+const migrationsPath = join(
+  __dirname,
+  'database',
+  'migrations',
+  '**',
+  '*.{ts,js}',
+);
+
 export default process.env.DB_TYPE === 'sqlite'
   ? new DataSource({
       type: process.env.DB_TYPE as DatabasesTypes,
       database: join(__dirname, 'database', 'database.sqlite'),
-      logging: process.env.TYPEORM_SYNCHRONIZE === 'true',
+      logging: process.env.TYPEORM_LOGGING === 'true',
       synchronize: false,
-      entities: [join(__dirname, 'src', 'modules', '**', '*.entity.{ts,js}')],
-      migrations: [
-        join(__dirname, 'database', 'migrations', '**', '*.{ts,js}'),
-      ],
+      migrations: [migrationsPath],
     })
   : new DataSource({
       type: process.env.DB_TYPE as DatabasesTypes,
@@ -23,10 +28,7 @@ export default process.env.DB_TYPE === 'sqlite'
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      logging: process.env.TYPEORM_SYNCHRONIZE === 'true',
+      logging: process.env.TYPEORM_LOGGING === 'true',
       synchronize: false,
-      entities: [join(__dirname, 'src', 'modules', '**', '*.entity.{ts,js}')],
-      migrations: [
-        join(__dirname, 'database', 'migrations', '**', '*.{ts,js}'),
-      ],
+      migrations: [migrationsPath],
     });

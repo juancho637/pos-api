@@ -16,7 +16,7 @@ export interface CustomerRepositoryInterface<
   findAll(
     pagination: PaginationType,
     sort: SortingType,
-    filters: FilteringType[],
+    filters: FilteringType<CustomerFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createCustomerFields: CreateCustomerType): Promise<Entity>;
   update(id: number, updateCustomerFields: UpdateCustomerType): Promise<Entity>;

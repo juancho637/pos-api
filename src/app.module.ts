@@ -8,8 +8,8 @@ import { TokenModule } from '@common/adapters/token/infrastructure';
 import { PermissionModule } from '@modules/permissions/infrastructure';
 import { RoleModule } from '@modules/roles/infrastructure';
 import { UserModule } from '@modules/users/infrastructure';
-import { ProviderModule } from '@modules/providers/infrastructure';
 import { AuthModule } from '@modules/auth/infrastructure';
+import { ProviderModule } from '@modules/providers/infrastructure';
 import { CustomerModule } from '@modules/customers/infrastructure';
 import { CategoryModule } from '@modules/categories/infrastructure';
 import { CounterModule } from './modules/counters/infrastructure';
@@ -28,8 +28,8 @@ import { CounterModule } from './modules/counters/infrastructure';
     PermissionModule,
     RoleModule,
     UserModule,
-    ProviderModule,
     AuthModule,
+    ProviderModule,
     CustomerModule,
     CategoryModule,
     CounterModule,

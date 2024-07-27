@@ -14,9 +14,11 @@ export interface UserRepositoryInterface<Entity extends UserType = UserType> {
   findAll(
     pagination: PaginationType,
     sort: SortingType,
-    filters: FilteringType[],
+    filters: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
-  store(createUserFields: CreateUserType): Promise<Entity>;
+  store(
+    createUserFields: CreateUserType | CreateUserType[],
+  ): Promise<Entity | Entity[]>;
   update(id: number, updateUserFields: UpdateUserType): Promise<Entity>;
   delete(id: number): Promise<Entity>;
 }

@@ -25,12 +25,6 @@ export class RoleEntity implements RoleType {
   name: string;
 
   @Column({
-    type: 'text',
-    nullable: true,
-  })
-  description: string;
-
-  @Column({
     type: 'varchar',
     nullable: false,
     default: true,
@@ -70,16 +64,5 @@ export class RoleEntity implements RoleType {
   permissions: PermissionEntity[];
 
   @ManyToMany(() => UserEntity, (user) => user.roles)
-  @JoinTable({
-    name: 'role_user',
-    joinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id',
-    },
-  })
   users: UserEntity[];
 }

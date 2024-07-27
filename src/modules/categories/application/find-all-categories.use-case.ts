@@ -7,6 +7,7 @@ import {
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
+  CategoryFilterType,
   CategoryRepositoryInterface,
   CategoryType,
   categoryErrorsCodes,
@@ -24,7 +25,7 @@ export class FindAllCategoriesUseCase {
   async run(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<CategoryFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CategoryType>>> {
     try {
       const categoryResource = await this.categoryRepository.findAll(

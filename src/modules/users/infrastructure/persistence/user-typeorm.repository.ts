@@ -67,7 +67,7 @@ export class UserTypeOrmRepository
   async findAll(
     pagination: PaginationType,
     sort?: SortingType,
-    filters?: FilteringType[],
+    filters?: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<UserEntity>>> {
     try {
       const { page, size } = pagination;
@@ -101,8 +101,14 @@ export class UserTypeOrmRepository
     }
   }
 
-  async store(createUserFields: CreateUserType): Promise<UserEntity> {
+  async store(
+    createUserFields: CreateUserType | CreateUserType[],
+  ): Promise<UserEntity | UserEntity[]> {
     try {
+      if (Array.isArray(createUserFields)) {
+        return this.usersRepository.save(createUserFields);
+      }
+
       return this.usersRepository.save(createUserFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.context });

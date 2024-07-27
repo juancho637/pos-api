@@ -6,9 +6,7 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
+  FindAllFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import {
@@ -60,11 +58,13 @@ export class RoleTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<RoleEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<RoleFilterType>): Promise<
+    PaginatedResourceType<RoleEntity>
+  > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
@@ -97,8 +97,14 @@ export class RoleTypeOrmRepository
     }
   }
 
-  async store(createRoleFields: CreateRoleType): Promise<RoleEntity> {
+  async store(
+    createRoleFields: CreateRoleType | CreateRoleType[],
+  ): Promise<RoleEntity | RoleEntity[]> {
     try {
+      if (Array.isArray(createRoleFields)) {
+        return this.rolesRepository.save(createRoleFields);
+      }
+
       return this.rolesRepository.save(createRoleFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.context });

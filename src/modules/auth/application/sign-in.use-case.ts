@@ -26,7 +26,7 @@ export class SignInUseCase implements SignInUseCaseInterface {
 
     try {
       const user = await this.findByUserUseCase.run({
-        [usernameType]: username,
+        userFilters: { [usernameType]: username },
       });
 
       if (!user) {
