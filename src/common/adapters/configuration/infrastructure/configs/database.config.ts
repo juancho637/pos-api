@@ -1,4 +1,4 @@
-import { DataBaseConfigType } from '../../domain';
+import { DataBaseConfigType, DatabasesTypes } from '../../domain';
 
 export class DataBaseConfig {
   private static instance: DataBaseConfig;
@@ -6,12 +6,12 @@ export class DataBaseConfig {
 
   private constructor() {
     this._config = {
+      type: (process.env.DB_TYPE as DatabasesTypes) ?? 'sqlite',
       host: process.env.DB_HOST ?? 'localhost',
       port: parseInt(process.env.DB_PORT ?? '5432'),
       username: process.env.DB_USERNAME ?? 'postgres',
       password: process.env.DB_PASSWORD ?? 'password',
       database: process.env.DB_DATABASE ?? 'postgres',
-      type: 'postgres',
     };
   }
 

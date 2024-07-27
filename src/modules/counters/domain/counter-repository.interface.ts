@@ -16,7 +16,7 @@ export interface CounterRepositoryInterface<
   findAll(
     pagination: PaginationType,
     sort: SortingType,
-    filters: FilteringType[],
+    filters: FilteringType<CounterFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createCounterFields: CreateCounterType): Promise<Entity>;
   update(id: number, updateCounterFields: UpdateCounterType): Promise<Entity>;

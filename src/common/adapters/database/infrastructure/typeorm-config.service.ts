@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
@@ -7,6 +6,7 @@ import {
   DataBaseConfigType,
   TypeOrmConfigType,
 } from '@common/adapters/configuration/domain';
+import { join } from 'path';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -15,29 +15,45 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     const database = this.configService.get<DataBaseConfigType>('database');
     const typeOrm = this.configService.get<TypeOrmConfigType>('typeOrm');
-
-    return {
+    const config = {
       type: database.type,
-      host: database.host,
-      port: database.port,
-      username: database.username,
-      password: database.password,
-      database: database.database,
       logging: typeOrm.logging,
       synchronize: typeOrm.synchronize,
+      autoLoadEntities: true,
       entities: [
         join(
           __dirname,
-          '../',
-          '../',
-          '../',
-          '../',
+          '..',
+          '..',
+          '..',
+          '..',
           'modules',
           '**',
           '*.entity.{ts,js}',
         ),
       ],
-      autoLoadEntities: true,
     };
+
+    if (database.type === 'sqlite') {
+      config['database'] = join(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        '..',
+        '..',
+        '..',
+        'database',
+        'database.sqlite',
+      );
+    } else {
+      config['host'] = database.host;
+      config['port'] = database.port;
+      config['username'] = database.username;
+      config['password'] = database.password;
+      config['database'] = database.database;
+    }
+
+    return config;
   }
 }

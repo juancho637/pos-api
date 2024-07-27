@@ -13,7 +13,12 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { UserProvidersEnum, userErrorsCodes } from '../../domain';
+import { Auth } from '@modules/auth/infrastructure';
+import {
+  UserPermissionsEnum,
+  UserProvidersEnum,
+  userErrorsCodes,
+} from '../../domain';
 import { DeleteUserUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
 
@@ -31,6 +36,7 @@ export class DeleteUserController {
   ) {}
 
   @Delete('api/users/:id')
+  @Auth(UserPermissionsEnum.DELETE_ANY_USER)
   async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
     try {
       const user = await this.deleteUserUseCase.run(id);

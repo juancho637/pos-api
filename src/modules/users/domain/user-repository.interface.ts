@@ -10,13 +10,15 @@ import { UpdateUserType } from './update-user.type';
 import { UserFilterType } from './user-filter.type';
 
 export interface UserRepositoryInterface<Entity extends UserType = UserType> {
-  findOneBy(fields: UserFilterType): Promise<Entity>;
+  findOneBy(fields: UserFilterType, relations?: string[]): Promise<Entity>;
   findAll(
     pagination: PaginationType,
     sort: SortingType,
-    filters: FilteringType[],
+    filters: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
-  store(createUserFields: CreateUserType): Promise<Entity>;
+  store(
+    createUserFields: CreateUserType | CreateUserType[],
+  ): Promise<Entity | Entity[]>;
   update(id: number, updateUserFields: UpdateUserType): Promise<Entity>;
   delete(id: number): Promise<Entity>;
 }

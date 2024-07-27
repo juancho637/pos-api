@@ -22,6 +22,7 @@ import {
   FindByUserUseCase,
   StoreUserUseCase,
   UpdateUserUseCase,
+  UserPolicy,
 } from '../application';
 import { UserEntity, UserTypeOrmRepository } from './persistence';
 import {
@@ -31,6 +32,19 @@ import {
   StoreUserController,
   UpdateUserController,
 } from './api';
+import { DevUsersSeeder, ProdUsersSeeder } from './seeders';
+import { ConfigurationModule } from '@common/adapters/configuration/infrastructure';
+import {
+  AppConfigType,
+  ConfigurationType,
+} from '@common/adapters/configuration/domain';
+import { ConfigService } from '@nestjs/config';
+import { PermissionModule } from '@modules/permissions/infrastructure';
+import { RoleModule } from '@modules/roles/infrastructure';
+import { FindAllRolesUseCase } from '@modules/roles/application';
+import { FindAllPermissionsUseCase } from '@modules/permissions/application';
+import { RoleProvidersEnum } from '@modules/roles/domain';
+import { PermissionProvidersEnum } from '@modules/permissions/domain';
 
 @Module({
   imports: [
@@ -38,6 +52,9 @@ import {
     LoggerModule,
     ExceptionModule,
     HashModule,
+    ConfigurationModule,
+    PermissionModule,
+    RoleModule,
   ],
   controllers: [
     FindAllUsersController,
@@ -50,6 +67,28 @@ import {
     {
       provide: UserProvidersEnum.USER_REPOSITORY,
       useClass: UserTypeOrmRepository,
+    },
+    UserPolicy,
+    {
+      provide: UserProvidersEnum.USER_SEEDER,
+      inject: [
+        ConfigService,
+        UserProvidersEnum.USER_REPOSITORY,
+        HashProvidersEnum.HASH_SERVICE,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+      ],
+      useFactory: (
+        configService: ConfigService<ConfigurationType>,
+        userRepositoy: UserRepositoryInterface,
+        hashService: HashServiceInterface,
+        loggerService: LoggerServiceInterface,
+      ) => {
+        const env = configService.get<AppConfigType>('app').env;
+
+        return env !== 'prod'
+          ? new DevUsersSeeder(userRepositoy, hashService, loggerService)
+          : new ProdUsersSeeder(userRepositoy, hashService, loggerService);
+      },
     },
     {
       inject: [
@@ -82,6 +121,8 @@ import {
     {
       inject: [
         UserProvidersEnum.USER_REPOSITORY,
+        RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
+        PermissionProvidersEnum.FIND_ALL_PERMISSIONS_USE_CASE,
         HashProvidersEnum.HASH_SERVICE,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
@@ -89,12 +130,16 @@ import {
       provide: UserProvidersEnum.STORE_USER_USE_CASE,
       useFactory: (
         userRepositoy: UserRepositoryInterface,
+        findAllRolesUseCase: FindAllRolesUseCase,
+        findAllPermissionsUseCase: FindAllPermissionsUseCase,
         hashService: HashServiceInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreUserUseCase(
           userRepositoy,
+          findAllRolesUseCase,
+          findAllPermissionsUseCase,
           hashService,
           loggerService,
           exceptionService,

@@ -1,14 +1,13 @@
-{    
-    "recommendations": [
-      "dbaeumer.vscode-eslint", 
-      "esbenp.prettier-vscode",
-      "rangav.vscode-thunder-client",
-      "pkief.material-icon-theme",
-      "cweijan.vscode-mysql-client2",
-      "guilhermetheodoro.typescript-indexing",
-      "usernamehw.errorlens",
-      "kavod-io.vscode-jest-test-adapter",
-      "kisstkondoros.vscode-codemetrics",
-      "rogerchi.vsce-gitkeep"
-    ]
-  }
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rangav.vscode-thunder-client",
+    "pkief.material-icon-theme",
+    "cweijan.vscode-mysql-client2",
+    "guilhermetheodoro.typescript-indexing",
+    "usernamehw.errorlens",
+    "kisstkondoros.vscode-codemetrics",
+    "rogerchi.vsce-gitkeep"
+  ]
+}

@@ -16,7 +16,7 @@ export interface CategoryRepositoryInterface<
   findAll(
     pagination: PaginationType,
     sort: SortingType,
-    filters: FilteringType[],
+    filters: FilteringType<CategoryFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createCategoryFields: CreateCategoryType): Promise<Entity>;
   update(id: number, updateCategoryFields: UpdateCategoryType): Promise<Entity>;

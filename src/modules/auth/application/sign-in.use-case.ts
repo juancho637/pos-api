@@ -23,9 +23,10 @@ export class SignInUseCase implements SignInUseCaseInterface {
 
   async run({ username, password }: SignInType): Promise<AuthType> {
     const usernameType = this.isValidEmail(username) ? 'email' : 'username';
+
     try {
       const user = await this.findByUserUseCase.run({
-        [usernameType]: username,
+        userFilters: { [usernameType]: username },
       });
 
       if (!user) {
@@ -35,17 +36,20 @@ export class SignInUseCase implements SignInUseCaseInterface {
         });
       }
 
-      if (!this.hashService.compare(password, user.password)) {
+      if (!(await this.hashService.compare(password, user.password))) {
         throw this.exception.badRequestException({
           message: authErrorsCodes.AM012,
           context: this.context,
         });
       }
 
-      const token = this.tokenService.generateToken({ sub: user.id });
+      const { token, tokenExpiration } = this.tokenService.generateToken({
+        sub: user.id,
+      });
 
       return {
         accessToken: token,
+        expiresIn: tokenExpiration,
         tokenType: 'Bearer',
       };
     } catch (error) {

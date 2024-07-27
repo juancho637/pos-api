@@ -19,6 +19,7 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import {
+  CustomerFilterType,
   CustomerProvidersEnum,
   CustomerType,
   customerErrorsCodes,
@@ -43,7 +44,8 @@ export class FindAllCustomersController {
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
-    @FilteringParams(['id', 'name', 'email']) filterParams?: FilteringType[],
+    @FilteringParams(['id', 'name', 'email'])
+    filterParams?: FilteringType<CustomerFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CustomerType>>> {
     try {
       const customers = await this.findAllCustomersUseCase.run(

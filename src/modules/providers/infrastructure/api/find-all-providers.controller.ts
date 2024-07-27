@@ -19,6 +19,7 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import {
+  ProviderFilterType,
   ProviderProvidersEnum,
   ProviderType,
   providerErrorsCodes,
@@ -43,7 +44,8 @@ export class FindAllProvidersController {
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
-    @FilteringParams(['id', 'name', 'email']) filterParams?: FilteringType[],
+    @FilteringParams(['id', 'name', 'email'])
+    filterParams?: FilteringType<ProviderFilterType>[],
   ): Promise<PaginatedResourceType<Partial<ProviderType>>> {
     try {
       const providers = await this.findAllProvidersUseCase.run(
