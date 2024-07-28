@@ -6,10 +6,8 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
   PaginatedResourceType,
+  FindAllFieldsDto,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -60,11 +58,13 @@ export class ProductTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<ProductEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<ProductFilterType>): Promise<
+    PaginatedResourceType<Partial<ProductEntity>>
+  > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);

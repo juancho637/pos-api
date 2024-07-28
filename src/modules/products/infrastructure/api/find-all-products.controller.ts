@@ -1,9 +1,9 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import {
-  FilteringType,
   PaginationType,
   SortingType,
   PaginatedResourceType,
+  FilteringType,
 } from '@common/helpers/domain';
 import {
   PaginationParams,
@@ -19,6 +19,7 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import {
+  ProductFilterType,
   ProductProvidersEnum,
   ProductType,
   productErrorsCodes,
@@ -44,14 +45,14 @@ export class FindAllProductsController {
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams(['id', 'branch_id', 'user_id']) sortParams?: SortingType,
     @FilteringParams(['id', 'branch_id', 'user_id'])
-    filterParams?: FilteringType[],
+    filterParams?: FilteringType<ProductFilterType>[],
   ): Promise<PaginatedResourceType<Partial<ProductType>>> {
     try {
-      const products = await this.findAllProductsUseCase.run(
-        paginationParams,
-        sortParams,
-        filterParams,
-      );
+      const products = await this.findAllProductsUseCase.run({
+        pagination: paginationParams,
+        sort: sortParams,
+        filters: filterParams,
+      });
 
       return {
         ...products,

@@ -1,8 +1,6 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { ProductType } from './product.type';
 import { CreateProductType } from './create-product.type';
@@ -14,9 +12,7 @@ export interface ProductRepositoryInterface<
 > {
   findOneBy(fields: ProductFilterType): Promise<Entity>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType[],
+    findAllFieldsDto: FindAllFieldsDto<ProductFilterType>,
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createProductFields: CreateProductType): Promise<Entity>;
   update(id: number, updateProductFields: UpdateProductType): Promise<Entity>;

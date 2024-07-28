@@ -1,12 +1,11 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
+  ProductFilterType,
   ProductRepositoryInterface,
   ProductType,
   productErrorsCodes,
@@ -21,17 +20,19 @@ export class FindAllProductsUseCase {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType[],
-  ): Promise<PaginatedResourceType<Partial<ProductType>>> {
+  async run({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<ProductFilterType>): Promise<
+    PaginatedResourceType<Partial<ProductType>>
+  > {
     try {
-      const productResource = await this.productRepository.findAll(
+      const productResource = await this.productRepository.findAll({
         pagination,
         sort,
         filters,
-      );
+      });
 
       return productResource;
     } catch (error) {

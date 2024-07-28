@@ -5,5 +5,5 @@ import { SortingType } from './sorting.type';
 export type FindAllFieldsDto<T> = {
   pagination: PaginationType;
   sort?: SortingType;
-  filters?: FilteringType<keyof T>[];
+  filters?: FilteringType<keyof T | T>[];
 };
