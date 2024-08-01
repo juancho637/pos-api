@@ -19,15 +19,15 @@ export class StoreProductUseCase {
   ) {}
 
   async run({
-    category,
-    ...createProduct
+    categoryId,
+    ...createProductFields
   }: CreateProductType): Promise<ProductType> {
     try {
-      await this.findByCategoryUseCase.run({ id: category });
+      const category = await this.findByCategoryUseCase.run({ id: categoryId });
 
       const product = await this.productRepository.store({
         category,
-        ...createProduct,
+        ...createProductFields,
       });
 
       return product;

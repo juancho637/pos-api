@@ -20,9 +20,9 @@ import {
 import {
   ProductRepositoryInterface,
   ProductFilterType,
-  UpdateProductType,
-  CreateProductType,
   productErrorsCodes,
+  CreateProductRepositoryType,
+  UpdateProductRepositoryType,
 } from '../../domain';
 import { ProductEntity } from './product.entity';
 
@@ -97,7 +97,9 @@ export class ProductTypeOrmRepository
     }
   }
 
-  async store(createProductFields: CreateProductType): Promise<ProductEntity> {
+  async store(
+    createProductFields: CreateProductRepositoryType,
+  ): Promise<ProductEntity> {
     try {
       return this.productsRepository.save(createProductFields);
     } catch (error) {
@@ -113,7 +115,7 @@ export class ProductTypeOrmRepository
 
   async update(
     id: number,
-    updateProductFields: UpdateProductType,
+    updateProductFields: UpdateProductRepositoryType,
   ): Promise<ProductEntity> {
     try {
       const product = await this.findOneBy({ id });

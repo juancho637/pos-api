@@ -8,7 +8,7 @@ export class CreateProductDto implements CreateProductType {
 
   @IsNotEmpty()
   @IsNumber()
-  category: number;
+  categoryId: number;
 
   @IsNotEmpty()
   @IsNumber()

@@ -6,25 +6,31 @@ import {
   ProductType,
   productErrorsCodes,
 } from '../domain';
+import { FindByCategoryUseCaseInterface } from '@modules/categories/domain';
 
 export class UpdateProductUseCase {
   private readonly context = UpdateProductUseCase.name;
 
   constructor(
     private readonly productRepository: ProductRepositoryInterface,
+    private readonly findByCategoryUseCase: FindByCategoryUseCaseInterface,
     private readonly logger: LoggerServiceInterface,
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
   async run(
     id: number,
-    updateProductFields: UpdateProductType,
+    { categoryId, ...updateProductFields }: UpdateProductType,
   ): Promise<ProductType> {
     try {
-      const product = await this.productRepository.update(
-        id,
-        updateProductFields,
-      );
+      const category = await this.findByCategoryUseCase.run({
+        id: categoryId,
+      });
+
+      const product = await this.productRepository.update(id, {
+        category,
+        ...updateProductFields,
+      });
 
       return product;
     } catch (error) {

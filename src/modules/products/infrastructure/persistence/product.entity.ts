@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { ProductType } from '../../domain';
 import { CategoryEntity } from '@modules/categories/infrastructure';
+import { CategoryType } from '@modules/categories/domain';
 
 @Entity({ name: 'products' })
 export class ProductEntity implements ProductType {
@@ -26,7 +27,7 @@ export class ProductEntity implements ProductType {
   @Column({ type: 'real', name: 'category_id' })
   @OneToOne(() => CategoryEntity, (categoryEntity) => categoryEntity.id)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
-  category: number;
+  category: CategoryType;
 
   @Column({
     type: 'real',

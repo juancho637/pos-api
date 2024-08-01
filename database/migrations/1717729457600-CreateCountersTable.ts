@@ -31,6 +31,7 @@ export class CreateCountersTable1717729457600 implements MigrationInterface {
             name: 'status',
             type: 'varchar',
             isNullable: false,
+            default: true,
           },
           {
             name: 'created_at',

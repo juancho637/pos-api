@@ -111,17 +111,20 @@ import { CategoryModule } from '@modules/categories/infrastructure';
     {
       inject: [
         ProductProvidersEnum.PRODUCT_REPOSITORY,
+        CategoryProvidersEnum.FIND_BY_CATEGORY_USE_CASE,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
       provide: ProductProvidersEnum.UPDATE_PRODUCT_USE_CASE,
       useFactory: (
         userRepositoy: ProductRepositoryInterface,
+        findByCategoryUseCase: FindByCategoryUseCaseInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new UpdateProductUseCase(
           userRepositoy,
+          findByCategoryUseCase,
           loggerService,
           exceptionService,
         ),

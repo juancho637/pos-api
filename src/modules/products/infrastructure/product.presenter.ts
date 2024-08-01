@@ -1,11 +1,12 @@
 import { CategoryPresenter } from '@modules/categories/infrastructure';
 //import { ProductType } from '../domain';'@modules/categories/infrastructure';
 import { ProductEntity } from './persistence';
+import { CategoryType } from '@modules/categories/domain';
 
 export class ProductPresenter {
   id: number;
   name: string;
-  category: any;
+  category: CategoryType;
   //category: CategoryPresenter;
   fee: number;
   description: string;
@@ -17,9 +18,7 @@ export class ProductPresenter {
   constructor(product: Partial<ProductEntity>) {
     this.id = product.id;
     this.name = product.name;
-    this.category = new CategoryPresenter(
-      product.category as unknown as CategoryPresenter,
-    );
+    this.category = new CategoryPresenter(product.category);
     //this.category = product.category;
     this.fee = product.fee;
     this.description = product.description;

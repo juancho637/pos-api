@@ -1,6 +1,6 @@
 export type UpdateProductType = {
   name?: string;
-  category?: number;
+  categoryId?: number;
   fee?: number;
   description?: string;
   type?: string;

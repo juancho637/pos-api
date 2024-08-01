@@ -8,7 +8,7 @@ export class UpdateProductDto implements UpdateProductType {
 
   @IsNotEmpty()
   @IsNumber()
-  category: number;
+  categoryId: number;
 
   @IsNotEmpty()
   @IsNumber()

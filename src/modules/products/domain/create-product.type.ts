@@ -2,5 +2,7 @@ import { ProductType } from './product.type';
 
 export type CreateProductType = Omit<
   ProductType,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'status'
->;
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'status' | 'category'
+> & {
+  categoryId: number;
+};
