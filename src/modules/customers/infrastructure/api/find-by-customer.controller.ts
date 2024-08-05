@@ -10,6 +10,7 @@ import {
 import { CustomerProvidersEnum, customerErrorsCodes } from '../../domain';
 import { FindByCustomerUseCase } from '../../application';
 import { CustomerPresenter } from '../customer.presenter';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 @Controller()
 export class FindByCustomerController {
@@ -27,7 +28,9 @@ export class FindByCustomerController {
   @Get('api/customers/:id')
   async run(@Param('id', ParseIntPipe) id: number): Promise<CustomerPresenter> {
     try {
-      const customer = await this.findByCustomerUseCase.run({ id });
+      const customer = await this.findByCustomerUseCase.run({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return new CustomerPresenter(customer);
     } catch (error) {

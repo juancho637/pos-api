@@ -1,4 +1,4 @@
-import { FindByUserUseCaseInterface } from '@modules/users/domain';
+import { FindByUserUseCase } from '@modules/users/application';
 import { TokenServiceInterface } from '@common/adapters/token/domain';
 import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
@@ -9,12 +9,13 @@ import {
   SignInUseCaseInterface,
   authErrorsCodes,
 } from '../domain';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 export class SignInUseCase implements SignInUseCaseInterface {
   private readonly context = SignInUseCase.name;
 
   constructor(
-    private readonly findByUserUseCase: FindByUserUseCaseInterface,
+    private readonly findByUserUseCase: FindByUserUseCase,
     private readonly tokenService: TokenServiceInterface,
     private readonly hashService: HashServiceInterface,
     private readonly logger: LoggerServiceInterface,
@@ -26,7 +27,11 @@ export class SignInUseCase implements SignInUseCaseInterface {
 
     try {
       const user = await this.findByUserUseCase.run({
-        userFilters: { [usernameType]: username },
+        filter: {
+          property: usernameType,
+          rule: FilterRuleEnum.EQUALS,
+          value: username,
+        },
       });
 
       if (!user) {

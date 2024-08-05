@@ -1,8 +1,7 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { UserType } from './user.type';
 import { CreateUserType } from './create-user.type';
@@ -10,11 +9,11 @@ import { UpdateUserType } from './update-user.type';
 import { UserFilterType } from './user-filter.type';
 
 export interface UserRepositoryInterface<Entity extends UserType = UserType> {
-  findOneBy(fields: UserFilterType, relations?: string[]): Promise<Entity>;
+  findOneBy(
+    findOneByFieldsDto: FindOneByFieldsDto<UserFilterType>,
+  ): Promise<Entity>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType<UserFilterType>[],
+    findAllFieldsDto: FindAllFieldsDto<UserFilterType>,
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(
     createUserFields: CreateUserType | CreateUserType[],

@@ -1,8 +1,6 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
@@ -22,17 +20,21 @@ export class FindAllCategoriesUseCase {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<CategoryFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<CategoryType>>> {
+  async run({
+    pagination,
+    sort,
+    filters,
+    relations,
+  }: FindAllFieldsDto<CategoryFilterType>): Promise<
+    PaginatedResourceType<Partial<CategoryType>>
+  > {
     try {
-      const categoryResource = await this.categoryRepository.findAll(
+      const categoryResource = await this.categoryRepository.findAll({
         pagination,
         sort,
         filters,
-      );
+        relations,
+      });
 
       return categoryResource;
     } catch (error) {

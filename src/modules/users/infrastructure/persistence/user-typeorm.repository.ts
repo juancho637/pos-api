@@ -6,10 +6,10 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
   PaginatedResourceType,
+  FindAllFieldsDto,
+  FindOneByFieldsDto,
+  FilterRuleEnum,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -42,13 +42,15 @@ export class UserTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(
-    fields: UserFilterType,
-    relations?: string[],
-  ): Promise<UserEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<UserFilterType>): Promise<UserEntity> {
     try {
+      const where = getWhereTypeOrmHelper<UserFilterType>(filter);
+
       const user = await this.usersRepository.findOne({
-        where: { ...fields },
+        where,
         relations: relations || [],
       });
 
@@ -64,15 +66,17 @@ export class UserTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<UserFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<UserEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<UserFilterType>): Promise<
+    PaginatedResourceType<Partial<UserEntity>>
+  > {
     try {
       const { page, size } = pagination;
-      const where = getWhereTypeOrmHelper(filters);
-      const order = getOrderTypeOrmHelper(sort);
+      const where = getWhereTypeOrmHelper<UserFilterType>(filters);
+      const order = getOrderTypeOrmHelper<UserFilterType>(sort);
 
       const [users, count] = await this.usersRepository.findAndCount({
         where,
@@ -126,7 +130,9 @@ export class UserTypeOrmRepository
     updateUserFields: UpdateUserType,
   ): Promise<UserEntity> {
     try {
-      const user = await this.findOneBy({ id });
+      const user = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.usersRepository.save({ ...user, ...updateUserFields });
     } catch (error) {
@@ -142,7 +148,9 @@ export class UserTypeOrmRepository
 
   async delete(id: number): Promise<UserEntity> {
     try {
-      const user = await this.findOneBy({ id });
+      const user = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.usersRepository.softRemove(user);
 

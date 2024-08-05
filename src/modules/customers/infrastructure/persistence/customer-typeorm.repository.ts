@@ -6,10 +6,10 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
   PaginatedResourceType,
+  FindOneByFieldsDto,
+  FindAllFieldsDto,
+  FilterRuleEnum,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -42,10 +42,16 @@ export class CustomerTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: CustomerFilterType): Promise<CustomerEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<CustomerFilterType>): Promise<CustomerEntity> {
     try {
+      const where = getWhereTypeOrmHelper<CustomerFilterType>(filter);
+
       const customer = await this.customersRepository.findOneOrFail({
-        where: { ...fields },
+        where,
+        relations: relations || [],
       });
 
       return customer;
@@ -60,11 +66,13 @@ export class CustomerTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<CustomerFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<CustomerEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<CustomerFilterType>): Promise<
+    PaginatedResourceType<Partial<CustomerEntity>>
+  > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
@@ -118,7 +126,9 @@ export class CustomerTypeOrmRepository
     updateCustomerFields: UpdateCustomerType,
   ): Promise<CustomerEntity> {
     try {
-      const customer = await this.findOneBy({ id });
+      const customer = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.customersRepository.save({
         ...customer,
@@ -137,7 +147,9 @@ export class CustomerTypeOrmRepository
 
   async delete(id: number): Promise<CustomerEntity> {
     try {
-      const customer = await this.findOneBy({ id });
+      const customer = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.customersRepository.softRemove(customer);
 

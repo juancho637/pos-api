@@ -43,16 +43,17 @@ export class FindAllCategoriesController {
   @Get('api/categories')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'branch_id', 'user_id']) sortParams?: SortingType,
-    @FilteringParams(['id', 'branch_id', 'user_id'])
+    @SortingParams<CategoryFilterType>('id', 'name', 'status')
+    sortParams?: SortingType<CategoryFilterType>,
+    @FilteringParams<CategoryFilterType>('id', 'name', 'status')
     filterParams?: FilteringType<CategoryFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CategoryType>>> {
     try {
-      const categories = await this.findAllCategoriesUseCase.run(
-        paginationParams,
-        sortParams,
-        filterParams,
-      );
+      const categories = await this.findAllCategoriesUseCase.run({
+        pagination: paginationParams,
+        sort: sortParams,
+        filters: filterParams,
+      });
 
       return {
         ...categories,
