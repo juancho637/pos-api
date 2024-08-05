@@ -43,19 +43,20 @@ export class FindAllUsersController {
   ) {}
 
   @Get('api/users')
-  @Auth(UserPermissionsEnum.LIST_ANY_USER)
+  @Auth<UserPermissionsEnum>(UserPermissionsEnum.LIST_ANY_USER)
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
-    @FilteringParams(['id', 'name', 'email'])
+    @SortingParams<UserFilterType>('id', 'email', 'name', 'username')
+    sortParams?: SortingType<UserFilterType>,
+    @FilteringParams<UserFilterType>('id', 'email', 'name', 'username')
     filterParams?: FilteringType<UserFilterType>[],
   ): Promise<PaginatedResourceType<Partial<UserType>>> {
     try {
-      const users = await this.findAllUsersUseCase.run(
-        paginationParams,
-        sortParams,
-        filterParams,
-      );
+      const users = await this.findAllUsersUseCase.run({
+        pagination: paginationParams,
+        sort: sortParams,
+        filters: filterParams,
+      });
 
       return {
         ...users,

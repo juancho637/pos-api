@@ -1,8 +1,6 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
@@ -22,17 +20,21 @@ export class FindAllUsersUseCase {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<UserFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<UserType>>> {
+  async run({
+    pagination,
+    sort,
+    filters,
+    relations,
+  }: FindAllFieldsDto<UserFilterType>): Promise<
+    PaginatedResourceType<Partial<UserType>>
+  > {
     try {
-      const userResource = await this.userRepository.findAll(
+      const userResource = await this.userRepository.findAll({
         pagination,
         sort,
         filters,
-      );
+        relations,
+      });
 
       return userResource;
     } catch (error) {

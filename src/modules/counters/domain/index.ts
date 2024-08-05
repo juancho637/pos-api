@@ -4,5 +4,4 @@ export * from './counter-providers.enum';
 export * from './counter-repository.interface';
 export * from './counter.type';
 export * from './create-counter.type';
-export * from './interfaces';
 export * from './update-counter.type';

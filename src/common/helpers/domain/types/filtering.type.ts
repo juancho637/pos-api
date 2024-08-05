@@ -1,7 +1,7 @@
 import { FilterRuleEnum } from '../enums';
 
 export type FilteringType<T> = {
-  property: T;
+  property: keyof T;
   rule: FilterRuleEnum;
-  value: string;
+  value?: unknown;
 };

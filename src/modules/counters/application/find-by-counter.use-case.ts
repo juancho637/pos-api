@@ -1,14 +1,14 @@
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
-  FindByCounterUseCaseInterface,
   CounterFilterType,
   CounterRepositoryInterface,
   CounterType,
   counterErrorsCodes,
 } from '../domain';
+import { FindOneByFieldsDto } from '@common/helpers/domain';
 
-export class FindByCounterUseCase implements FindByCounterUseCaseInterface {
+export class FindByCounterUseCase {
   private readonly context = FindByCounterUseCase.name;
 
   constructor(
@@ -17,10 +17,14 @@ export class FindByCounterUseCase implements FindByCounterUseCaseInterface {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(counterFilters: CounterFilterType): Promise<CounterType> {
+  async run({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<CounterFilterType>): Promise<CounterType> {
     try {
       const counter = await this.counterRepository.findOneBy({
-        ...counterFilters,
+        filter,
+        relations,
       });
 
       return counter;

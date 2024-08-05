@@ -1,14 +1,14 @@
+import { FindOneByFieldsDto } from '@common/helpers/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
-  FindByCategoryUseCaseInterface,
   CategoryFilterType,
   CategoryRepositoryInterface,
   CategoryType,
   categoryErrorsCodes,
 } from '../domain';
 
-export class FindByCategoryUseCase implements FindByCategoryUseCaseInterface {
+export class FindByCategoryUseCase {
   private readonly context = FindByCategoryUseCase.name;
 
   constructor(
@@ -17,10 +17,14 @@ export class FindByCategoryUseCase implements FindByCategoryUseCaseInterface {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(categoryFilters: CategoryFilterType): Promise<CategoryType> {
+  async run({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<CategoryFilterType>): Promise<CategoryType> {
     try {
       const category = await this.categoryRepository.findOneBy({
-        ...categoryFilters,
+        filter,
+        relations,
       });
 
       return category;

@@ -1,8 +1,7 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { CounterType } from './counter.type';
 import { CreateCounterType } from './create-counter.type';
@@ -12,11 +11,11 @@ import { CounterFilterType } from './counter-filter.type';
 export interface CounterRepositoryInterface<
   Entity extends CounterType = CounterType,
 > {
-  findOneBy(fields: CounterFilterType): Promise<Entity>;
+  findOneBy(
+    findOneByFieldsDto: FindOneByFieldsDto<CounterFilterType>,
+  ): Promise<Entity>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType<CounterFilterType>[],
+    findAllFieldsDto: FindAllFieldsDto<CounterFilterType>,
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createCounterFields: CreateCounterType): Promise<Entity>;
   update(id: number, updateCounterFields: UpdateCounterType): Promise<Entity>;

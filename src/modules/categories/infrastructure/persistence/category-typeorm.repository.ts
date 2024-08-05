@@ -6,9 +6,9 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
+  FilterRuleEnum,
+  FindOneByFieldsDto,
+  FindAllFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import {
@@ -42,10 +42,16 @@ export class CategoryTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: CategoryFilterType): Promise<CategoryEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<CategoryFilterType>): Promise<CategoryEntity> {
     try {
+      const where = getWhereTypeOrmHelper<CategoryFilterType>(filter);
+
       const category = await this.categoriesRepository.findOneOrFail({
-        where: { ...fields },
+        where,
+        relations: relations || [],
       });
 
       return category;
@@ -60,11 +66,13 @@ export class CategoryTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<CategoryFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<CategoryEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<CategoryFilterType>): Promise<
+    PaginatedResourceType<Partial<CategoryEntity>>
+  > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
@@ -118,7 +126,9 @@ export class CategoryTypeOrmRepository
     updateCategoryFields: UpdateCategoryType,
   ): Promise<CategoryEntity> {
     try {
-      const category = await this.findOneBy({ id });
+      const category = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.categoriesRepository.save({
         ...category,
@@ -137,7 +147,9 @@ export class CategoryTypeOrmRepository
 
   async delete(id: number): Promise<CategoryEntity> {
     try {
-      const category = await this.findOneBy({ id });
+      const category = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.categoriesRepository.softRemove(category);
 

@@ -10,47 +10,65 @@ import {
 } from 'typeorm';
 import { FilterRuleEnum, FilteringType } from '../domain';
 
-export const getWhereTypeOrmHelper = <T>(filters: FilteringType<T>[]) => {
+export const getWhereTypeOrmHelper = <T>(
+  filters: FilteringType<T>[] | FilteringType<T>,
+) => {
   if (!filters) return {};
 
-  return filters.map((filter) => {
-    const { property, rule, value } = filter;
-    const propertyString = property as string;
-    const ruleString = rule.toString();
+  return Array.isArray(filters)
+    ? filters.map((filter) => {
+        return getValidFilter<T>(filter);
+      })
+    : getValidFilter<T>(filters);
+};
 
-    if (ruleString == FilterRuleEnum.IS_NULL)
-      return { [propertyString]: IsNull() };
+const getValidFilter = <T>(filter: FilteringType<T>) => {
+  const { property, rule, value } = filter;
+  const propertyString = property as string;
+  const ruleString = rule.toString();
 
-    if (ruleString == FilterRuleEnum.IS_NOT_NULL)
-      return { [propertyString]: Not(IsNull()) };
+  const filterFunction = filterMap[ruleString];
+  if (filterFunction) {
+    return filterFunction(propertyString, value);
+  }
+};
 
-    if (ruleString == FilterRuleEnum.EQUALS) return { [propertyString]: value };
-
-    if (ruleString == FilterRuleEnum.NOT_EQUALS)
-      return { [propertyString]: Not(value) };
-
-    if (ruleString == FilterRuleEnum.GREATER_THAN)
-      return { [propertyString]: MoreThan(value) };
-
-    if (ruleString == FilterRuleEnum.GREATER_THAN_OR_EQUALS)
-      return { [propertyString]: MoreThanOrEqual(value) };
-
-    if (ruleString == FilterRuleEnum.LESS_THAN)
-      return { [propertyString]: LessThan(value) };
-
-    if (ruleString == FilterRuleEnum.LESS_THAN_OR_EQUALS)
-      return { [propertyString]: LessThanOrEqual(value) };
-
-    if (ruleString == FilterRuleEnum.LIKE)
-      return { [propertyString]: ILike(`%${value}%`) };
-
-    if (ruleString == FilterRuleEnum.NOT_LIKE)
-      return { [propertyString]: Not(ILike(`%${value}%`)) };
-
-    if (ruleString == FilterRuleEnum.IN)
-      return { [propertyString]: In(value.split(',')) };
-
-    if (ruleString == FilterRuleEnum.NOT_IN)
-      return { [propertyString]: Not(In(value.split(','))) };
-  });
+const filterMap = {
+  [FilterRuleEnum.IS_NULL]: (property: string) => ({ [property]: IsNull() }),
+  [FilterRuleEnum.IS_NOT_NULL]: (property: string) => ({
+    [property]: Not(IsNull()),
+  }),
+  [FilterRuleEnum.EQUALS]: (property: string, value: unknown) => ({
+    [property]: value,
+  }),
+  [FilterRuleEnum.NOT_EQUALS]: (property: string, value: unknown) => ({
+    [property]: Not(value),
+  }),
+  [FilterRuleEnum.GREATER_THAN]: (property: string, value: unknown) => ({
+    [property]: MoreThan(value),
+  }),
+  [FilterRuleEnum.GREATER_THAN_OR_EQUALS]: (
+    property: string,
+    value: unknown,
+  ) => ({
+    [property]: MoreThanOrEqual(value),
+  }),
+  [FilterRuleEnum.LESS_THAN]: (property: string, value: unknown) => ({
+    [property]: LessThan(value),
+  }),
+  [FilterRuleEnum.LESS_THAN_OR_EQUALS]: (property: string, value: unknown) => ({
+    [property]: LessThanOrEqual(value),
+  }),
+  [FilterRuleEnum.LIKE]: (property: string, value: unknown) => ({
+    [property]: ILike(`%${value}%`),
+  }),
+  [FilterRuleEnum.NOT_LIKE]: (property: string, value: unknown) => ({
+    [property]: Not(ILike(`%${value}%`)),
+  }),
+  [FilterRuleEnum.IN]: (property: string, value: unknown) => ({
+    [property]: In((value as string).split(',')),
+  }),
+  [FilterRuleEnum.NOT_IN]: (property: string, value: unknown) => ({
+    [property]: Not(In((value as string).split(','))),
+  }),
 };
