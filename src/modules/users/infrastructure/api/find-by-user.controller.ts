@@ -7,7 +7,7 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
-import { Auth, GetAuthUser } from '@modules/auth/infrastructure';
+import { Auth } from '@modules/auth/infrastructure';
 import {
   UserPermissionsEnum,
   UserProvidersEnum,
@@ -15,7 +15,7 @@ import {
 } from '../../domain';
 import { FindByUserUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
-import { AuthUserType } from '@modules/auth/domain';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 @Controller()
 export class FindByUserController {
@@ -31,15 +31,11 @@ export class FindByUserController {
   ) {}
 
   @Get('api/users/:id')
-  @Auth(UserPermissionsEnum.READ_ANY_USER)
-  async run(
-    @Param('id', ParseIntPipe) id: number,
-    @GetAuthUser() authUser: AuthUserType,
-  ): Promise<UserPresenter> {
+  @Auth<UserPermissionsEnum>(UserPermissionsEnum.READ_ANY_USER)
+  async run(@Param('id', ParseIntPipe) id: number): Promise<UserPresenter> {
     try {
       const user = await this.findByUserUseCase.run({
-        userFilters: { id },
-        authUser,
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
       });
 
       return new UserPresenter(user);

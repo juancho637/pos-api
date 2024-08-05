@@ -1,8 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
-import {
-  FindByUserUseCaseInterface,
-  UserProvidersEnum,
-} from '@modules/users/domain';
+import { UserProvidersEnum } from '@modules/users/domain';
+import { FindByUserUseCase } from '@modules/users/application';
 import { UserModule } from '@modules/users/infrastructure';
 import {
   TokenProvidersEnum,
@@ -48,7 +46,7 @@ import { SignInController } from './api';
       ],
       provide: AuthUseCasesEnum.SIGN_IN_USE_CASE,
       useFactory: (
-        findByUserUseCase: FindByUserUseCaseInterface,
+        findByUserUseCase: FindByUserUseCase,
         tokenService: TokenServiceInterface,
         hashService: HashServiceInterface,
         loggerService: LoggerServiceInterface,

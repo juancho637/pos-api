@@ -1,10 +1,12 @@
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
+  ProviderFilterType,
   ProviderRepositoryInterface,
   ProviderType,
   providerErrorsCodes,
 } from '../domain';
+import { FindOneByFieldsDto } from '@common/helpers/domain';
 
 export class FindByProviderUseCase {
   private readonly context = FindByProviderUseCase.name;
@@ -15,9 +17,15 @@ export class FindByProviderUseCase {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(id: number): Promise<ProviderType> {
+  async run({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<ProviderFilterType>): Promise<ProviderType> {
     try {
-      const provider = await this.providerRepository.findOneBy({ id });
+      const provider = await this.providerRepository.findOneBy({
+        filter,
+        relations,
+      });
 
       return provider;
     } catch (error) {

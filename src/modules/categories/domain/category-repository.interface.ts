@@ -1,8 +1,7 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { CategoryType } from './category.type';
 import { CreateCategoryType } from './create-category.type';
@@ -12,11 +11,11 @@ import { CategoryFilterType } from './category-filter.type';
 export interface CategoryRepositoryInterface<
   Entity extends CategoryType = CategoryType,
 > {
-  findOneBy(fields: CategoryFilterType): Promise<Entity>;
+  findOneBy(
+    findOneByFieldsDto: FindOneByFieldsDto<CategoryFilterType>,
+  ): Promise<Entity>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType<CategoryFilterType>[],
+    findAllFieldsDto: FindAllFieldsDto<CategoryFilterType>,
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createCategoryFields: CreateCategoryType): Promise<Entity>;
   update(id: number, updateCategoryFields: UpdateCategoryType): Promise<Entity>;

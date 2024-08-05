@@ -6,10 +6,8 @@ import {
   ConfigurationType,
   JwtConfigType,
 } from '@common/adapters/configuration/domain';
-import {
-  FindByUserUseCaseInterface,
-  UserProvidersEnum,
-} from '@modules/users/domain';
+import { UserProvidersEnum } from '@modules/users/domain';
+import { FindByUserUseCase } from '@modules/users/application';
 import {
   LoggerProvidersEnum,
   LoggerServiceInterface,
@@ -21,6 +19,7 @@ import {
 import { TokenPayloadType } from '../../domain';
 import { PermissionType } from '@modules/permissions/domain';
 import { RoleType } from '@modules/roles/domain';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
   private readonly context = JwtPassportStrategy.name;
@@ -29,7 +28,7 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
     @Inject(ConfigService)
     private readonly configService: ConfigService<ConfigurationType>,
     @Inject(UserProvidersEnum.FIND_BY_USER_USE_CASE)
-    private readonly findByUserUseCase: FindByUserUseCaseInterface,
+    private readonly findByUserUseCase: FindByUserUseCase,
     @Inject(LoggerProvidersEnum.LOGGER_SERVICE)
     private readonly logger: LoggerServiceInterface,
     @Inject(ExceptionProvidersEnum.EXCEPTION_SERVICE)
@@ -46,9 +45,7 @@ export class JwtPassportStrategy extends PassportStrategy(Strategy, 'jwt') {
     try {
       const { roles, permissions, ...userData } =
         await this.findByUserUseCase.run({
-          userFilters: {
-            id: sub as number,
-          },
+          filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: sub },
           relations: ['roles.permissions', 'permissions'],
         });
 

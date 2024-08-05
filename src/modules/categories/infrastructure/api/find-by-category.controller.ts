@@ -1,4 +1,5 @@
 import { Controller, Get, Inject, Param, ParseIntPipe } from '@nestjs/common';
+import { FilterRuleEnum } from '@common/helpers/domain';
 import {
   LoggerServiceInterface,
   LoggerProvidersEnum,
@@ -27,7 +28,9 @@ export class FindByCategoryController {
   @Get('api/categories/:id')
   async run(@Param('id', ParseIntPipe) id: number): Promise<CategoryPresenter> {
     try {
-      const category = await this.findByCategoryUseCase.run({ id });
+      const category = await this.findByCategoryUseCase.run({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return new CategoryPresenter(category);
     } catch (error) {

@@ -43,16 +43,17 @@ export class FindAllProvidersController {
   @Get('api/providers')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
-    @FilteringParams(['id', 'name', 'email'])
+    @SortingParams<ProviderFilterType>('id', 'name', 'status')
+    sortParams?: SortingType<ProviderFilterType>,
+    @FilteringParams<ProviderFilterType>('id', 'name', 'status')
     filterParams?: FilteringType<ProviderFilterType>[],
   ): Promise<PaginatedResourceType<Partial<ProviderType>>> {
     try {
-      const providers = await this.findAllProvidersUseCase.run(
-        paginationParams,
-        sortParams,
-        filterParams,
-      );
+      const providers = await this.findAllProvidersUseCase.run({
+        pagination: paginationParams,
+        sort: sortParams,
+        filters: filterParams,
+      });
 
       return {
         ...providers,

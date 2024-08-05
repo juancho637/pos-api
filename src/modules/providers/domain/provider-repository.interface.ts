@@ -1,8 +1,7 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { ProviderType } from './provider.type';
 import { CreateProviderType } from './create-provider.type';
@@ -12,11 +11,11 @@ import { ProviderFilterType } from './provider-filter.type';
 export interface ProviderRepositoryInterface<
   Entity extends ProviderType = ProviderType,
 > {
-  findOneBy(fields: ProviderFilterType): Promise<Entity>;
+  findOneBy(
+    findOneByFieldsDto: FindOneByFieldsDto<ProviderFilterType>,
+  ): Promise<Entity>;
   findAll(
-    pagination: PaginationType,
-    sort: SortingType,
-    filters: FilteringType<ProviderFilterType>[],
+    findAllFieldsDto: FindAllFieldsDto<ProviderFilterType>,
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
   store(createProviderFields: CreateProviderType): Promise<Entity>;
   update(id: number, updateProviderFields: UpdateProviderType): Promise<Entity>;
