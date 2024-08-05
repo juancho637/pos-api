@@ -1,5 +1,6 @@
 import {
   FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import { ProductType } from './product.type';
@@ -10,7 +11,9 @@ import { ProductFilterType } from './product-filter.type';
 export interface ProductRepositoryInterface<
   Entity extends ProductType = ProductType,
 > {
-  findOneBy(fields: ProductFilterType): Promise<Entity>;
+  findOneBy(
+    findOneByFieldsDto: FindOneByFieldsDto<ProductFilterType>,
+  ): Promise<Entity>;
   findAll(
     findAllFieldsDto: FindAllFieldsDto<ProductFilterType>,
   ): Promise<PaginatedResourceType<Partial<Entity>>>;

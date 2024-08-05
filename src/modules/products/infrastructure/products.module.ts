@@ -26,10 +26,8 @@ import {
   StoreProductController,
   UpdateProductController,
 } from './api';
-import {
-  CategoryProvidersEnum,
-  FindByCategoryUseCaseInterface,
-} from '@modules/categories/domain';
+import { CategoryProvidersEnum } from '@modules/categories/domain';
+import { FindByCategoryUseCase } from '@modules/categories/application';
 import { CategoryModule } from '@modules/categories/infrastructure';
 
 @Module({
@@ -97,7 +95,7 @@ import { CategoryModule } from '@modules/categories/infrastructure';
       provide: ProductProvidersEnum.STORE_PRODUCT_USE_CASE,
       useFactory: (
         userRepositoy: ProductRepositoryInterface,
-        findByCategoryUseCase: FindByCategoryUseCaseInterface,
+        findByCategoryUseCase: FindByCategoryUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>

@@ -8,6 +8,8 @@ import {
 import {
   PaginatedResourceType,
   FindAllFieldsDto,
+  FindOneByFieldsDto,
+  FilterRuleEnum,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -40,11 +42,16 @@ export class ProductTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: ProductFilterType): Promise<ProductEntity> {
+  async findOneBy({
+    filter,
+    relations = [],
+  }: FindOneByFieldsDto<ProductFilterType>): Promise<ProductEntity> {
     try {
+      const where = getWhereTypeOrmHelper<ProductFilterType>(filter);
+
       const product = await this.productsRepository.findOneOrFail({
-        where: { ...fields },
-        relations: ['category'],
+        where,
+        relations: relations,
       });
       return product;
     } catch (error) {
@@ -116,7 +123,9 @@ export class ProductTypeOrmRepository
     updateProductFields: UpdateProductType,
   ): Promise<ProductEntity> {
     try {
-      const product = await this.findOneBy({ id });
+      const product = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.productsRepository.save({
         ...product,
@@ -135,7 +144,9 @@ export class ProductTypeOrmRepository
 
   async delete(id: number): Promise<ProductEntity> {
     try {
-      const product = await this.findOneBy({ id });
+      const product = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.productsRepository.softRemove(product);
 
