@@ -11,17 +11,14 @@ import {
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { RoleProvidersEnum, RoleRepositoryInterface } from '../domain';
-import {
-  FindAllRolesUseCase,
-  // FindByRoleUseCase,
-} from '../application';
+import { FindAllRolesUseCase, FindByRoleUseCase } from '../application';
 import { RoleEntity, RoleTypeOrmRepository } from './persistence';
 import { RolesSeeder } from './seeders';
 // import { PermissionModule } from '@modules/permissions/infrastructure';
-// import {
-//   FindAllRolesController,
-//   FindByRoleController,
-// } from './api';
+import {
+  // FindAllRolesController,
+  FindByRoleController,
+} from './api';
 
 @Module({
   imports: [
@@ -30,7 +27,10 @@ import { RolesSeeder } from './seeders';
     LoggerModule,
     ExceptionModule,
   ],
-  // controllers: [FindAllRolesController, FindByRoleController],
+  controllers: [
+    // FindAllRolesController,
+    FindByRoleController,
+  ],
   providers: [
     {
       provide: RoleProvidersEnum.ROLE_REPOSITORY,
@@ -61,28 +61,24 @@ import { RolesSeeder } from './seeders';
       ) =>
         new FindAllRolesUseCase(RoleRepositoy, loggerService, exceptionService),
     },
-    // {
-    //   inject: [
-    //     RoleProvidersEnum.ROLE_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
-    //   useFactory: (
-    //     RoleRepositoy: RoleRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new FindByRoleUseCase(
-    //       RoleRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
+    {
+      inject: [
+        RoleProvidersEnum.ROLE_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
+      useFactory: (
+        RoleRepositoy: RoleRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new FindByRoleUseCase(RoleRepositoy, loggerService, exceptionService),
+    },
   ],
   exports: [
     RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
-    // RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
+    RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
   ],
 })
 export class RoleModule {}

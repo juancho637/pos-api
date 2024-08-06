@@ -1,5 +1,6 @@
 import {
   FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import { RoleType } from './role.type';
@@ -8,7 +9,9 @@ import { CreateRoleType } from './create-role.type';
 import { UpdateRoleType } from './update-role.type';
 
 export interface RoleRepositoryInterface<Entity extends RoleType = RoleType> {
-  findOneBy(fields: RoleFilterType): Promise<Entity>;
+  findOneBy(
+    findOneByFieldsDto: FindOneByFieldsDto<RoleFilterType>,
+  ): Promise<Entity>;
   findAll(
     findAllFieldsDto: FindAllFieldsDto<RoleFilterType>,
   ): Promise<PaginatedResourceType<Entity>>;
