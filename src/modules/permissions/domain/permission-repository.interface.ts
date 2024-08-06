@@ -17,6 +17,6 @@ export interface PermissionRepositoryInterface<
     findAllFieldsDto: FindAllFieldsDto<PermissionFilterType>,
   ): Promise<PaginatedResourceType<Entity>>;
   store(
-    createUsersFields: CreatePermissionType | CreatePermissionType[],
+    createPermissionsFields: CreatePermissionType | CreatePermissionType[],
   ): Promise<Entity | Entity[]>;
 }
