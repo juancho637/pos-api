@@ -1,3 +1,5 @@
 import { RoleType } from './role.type';
 
-export type CreateRoleType = Partial<RoleType>;
+export type CreateRoleType = Partial<RoleType> & {
+  permissionsIds?: number[];
+};

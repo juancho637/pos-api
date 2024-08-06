@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   LoggerProvidersEnum,
@@ -10,21 +10,35 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import { PermissionProvidersEnum } from '@modules/permissions/domain';
+import { PermissionModule } from '@modules/permissions/infrastructure';
+import { FindAllPermissionsUseCase } from '@modules/permissions/application';
 import { RoleProvidersEnum, RoleRepositoryInterface } from '../domain';
-import { FindAllRolesUseCase, FindByRoleUseCase } from '../application';
+import {
+  FindAllRolesUseCase,
+  FindByRoleUseCase,
+  StoreRoleUseCase,
+} from '../application';
+import {
+  FindAllRolesController,
+  FindByRoleController,
+  StoreRoleController,
+} from './api';
 import { RoleEntity, RoleTypeOrmRepository } from './persistence';
 import { RolesSeeder } from './seeders';
-// import { PermissionModule } from '@modules/permissions/infrastructure';
-import { FindAllRolesController, FindByRoleController } from './api';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RoleEntity]),
-    // forwardRef(() => PermissionModule),
+    forwardRef(() => PermissionModule),
     LoggerModule,
     ExceptionModule,
   ],
-  controllers: [FindAllRolesController, FindByRoleController],
+  controllers: [
+    FindAllRolesController,
+    FindByRoleController,
+    StoreRoleController,
+  ],
   providers: [
     {
       provide: RoleProvidersEnum.ROLE_REPOSITORY,
@@ -49,11 +63,11 @@ import { FindAllRolesController, FindByRoleController } from './api';
       ],
       provide: RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
       useFactory: (
-        RoleRepositoy: RoleRepositoryInterface,
+        roleRepositoy: RoleRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindAllRolesUseCase(RoleRepositoy, loggerService, exceptionService),
+        new FindAllRolesUseCase(roleRepositoy, loggerService, exceptionService),
     },
     {
       inject: [
@@ -63,16 +77,38 @@ import { FindAllRolesController, FindByRoleController } from './api';
       ],
       provide: RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
       useFactory: (
-        RoleRepositoy: RoleRepositoryInterface,
+        roleRepositoy: RoleRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindByRoleUseCase(RoleRepositoy, loggerService, exceptionService),
+        new FindByRoleUseCase(roleRepositoy, loggerService, exceptionService),
+    },
+    {
+      inject: [
+        RoleProvidersEnum.ROLE_REPOSITORY,
+        PermissionProvidersEnum.FIND_ALL_PERMISSIONS_USE_CASE,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: RoleProvidersEnum.STORE_ROLE_USE_CASE,
+      useFactory: (
+        roleRepositoy: RoleRepositoryInterface,
+        findAllPermissionsUseCase: FindAllPermissionsUseCase,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new StoreRoleUseCase(
+          roleRepositoy,
+          findAllPermissionsUseCase,
+          loggerService,
+          exceptionService,
+        ),
     },
   ],
   exports: [
     RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
     RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
+    RoleProvidersEnum.STORE_ROLE_USE_CASE,
   ],
 })
 export class RoleModule {}
