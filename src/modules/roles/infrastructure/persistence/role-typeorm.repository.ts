@@ -6,7 +6,9 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
+  FilterRuleEnum,
   FindAllFieldsDto,
+  FindOneByFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import {
@@ -40,10 +42,16 @@ export class RoleTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: RoleFilterType): Promise<RoleEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<RoleFilterType>): Promise<RoleEntity> {
     try {
+      const where = getWhereTypeOrmHelper<RoleFilterType>(filter);
+
       const role = await this.rolesRepository.findOneOrFail({
-        where: { ...fields },
+        where,
+        relations: relations || [],
       });
 
       return role;
@@ -122,7 +130,9 @@ export class RoleTypeOrmRepository
     updateRoleFields: UpdateRoleType,
   ): Promise<RoleEntity> {
     try {
-      const role = await this.findOneBy({ id });
+      const role = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.rolesRepository.save({ ...role, ...updateRoleFields });
     } catch (error) {
@@ -138,7 +148,9 @@ export class RoleTypeOrmRepository
 
   async delete(id: number): Promise<RoleEntity> {
     try {
-      const role = await this.findOneBy({ id });
+      const role = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.rolesRepository.softRemove(role);
 
