@@ -13,10 +13,13 @@ export class RolesSeeder {
   async seed(permissions: PermissionType[]): Promise<RoleType[]> {
     const adminPermissions = [
       ...permissions.filter((permission) =>
-        permission.name.includes('any:user'),
+        permission.module.includes('permissions'),
       ),
       ...permissions.filter((permission) =>
         permission.module.includes('roles'),
+      ),
+      ...permissions.filter((permission) =>
+        permission.name.includes('any:user'),
       ),
     ];
 

@@ -17,10 +17,10 @@ import {
 import { FindAllPermissionsUseCase } from '../application';
 import { PermissionEntity, PermissionTypeOrmRepository } from './persistence';
 import { PermissionsSeeder } from './seeders';
-// import {
-//   FindAllPermissionsController,
-//   FindByPermissionController,
-// } from './api';
+import {
+  FindAllPermissionsController,
+  // FindByPermissionController,
+} from './api';
 
 @Module({
   imports: [
@@ -28,7 +28,10 @@ import { PermissionsSeeder } from './seeders';
     LoggerModule,
     ExceptionModule,
   ],
-  // controllers: [FindAllPermissionsController, FindByPermissionController],
+  controllers: [
+    FindAllPermissionsController,
+    // FindByPermissionController
+  ],
   providers: [
     {
       provide: PermissionProvidersEnum.PERMISSION_REPOSITORY,
