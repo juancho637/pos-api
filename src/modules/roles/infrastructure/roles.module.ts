@@ -15,10 +15,7 @@ import { FindAllRolesUseCase, FindByRoleUseCase } from '../application';
 import { RoleEntity, RoleTypeOrmRepository } from './persistence';
 import { RolesSeeder } from './seeders';
 // import { PermissionModule } from '@modules/permissions/infrastructure';
-import {
-  // FindAllRolesController,
-  FindByRoleController,
-} from './api';
+import { FindAllRolesController, FindByRoleController } from './api';
 
 @Module({
   imports: [
@@ -27,10 +24,7 @@ import {
     LoggerModule,
     ExceptionModule,
   ],
-  controllers: [
-    // FindAllRolesController,
-    FindByRoleController,
-  ],
+  controllers: [FindAllRolesController, FindByRoleController],
   providers: [
     {
       provide: RoleProvidersEnum.ROLE_REPOSITORY,
