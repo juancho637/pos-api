@@ -152,9 +152,11 @@ export class RoleTypeOrmRepository
         filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
       });
 
-      await this.rolesRepository.softRemove(role);
-
-      return { ...role, id };
+      return await this.rolesRepository.save({
+        ...role,
+        status: 'INACTIVE',
+        deletedAt: new Date(),
+      });
     } catch (error) {
       this.logger.error({ message: error, context: this.context });
 

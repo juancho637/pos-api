@@ -15,12 +15,14 @@ import { PermissionModule } from '@modules/permissions/infrastructure';
 import { FindAllPermissionsUseCase } from '@modules/permissions/application';
 import { RoleProvidersEnum, RoleRepositoryInterface } from '../domain';
 import {
+  DeleteRoleUseCase,
   FindAllRolesUseCase,
   FindByRoleUseCase,
   StoreRoleUseCase,
   UpdateRoleUseCase,
 } from '../application';
 import {
+  DeleteRoleController,
   FindAllRolesController,
   FindByRoleController,
   StoreRoleController,
@@ -41,6 +43,7 @@ import { RolesSeeder } from './seeders';
     FindByRoleController,
     StoreRoleController,
     UpdateRoleController,
+    DeleteRoleController,
   ],
   providers: [
     {
@@ -121,12 +124,27 @@ import { RolesSeeder } from './seeders';
       ) =>
         new UpdateRoleUseCase(roleRepositoy, loggerService, exceptionService),
     },
+    {
+      inject: [
+        RoleProvidersEnum.ROLE_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: RoleProvidersEnum.DELETE_ROLE_USE_CASE,
+      useFactory: (
+        roleRepositoy: RoleRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new DeleteRoleUseCase(roleRepositoy, loggerService, exceptionService),
+    },
   ],
   exports: [
     RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
     RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
     RoleProvidersEnum.STORE_ROLE_USE_CASE,
     RoleProvidersEnum.UPDATE_ROLE_USE_CASE,
+    RoleProvidersEnum.DELETE_ROLE_USE_CASE,
   ],
 })
 export class RoleModule {}
