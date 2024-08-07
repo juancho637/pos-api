@@ -18,11 +18,13 @@ import {
   FindAllRolesUseCase,
   FindByRoleUseCase,
   StoreRoleUseCase,
+  UpdateRoleUseCase,
 } from '../application';
 import {
   FindAllRolesController,
   FindByRoleController,
   StoreRoleController,
+  UpdateRoleController,
 } from './api';
 import { RoleEntity, RoleTypeOrmRepository } from './persistence';
 import { RolesSeeder } from './seeders';
@@ -38,6 +40,7 @@ import { RolesSeeder } from './seeders';
     FindAllRolesController,
     FindByRoleController,
     StoreRoleController,
+    UpdateRoleController,
   ],
   providers: [
     {
@@ -104,11 +107,26 @@ import { RolesSeeder } from './seeders';
           exceptionService,
         ),
     },
+    {
+      inject: [
+        RoleProvidersEnum.ROLE_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: RoleProvidersEnum.UPDATE_ROLE_USE_CASE,
+      useFactory: (
+        roleRepositoy: RoleRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new UpdateRoleUseCase(roleRepositoy, loggerService, exceptionService),
+    },
   ],
   exports: [
     RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
     RoleProvidersEnum.FIND_BY_ROLE_USE_CASE,
     RoleProvidersEnum.STORE_ROLE_USE_CASE,
+    RoleProvidersEnum.UPDATE_ROLE_USE_CASE,
   ],
 })
 export class RoleModule {}
