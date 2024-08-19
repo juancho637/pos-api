@@ -99,7 +99,7 @@ export class CategoryTypeOrmRepository
 
   async store(
     createCategoryFields: CreateCategoryType,
-  ): Promise<CategoryEntity> {
+  ): Promise<CategoryEntity | CategoryEntity[]> {
     try {
       return this.categoriesRepository.save(createCategoryFields);
     } catch (error) {

@@ -5,4 +5,5 @@ export enum CategoryProvidersEnum {
   STORE_CATEGORY_USE_CASE = 'StoreCategoryUseCase',
   UPDATE_CATEGORY_USE_CASE = 'UpdateCategoryUseCase',
   DELETE_CATEGORY_USE_CASE = 'DeleteCategoryUseCase',
+  CATEGORY_SEEDER = 'CategorySeeder',
 }

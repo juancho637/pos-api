@@ -18,7 +18,9 @@ export interface CategoryRepositoryInterface<
     sort: SortingType,
     filters: FilteringType<CategoryFilterType>[],
   ): Promise<PaginatedResourceType<Partial<Entity>>>;
-  store(createCategoryFields: CreateCategoryType): Promise<Entity>;
+  store(
+    createCategoryFields: CreateCategoryType | CreateCategoryType[],
+  ): Promise<Entity | Entity[]>;
   update(id: number, updateCategoryFields: UpdateCategoryType): Promise<Entity>;
   delete(id: number): Promise<Entity>;
 }
