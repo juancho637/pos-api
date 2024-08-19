@@ -3,10 +3,12 @@ import {
   FindOneByFieldsDto,
   PaginatedResourceType,
 } from '@common/helpers/domain';
-import { OrderType } from './order.type';
-import { OrderFilterType } from './order-filter.type';
-import { CreateOrderType } from './create-order.type';
-import { UpdateOrderType } from './update-order.type';
+import {
+  CreateOrderRepositoryType,
+  OrderFilterType,
+  OrderType,
+  UpdateOrderRepositoryType,
+} from './types';
 
 export interface OrderRepositoryInterface<
   Entity extends OrderType = OrderType,
@@ -18,8 +20,11 @@ export interface OrderRepositoryInterface<
     findAllFieldsDto: FindAllFieldsDto<OrderFilterType>,
   ): Promise<PaginatedResourceType<Entity>>;
   store(
-    createOrderFields: CreateOrderType | CreateOrderType[],
+    createOrderFields: CreateOrderRepositoryType | CreateOrderRepositoryType[],
   ): Promise<Entity | Entity[]>;
-  update(id: number, updateOrderFields: UpdateOrderType): Promise<Entity>;
+  update(
+    id: number,
+    updateOrderFields: UpdateOrderRepositoryType,
+  ): Promise<Entity>;
   delete(id: number): Promise<Entity>;
 }
