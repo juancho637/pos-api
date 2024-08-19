@@ -1,6 +1,7 @@
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
-import { UserPermissionsEnum } from '@modules/users/domain';
+import { OrderPermissionsEnum } from '@modules/orders/domain';
 import { RolePermissionsEnum } from '@modules/roles/domain';
+import { UserPermissionsEnum } from '@modules/users/domain';
 import {
   PermissionPermissionsEnum,
   PermissionRepositoryInterface,
@@ -22,11 +23,13 @@ export class PermissionsSeeder {
     );
     const rolePermissions = this.enumToArray(RolePermissionsEnum, 'roles');
     const userPermissions = this.enumToArray(UserPermissionsEnum, 'users');
+    const orderPermissions = this.enumToArray(OrderPermissionsEnum, 'orders');
 
     const permissions = await this.permissionRepository.store([
       ...permissionPermissions,
       ...rolePermissions,
       ...userPermissions,
+      ...orderPermissions,
     ]);
 
     this.logger.debug({
