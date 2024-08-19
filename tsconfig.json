@@ -36,6 +36,8 @@
       "@modules/providers/*": ["./src/modules/providers/*"],
       "@modules/customers/*": ["./src/modules/customers/*"],
       "@modules/products/*": ["./src/modules/products/*"],
+      "@modules/counters/*": ["./src/modules/counters/*"],
+      "@modules/orders/*": ["./src/modules/orders/*"],
 
 
       // Tests

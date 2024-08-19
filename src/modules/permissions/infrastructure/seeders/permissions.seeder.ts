@@ -1,7 +1,11 @@
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { UserPermissionsEnum } from '@modules/users/domain';
 import { RolePermissionsEnum } from '@modules/roles/domain';
-import { PermissionRepositoryInterface, PermissionType } from '../../domain';
+import {
+  PermissionPermissionsEnum,
+  PermissionRepositoryInterface,
+  PermissionType,
+} from '../../domain';
 
 export class PermissionsSeeder {
   private readonly context = PermissionsSeeder.name;
@@ -12,12 +16,17 @@ export class PermissionsSeeder {
   ) {}
 
   async seed(): Promise<PermissionType[]> {
-    const userPermissions = this.enumToArray(UserPermissionsEnum, 'users');
+    const permissionPermissions = this.enumToArray(
+      PermissionPermissionsEnum,
+      'permissions',
+    );
     const rolePermissions = this.enumToArray(RolePermissionsEnum, 'roles');
+    const userPermissions = this.enumToArray(UserPermissionsEnum, 'users');
 
     const permissions = await this.permissionRepository.store([
-      ...userPermissions,
+      ...permissionPermissions,
       ...rolePermissions,
+      ...userPermissions,
     ]);
 
     this.logger.debug({

@@ -20,22 +20,22 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import {
-  RoleRepositoryInterface,
-  RoleFilterType,
-  roleErrorsCodes,
-  CreateRoleType,
-  UpdateRoleType,
+  OrderRepositoryInterface,
+  OrderFilterType,
+  orderErrorsCodes,
+  CreateOrderType,
+  UpdateOrderType,
 } from '../../domain';
-import { RoleEntity } from './role.entity';
+import { OrderEntity } from './order.entity';
 
-export class RoleTypeOrmRepository
-  implements RoleRepositoryInterface<RoleEntity>
+export class OrderTypeOrmRepository
+  implements OrderRepositoryInterface<OrderEntity>
 {
-  private readonly context = RoleTypeOrmRepository.name;
+  private readonly context = OrderTypeOrmRepository.name;
 
   constructor(
-    @InjectRepository(RoleEntity)
-    private readonly rolesRepository: Repository<RoleEntity>,
+    @InjectRepository(OrderEntity)
+    private readonly ordersRepository: Repository<OrderEntity>,
     @Inject(LoggerProvidersEnum.LOGGER_SERVICE)
     private readonly logger: LoggerServiceInterface,
     @Inject(ExceptionProvidersEnum.EXCEPTION_SERVICE)
@@ -45,21 +45,21 @@ export class RoleTypeOrmRepository
   async findOneBy({
     filter,
     relations,
-  }: FindOneByFieldsDto<RoleFilterType>): Promise<RoleEntity> {
+  }: FindOneByFieldsDto<OrderFilterType>): Promise<OrderEntity> {
     try {
-      const where = getWhereTypeOrmHelper<RoleFilterType>(filter);
+      const where = getWhereTypeOrmHelper<OrderFilterType>(filter);
 
-      const role = await this.rolesRepository.findOneOrFail({
+      const order = await this.ordersRepository.findOneOrFail({
         where,
         relations: relations || [],
       });
 
-      return role;
+      return order;
     } catch (error) {
       this.logger.error({ message: error, context: this.context });
 
       throw this.exception.internalServerErrorException({
-        message: roleErrorsCodes.ROL010,
+        message: orderErrorsCodes.ORD010,
         context: this.context,
         error,
       });
@@ -70,15 +70,15 @@ export class RoleTypeOrmRepository
     pagination,
     sort,
     filters,
-  }: FindAllFieldsDto<RoleFilterType>): Promise<
-    PaginatedResourceType<RoleEntity>
+  }: FindAllFieldsDto<OrderFilterType>): Promise<
+    PaginatedResourceType<OrderEntity>
   > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
       const order = getOrderTypeOrmHelper(sort);
 
-      const [roles, count] = await this.rolesRepository.findAndCount({
+      const [orders, count] = await this.ordersRepository.findAndCount({
         where,
         order,
         skip: (page - 1) * size,
@@ -92,13 +92,13 @@ export class RoleTypeOrmRepository
         current_page: page,
         last_page: lastPage,
         size,
-        items: roles,
+        items: orders,
       };
     } catch (error) {
       this.logger.error({ message: error, context: this.context });
 
       throw this.exception.internalServerErrorException({
-        message: roleErrorsCodes.ROL020,
+        message: orderErrorsCodes.ORD020,
         context: this.context,
         error,
       });
@@ -106,19 +106,19 @@ export class RoleTypeOrmRepository
   }
 
   async store(
-    createRoleFields: CreateRoleType | CreateRoleType[],
-  ): Promise<RoleEntity | RoleEntity[]> {
+    createOrderFields: CreateOrderType | CreateOrderType[],
+  ): Promise<OrderEntity | OrderEntity[]> {
     try {
-      if (Array.isArray(createRoleFields)) {
-        return this.rolesRepository.save(createRoleFields);
+      if (Array.isArray(createOrderFields)) {
+        return this.ordersRepository.save(createOrderFields);
       }
 
-      return this.rolesRepository.save(createRoleFields);
+      return this.ordersRepository.save(createOrderFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.context });
 
       throw this.exception.internalServerErrorException({
-        message: roleErrorsCodes.ROL030,
+        message: orderErrorsCodes.ORD030,
         context: this.context,
         error,
       });
@@ -127,33 +127,36 @@ export class RoleTypeOrmRepository
 
   async update(
     id: number,
-    updateRoleFields: UpdateRoleType,
-  ): Promise<RoleEntity> {
+    updateOrderFields: UpdateOrderType,
+  ): Promise<OrderEntity> {
     try {
-      const role = await this.findOneBy({
+      const order = await this.findOneBy({
         filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
       });
 
-      return await this.rolesRepository.save({ ...role, ...updateRoleFields });
+      return await this.ordersRepository.save({
+        ...order,
+        ...updateOrderFields,
+      });
     } catch (error) {
       this.logger.error({ message: error, context: this.context });
 
       throw this.exception.internalServerErrorException({
-        message: roleErrorsCodes.ROL040,
+        message: orderErrorsCodes.ORD040,
         context: this.context,
         error,
       });
     }
   }
 
-  async delete(id: number): Promise<RoleEntity> {
+  async delete(id: number): Promise<OrderEntity> {
     try {
-      const role = await this.findOneBy({
+      const order = await this.findOneBy({
         filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
       });
 
-      return await this.rolesRepository.save({
-        ...role,
+      return await this.ordersRepository.save({
+        ...order,
         status: 'INACTIVE',
         deletedAt: new Date(),
       });
@@ -161,7 +164,7 @@ export class RoleTypeOrmRepository
       this.logger.error({ message: error, context: this.context });
 
       throw this.exception.internalServerErrorException({
-        message: roleErrorsCodes.ROL050,
+        message: orderErrorsCodes.ORD050,
         context: this.context,
         error,
       });
