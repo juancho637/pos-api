@@ -8,6 +8,7 @@
     "guilhermetheodoro.typescript-indexing",
     "usernamehw.errorlens",
     "kisstkondoros.vscode-codemetrics",
-    "rogerchi.vsce-gitkeep"
+    "rogerchi.vsce-gitkeep",
+    "orta.vscode-jest"
   ]
 }
