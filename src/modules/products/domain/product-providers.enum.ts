@@ -5,4 +5,5 @@ export enum ProductProvidersEnum {
   STORE_PRODUCT_USE_CASE = 'StoreProductUseCase',
   UPDATE_PRODUCT_USE_CASE = 'UpdateProductUseCase',
   DELETE_PRODUCT_USE_CASE = 'DeleteProductUseCase',
+  PRODUCT_SEEDER = 'ProductSeeder',
 }
