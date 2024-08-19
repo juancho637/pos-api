@@ -43,16 +43,17 @@ export class FindAllCountersController {
   @Get('api/counters')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'branch_id', 'user_id']) sortParams?: SortingType,
-    @FilteringParams(['id', 'branch_id', 'user_id'])
+    @SortingParams<CounterFilterType>('id', 'user_id', 'status')
+    sortParams?: SortingType<CounterFilterType>,
+    @FilteringParams<CounterFilterType>('id', 'user_id', 'status')
     filterParams?: FilteringType<CounterFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CounterType>>> {
     try {
-      const counters = await this.findAllCountersUseCase.run(
-        paginationParams,
-        sortParams,
-        filterParams,
-      );
+      const counters = await this.findAllCountersUseCase.run({
+        pagination: paginationParams,
+        sort: sortParams,
+        filters: filterParams,
+      });
 
       return {
         ...counters,

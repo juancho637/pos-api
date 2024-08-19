@@ -6,10 +6,10 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
   PaginatedResourceType,
+  FindOneByFieldsDto,
+  FilterRuleEnum,
+  FindAllFieldsDto,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -42,10 +42,16 @@ export class ProviderTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: ProviderFilterType): Promise<ProviderEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<ProviderFilterType>): Promise<ProviderEntity> {
     try {
+      const where = getWhereTypeOrmHelper<ProviderFilterType>(filter);
+
       const provider = await this.providersRepository.findOneOrFail({
-        where: { ...fields },
+        where,
+        relations: relations || [],
       });
 
       return provider;
@@ -60,15 +66,17 @@ export class ProviderTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<ProviderFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<ProviderEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<ProviderFilterType>): Promise<
+    PaginatedResourceType<Partial<ProviderEntity>>
+  > {
     try {
       const { page, size } = pagination;
-      const where = getWhereTypeOrmHelper(filters);
-      const order = getOrderTypeOrmHelper(sort);
+      const where = getWhereTypeOrmHelper<ProviderFilterType>(filters);
+      const order = getOrderTypeOrmHelper<ProviderFilterType>(sort);
 
       const [providers, count] = await this.providersRepository.findAndCount({
         where,
@@ -118,7 +126,9 @@ export class ProviderTypeOrmRepository
     updateProviderFields: UpdateProviderType,
   ): Promise<ProviderEntity> {
     try {
-      const provider = await this.findOneBy({ id });
+      const provider = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.providersRepository.save({
         ...provider,
@@ -137,7 +147,9 @@ export class ProviderTypeOrmRepository
 
   async delete(id: number): Promise<ProviderEntity> {
     try {
-      const provider = await this.findOneBy({ id });
+      const provider = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.providersRepository.softRemove(provider);
 

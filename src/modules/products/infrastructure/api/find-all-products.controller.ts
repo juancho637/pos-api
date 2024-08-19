@@ -43,8 +43,9 @@ export class FindAllProductsController {
   @Get('api/products')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'branch_id', 'user_id']) sortParams?: SortingType,
-    @FilteringParams(['id', 'branch_id', 'user_id'])
+    @SortingParams<ProductFilterType>('id', 'name', 'status')
+    sortParams?: SortingType<ProductFilterType>,
+    @FilteringParams<ProductFilterType>('id', 'name', 'status')
     filterParams?: FilteringType<ProductFilterType>[],
   ): Promise<PaginatedResourceType<Partial<ProductType>>> {
     try {

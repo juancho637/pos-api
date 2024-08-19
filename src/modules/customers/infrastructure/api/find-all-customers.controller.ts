@@ -43,16 +43,29 @@ export class FindAllCustomersController {
   @Get('api/customers')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'name', 'email']) sortParams?: SortingType,
-    @FilteringParams(['id', 'name', 'email'])
+    @SortingParams<CustomerFilterType>(
+      'id',
+      'email',
+      'full_name',
+      'status',
+      'type_identification',
+    )
+    sortParams?: SortingType<CustomerFilterType>,
+    @FilteringParams<CustomerFilterType>(
+      'id',
+      'email',
+      'full_name',
+      'status',
+      'type_identification',
+    )
     filterParams?: FilteringType<CustomerFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CustomerType>>> {
     try {
-      const customers = await this.findAllCustomersUseCase.run(
-        paginationParams,
-        sortParams,
-        filterParams,
-      );
+      const customers = await this.findAllCustomersUseCase.run({
+        pagination: paginationParams,
+        sort: sortParams,
+        filters: filterParams,
+      });
 
       return {
         ...customers,

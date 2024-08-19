@@ -6,10 +6,10 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  FilteringType,
-  PaginationType,
-  SortingType,
   PaginatedResourceType,
+  FindOneByFieldsDto,
+  FindAllFieldsDto,
+  FilterRuleEnum,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -42,10 +42,16 @@ export class CounterTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: CounterFilterType): Promise<CounterEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<CounterFilterType>): Promise<CounterEntity> {
     try {
+      const where = getWhereTypeOrmHelper<CounterFilterType>(filter);
+
       const counter = await this.countersRepository.findOneOrFail({
-        where: { ...fields },
+        where,
+        relations: relations || [],
       });
 
       return counter;
@@ -60,11 +66,13 @@ export class CounterTypeOrmRepository
     }
   }
 
-  async findAll(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<CounterFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<CounterEntity>>> {
+  async findAll({
+    pagination,
+    sort,
+    filters,
+  }: FindAllFieldsDto<CounterFilterType>): Promise<
+    PaginatedResourceType<Partial<CounterEntity>>
+  > {
     try {
       const { page, size } = pagination;
       const where = getWhereTypeOrmHelper(filters);
@@ -116,7 +124,9 @@ export class CounterTypeOrmRepository
     updateCounterFields: UpdateCounterType,
   ): Promise<CounterEntity> {
     try {
-      const counter = await this.findOneBy({ id });
+      const counter = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.countersRepository.save({
         ...counter,
@@ -135,7 +145,9 @@ export class CounterTypeOrmRepository
 
   async delete(id: number): Promise<CounterEntity> {
     try {
-      const counter = await this.findOneBy({ id });
+      const counter = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.countersRepository.softRemove(counter);
 

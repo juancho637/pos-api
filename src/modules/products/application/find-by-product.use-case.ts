@@ -1,14 +1,14 @@
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
-  FindByProductUseCaseInterface,
   ProductFilterType,
   ProductRepositoryInterface,
   ProductType,
   productErrorsCodes,
 } from '../domain';
+import { FindOneByFieldsDto } from '@common/helpers/domain';
 
-export class FindByProductUseCase implements FindByProductUseCaseInterface {
+export class FindByProductUseCase {
   private readonly context = FindByProductUseCase.name;
 
   constructor(
@@ -17,10 +17,14 @@ export class FindByProductUseCase implements FindByProductUseCaseInterface {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(productFilters: ProductFilterType): Promise<ProductType> {
+  async run({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<ProductFilterType>): Promise<ProductType> {
     try {
       const product = await this.productRepository.findOneBy({
-        ...productFilters,
+        filter,
+        relations,
       });
 
       return product;

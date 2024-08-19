@@ -10,6 +10,7 @@ import {
 import { CounterProvidersEnum, counterErrorsCodes } from '../../domain';
 import { FindByCounterUseCase } from '../../application';
 import { CounterPresenter } from '../counter.presenter';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 @Controller()
 export class FindByCounterController {
@@ -27,7 +28,9 @@ export class FindByCounterController {
   @Get('api/counters/:id')
   async run(@Param('id', ParseIntPipe) id: number): Promise<CounterPresenter> {
     try {
-      const counter = await this.findByCounterUseCase.run({ id });
+      const counter = await this.findByCounterUseCase.run({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return new CounterPresenter(counter);
     } catch (error) {

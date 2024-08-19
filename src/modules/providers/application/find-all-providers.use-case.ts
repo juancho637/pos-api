@@ -1,8 +1,6 @@
 import {
-  FilteringType,
+  FindAllFieldsDto,
   PaginatedResourceType,
-  PaginationType,
-  SortingType,
 } from '@common/helpers/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
@@ -22,17 +20,21 @@ export class FindAllProvidersUseCase {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(
-    pagination: PaginationType,
-    sort?: SortingType,
-    filters?: FilteringType<ProviderFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<ProviderType>>> {
+  async run({
+    pagination,
+    sort,
+    filters,
+    relations,
+  }: FindAllFieldsDto<ProviderFilterType>): Promise<
+    PaginatedResourceType<Partial<ProviderType>>
+  > {
     try {
-      const providerResource = await this.providerRepository.findAll(
+      const providerResource = await this.providerRepository.findAll({
         pagination,
         sort,
         filters,
-      );
+        relations,
+      });
 
       return providerResource;
     } catch (error) {

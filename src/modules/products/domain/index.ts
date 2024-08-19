@@ -1,6 +1,5 @@
 export * from './create-product-repository.type';
 export * from './create-product.type';
-export * from './interfaces';
 export * from './product-errors.codes';
 export * from './product-filter.type';
 export * from './product-providers.enum';

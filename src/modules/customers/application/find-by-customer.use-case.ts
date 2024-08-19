@@ -1,14 +1,14 @@
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { ExceptionServiceInterface } from '@common/adapters/exception/domain';
 import {
-  FindByCustomerUseCaseInterface,
   CustomerFilterType,
   CustomerRepositoryInterface,
   CustomerType,
   customerErrorsCodes,
 } from '../domain';
+import { FindOneByFieldsDto } from '@common/helpers/domain';
 
-export class FindByCustomerUseCase implements FindByCustomerUseCaseInterface {
+export class FindByCustomerUseCase {
   private readonly context = FindByCustomerUseCase.name;
 
   constructor(
@@ -17,10 +17,14 @@ export class FindByCustomerUseCase implements FindByCustomerUseCaseInterface {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async run(customerFilters: CustomerFilterType): Promise<CustomerType> {
+  async run({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<CustomerFilterType>): Promise<CustomerType> {
     try {
       const customer = await this.customerRepository.findOneBy({
-        ...customerFilters,
+        filter,
+        relations,
       });
 
       return customer;

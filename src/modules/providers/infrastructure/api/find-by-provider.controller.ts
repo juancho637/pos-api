@@ -1,4 +1,5 @@
 import { Controller, Get, Inject, Param, ParseIntPipe } from '@nestjs/common';
+import { FilterRuleEnum } from '@common/helpers/domain';
 import {
   LoggerServiceInterface,
   LoggerProvidersEnum,
@@ -27,7 +28,9 @@ export class FindByProviderController {
   @Get('api/providers/:id')
   async run(@Param('id', ParseIntPipe) id: number): Promise<ProviderPresenter> {
     try {
-      const provider = await this.findByProviderUseCase.run(id);
+      const provider = await this.findByProviderUseCase.run({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return new ProviderPresenter(provider);
     } catch (error) {

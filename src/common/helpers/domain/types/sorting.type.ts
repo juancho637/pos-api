@@ -1,4 +1,4 @@
-export type SortingType = {
-  property: string;
-  direction: string;
+export type SortingType<T> = {
+  property: keyof T;
+  direction: 'asc' | 'desc';
 };
