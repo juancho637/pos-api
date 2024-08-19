@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrderEntity } from '@modules/orders/infrastructure';
 import { CustomerType } from '../../domain';
 
 @Entity({ name: 'customers' })
@@ -102,4 +104,7 @@ export class CustomerEntity implements CustomerType {
     nullable: true,
   })
   deletedAt?: Date;
+
+  @OneToMany(() => OrderEntity, (order) => order.customer)
+  orders: OrderEntity[];
 }

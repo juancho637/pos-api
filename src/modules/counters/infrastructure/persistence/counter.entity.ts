@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { OrderEntity } from '@modules/orders/infrastructure';
 import { CounterType } from '../../domain';
 
 @Entity({ name: 'counters' })
@@ -58,4 +60,7 @@ export class CounterEntity implements CounterType {
     nullable: true,
   })
   deletedAt?: Date;
+
+  @OneToMany(() => OrderEntity, (order) => order.customer)
+  orders: OrderEntity[];
 }
