@@ -1,4 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import {
   LoggerServiceInterface,
   LoggerProvidersEnum,
@@ -30,7 +31,9 @@ export class StoreCustomerController {
     @Body() createProviderDto: CreateCustomerDto,
   ): Promise<CustomerPresenter> {
     try {
-      const provider = await this.storeCustomerUseCase.run(createProviderDto);
+      const provider = await this.storeCustomerUseCase.run(
+        plainToClass(CreateCustomerDto, createProviderDto),
+      );
 
       return new CustomerPresenter(provider);
     } catch (error) {

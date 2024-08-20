@@ -4,4 +4,5 @@ export * from './customer-filter.type';
 export * from './customer-provider.enums';
 export * from './customer-repository.interface';
 export * from './customer.type';
+export * from './types';
 export * from './update-customer.type';

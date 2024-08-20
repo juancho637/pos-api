@@ -29,14 +29,14 @@ export class FindAllCustomersUseCase {
     PaginatedResourceType<Partial<CustomerType>>
   > {
     try {
-      const providerResource = await this.customerRepository.findAll({
+      const customers = await this.customerRepository.findAll({
         pagination,
         sort,
         filters,
         relations,
       });
 
-      return providerResource;
+      return customers;
     } catch (error) {
       this.logger.error({
         message: error,
