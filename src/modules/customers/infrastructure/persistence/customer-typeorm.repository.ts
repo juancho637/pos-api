@@ -23,8 +23,8 @@ import {
   CustomerRepositoryInterface,
   CustomerFilterType,
   UpdateCustomerType,
-  CreateCustomerType,
   customerErrorsCodes,
+  CreateCustomerRepositoryType,
 } from '../../domain';
 import { CustomerEntity } from './customer.entity';
 
@@ -106,7 +106,7 @@ export class CustomerTypeOrmRepository
   }
 
   async store(
-    createCustomerFields: CreateCustomerType,
+    createCustomerFields: CreateCustomerRepositoryType,
   ): Promise<CustomerEntity> {
     try {
       return this.customersRepository.save(createCustomerFields);

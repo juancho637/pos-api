@@ -46,17 +46,17 @@ export class FindAllCustomersController {
     @SortingParams<CustomerFilterType>(
       'id',
       'email',
-      'full_name',
+      'fullName',
       'status',
-      'type_identification',
+      'typeIdentification',
     )
     sortParams?: SortingType<CustomerFilterType>,
     @FilteringParams<CustomerFilterType>(
       'id',
       'email',
-      'full_name',
+      'fullName',
       'status',
-      'type_identification',
+      'typeIdentification',
     )
     filterParams?: FilteringType<CustomerFilterType>[],
   ): Promise<PaginatedResourceType<Partial<CustomerType>>> {

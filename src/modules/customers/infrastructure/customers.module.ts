@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
 import {
   LoggerProvidersEnum,
   LoggerServiceInterface,
@@ -10,6 +11,10 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import {
+  AppConfigType,
+  ConfigurationType,
+} from '@common/adapters/configuration/domain';
 import { CustomerProvidersEnum, CustomerRepositoryInterface } from '../domain';
 import {
   FindAllCustomersUseCase,
@@ -26,6 +31,7 @@ import {
   StoreCustomerController,
   UpdateCustomerController,
 } from './api';
+import { DevCustomersSeeder } from './seeders';
 
 @Module({
   imports: [
@@ -44,6 +50,25 @@ import {
     {
       provide: CustomerProvidersEnum.CUSTOMER_REPOSITORY,
       useClass: CustomerTypeOrmRepository,
+    },
+    {
+      provide: CustomerProvidersEnum.CUSTOMER_SEEDER,
+      inject: [
+        ConfigService,
+        CustomerProvidersEnum.CUSTOMER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+      ],
+      useFactory: (
+        configService: ConfigService<ConfigurationType>,
+        customerRepositoy: CustomerRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+      ) => {
+        const env = configService.get<AppConfigType>('app').env;
+
+        return env !== 'prod'
+          ? new DevCustomersSeeder(customerRepositoy, loggerService)
+          : null;
+      },
     },
     {
       inject: [

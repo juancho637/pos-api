@@ -7,11 +7,13 @@ import {
   IsDate,
 } from 'class-validator';
 import { CreateCustomerType } from '../../domain';
+import { Expose } from 'class-transformer';
 
 export class CreateCustomerDto implements CreateCustomerType {
   @IsNotEmpty()
   @IsString()
-  type_identification: string;
+  @Expose({ name: 'type_identification' })
+  typeIdentification: string;
 
   @IsNotEmpty()
   @IsString()
@@ -19,19 +21,21 @@ export class CreateCustomerDto implements CreateCustomerType {
 
   @IsNotEmpty()
   @IsString()
-  full_name: string;
+  @Expose({ name: 'full_name' })
+  fullName: string;
 
   @IsNotEmpty()
   @IsEmail()
   email: string;
 
   @IsOptional()
-  @IsPhoneNumber(null) // Puede especificar un código de región, como 'US'
+  @IsPhoneNumber('CO') // Puede especificar un código de región, como 'US'
   phone?: string;
 
   @IsNotEmpty()
-  @IsPhoneNumber(null)
-  cell_phone: string;
+  @IsPhoneNumber('CO')
+  @Expose({ name: 'cell_phone' })
+  cellPhone: string;
 
   @IsOptional()
   @IsString()

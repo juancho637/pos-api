@@ -18,10 +18,12 @@ export class StoreCustomerUseCase {
 
   async run({ ...fields }: CreateCustomerType): Promise<CustomerType> {
     try {
-      const provider = await this.customerRepository.store({
+      const customer = await this.customerRepository.store({
         ...fields,
+        status: 'ACTIVE',
       });
-      return provider;
+
+      return customer as CustomerType;
     } catch (error) {
       this.logger.error({
         message: error,
