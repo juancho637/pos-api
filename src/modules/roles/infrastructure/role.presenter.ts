@@ -8,12 +8,12 @@ export class RolePresenter {
   created_at: Date;
   updated_at: Date;
 
-  constructor(user: Partial<RoleType>) {
-    this.id = user.id;
-    this.name = user.name;
-    this.status = user.status;
-    this.description = user.description;
-    this.created_at = user.createdAt;
-    this.updated_at = user.updatedAt;
+  constructor(role: RoleType) {
+    this.id = role.id;
+    this.name = role.name;
+    this.status = role.status;
+    this.description = role.description;
+    this.created_at = role.createdAt;
+    this.updated_at = role.updatedAt;
   }
 }

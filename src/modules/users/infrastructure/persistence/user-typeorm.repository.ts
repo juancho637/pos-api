@@ -70,6 +70,7 @@ export class UserTypeOrmRepository
     pagination,
     sort,
     filters,
+    relations,
   }: FindAllFieldsDto<UserFilterType>): Promise<
     PaginatedResourceType<Partial<UserEntity>>
   > {
@@ -81,6 +82,7 @@ export class UserTypeOrmRepository
       const [users, count] = await this.usersRepository.findAndCount({
         where,
         order,
+        relations,
         skip: (page - 1) * size,
         take: size,
       });

@@ -37,7 +37,7 @@ import { OrderEntity, OrderTypeOrmRepository } from './persistence';
     TypeOrmModule.forFeature([OrderEntity]),
     LoggerModule,
     ExceptionModule,
-    CounterModule,
+    forwardRef(() => CounterModule),
     forwardRef(() => CustomerModule),
   ],
   controllers: [
