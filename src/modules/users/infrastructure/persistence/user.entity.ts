@@ -5,11 +5,11 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import { PermissionEntity } from '../../../permissions/infrastructure';
-// import { RoleEntity } from '../../../roles/infrastructure';
+import { CounterEntity } from '@modules/counters/infrastructure';
 import { PermissionEntity } from '@modules/permissions/infrastructure';
 import { RoleEntity } from '@modules/roles/infrastructure';
 import { UserType } from '../../domain';
@@ -100,4 +100,7 @@ export class UserEntity implements UserType {
     },
   })
   permissions: PermissionEntity[];
+
+  @OneToMany(() => CounterEntity, (counter) => counter.user)
+  counters: CounterEntity[];
 }

@@ -23,7 +23,6 @@ import {
   UserFilterType,
   UserPermissionsEnum,
   UserProvidersEnum,
-  UserType,
   userErrorsCodes,
 } from '../../domain';
 import { FindAllUsersUseCase } from '../../application';
@@ -50,7 +49,7 @@ export class FindAllUsersController {
     sortParams?: SortingType<UserFilterType>,
     @FilteringParams<UserFilterType>('id', 'email', 'name', 'username')
     filterParams?: FilteringType<UserFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<UserType>>> {
+  ): Promise<PaginatedResourceType<UserPresenter>> {
     try {
       const users = await this.findAllUsersUseCase.run({
         pagination: paginationParams,

@@ -1,5 +1,6 @@
 export enum CounterProvidersEnum {
   COUNTER_REPOSITORY = 'CounterRepository',
+  COUNTER_SEEDER = 'CounterSeeder',
   FIND_ALL_COUNTERS_USE_CASE = 'FindAllCountersUseCase',
   FIND_BY_COUNTER_USE_CASE = 'FindByCounterUseCase',
   STORE_COUNTER_USE_CASE = 'StoreCounterUseCase',

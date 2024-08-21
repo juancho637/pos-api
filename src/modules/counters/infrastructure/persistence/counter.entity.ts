@@ -3,11 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderEntity } from '@modules/orders/infrastructure';
+import { UserEntity } from '@modules/users/infrastructure';
 import { CounterType } from '../../domain';
 
 @Entity({ name: 'counters' })
@@ -16,32 +19,30 @@ export class CounterEntity implements CounterType {
   id: number;
 
   @Column({
-    type: 'varchar',
-    length: 50,
-    nullable: false,
-  })
-  branch_id: number;
-
-  @Column({
     type: 'integer',
     nullable: false,
-    unique: true,
-  })
-  user_id: number;
-
-  @Column({
-    type: 'integer',
-    nullable: false,
-    unique: true,
   })
   base: number;
 
   @Column({
-    type: 'real',
+    type: 'varchar',
     nullable: false,
-    unique: true,
   })
   status: string;
+
+  @Column({
+    type: 'datetime',
+    name: 'start_time',
+    nullable: false,
+  })
+  startTime: Date;
+
+  @Column({
+    type: 'datetime',
+    name: 'end_time',
+    nullable: false,
+  })
+  endTime: Date;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -60,6 +61,10 @@ export class CounterEntity implements CounterType {
     nullable: true,
   })
   deletedAt?: Date;
+
+  @ManyToOne(() => UserEntity, (user) => user.counters)
+  @JoinColumn({ name: 'user_id' })
+  user: UserEntity;
 
   @OneToMany(() => OrderEntity, (order) => order.customer)
   orders: OrderEntity[];

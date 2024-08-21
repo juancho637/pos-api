@@ -23,8 +23,8 @@ import {
   CounterRepositoryInterface,
   CounterFilterType,
   UpdateCounterType,
-  CreateCounterType,
   counterErrorsCodes,
+  CreateCounterRepositoryType,
 } from '../../domain';
 import { CounterEntity } from './counter.entity';
 
@@ -105,8 +105,16 @@ export class CounterTypeOrmRepository
     }
   }
 
-  async store(createCounterFields: CreateCounterType): Promise<CounterEntity> {
+  async store(
+    createCounterFields:
+      | CreateCounterRepositoryType
+      | CreateCounterRepositoryType[],
+  ): Promise<CounterEntity | CounterEntity[]> {
     try {
+      if (Array.isArray(createCounterFields)) {
+        return this.countersRepository.save(createCounterFields);
+      }
+
       return this.countersRepository.save(createCounterFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.context });

@@ -1,10 +1,6 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  HashProvidersEnum,
-  HashServiceInterface,
-} from '@common/adapters/hash/domain';
-import { HashModule } from '@common/adapters/hash/infrastructure';
+import { ConfigService } from '@nestjs/config';
 import {
   LoggerProvidersEnum,
   LoggerServiceInterface,
@@ -15,6 +11,10 @@ import {
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
+import {
+  AppConfigType,
+  ConfigurationType,
+} from '@common/adapters/configuration/domain';
 import { CounterProvidersEnum, CounterRepositoryInterface } from '../domain';
 import {
   DeleteCounterUseCase,
@@ -31,13 +31,17 @@ import {
   StoreCounterController,
   UpdateCounterController,
 } from './api';
+import { DevCountersSeeder } from './seeders';
+import { UserProvidersEnum } from '@modules/users/domain';
+import { FindByUserUseCase } from '@modules/users/application';
+import { UserModule } from '@modules/users/infrastructure';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([CounterEntity]),
     LoggerModule,
     ExceptionModule,
-    HashModule,
+    forwardRef(() => UserModule),
   ],
   controllers: [
     FindAllCountersController,
@@ -50,6 +54,25 @@ import {
     {
       provide: CounterProvidersEnum.COUNTER_REPOSITORY,
       useClass: CounterTypeOrmRepository,
+    },
+    {
+      provide: CounterProvidersEnum.COUNTER_SEEDER,
+      inject: [
+        ConfigService,
+        CounterProvidersEnum.COUNTER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+      ],
+      useFactory: (
+        configService: ConfigService<ConfigurationType>,
+        customerRepositoy: CounterRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+      ) => {
+        const env = configService.get<AppConfigType>('app').env;
+
+        return env !== 'prod'
+          ? new DevCountersSeeder(customerRepositoy, loggerService)
+          : null;
+      },
     },
     {
       inject: [
@@ -90,20 +113,20 @@ import {
     {
       inject: [
         CounterProvidersEnum.COUNTER_REPOSITORY,
-        HashProvidersEnum.HASH_SERVICE,
+        UserProvidersEnum.FIND_BY_USER_USE_CASE,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
       provide: CounterProvidersEnum.STORE_COUNTER_USE_CASE,
       useFactory: (
         userRepositoy: CounterRepositoryInterface,
-        hashService: HashServiceInterface,
+        findByUserUseCase: FindByUserUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreCounterUseCase(
           userRepositoy,
-          hashService,
+          findByUserUseCase,
           loggerService,
           exceptionService,
         ),
