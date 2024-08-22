@@ -1,4 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   LoggerProvidersEnum,
@@ -9,13 +10,17 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
+import {
+  AppConfigType,
+  ConfigurationType,
+} from '@common/adapters/configuration/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
-import { CounterProvidersEnum } from '@modules/counters/domain';
-import { FindByCounterUseCase } from '@modules/counters/application';
-import { CounterModule } from '@modules/counters/infrastructure';
 import { CustomerProvidersEnum } from '@modules/customers/domain';
 import { FindByCustomerUseCase } from '@modules/customers/application';
 import { CustomerModule } from '@modules/customers/infrastructure';
+import { CounterProvidersEnum } from '@modules/counters/domain';
+import { FindByCounterUseCase } from '@modules/counters/application';
+import { CounterModule } from '@modules/counters/infrastructure';
 import { OrderProvidersEnum, OrderRepositoryInterface } from '../domain';
 import {
   //   FindAllOrdersUseCase,
@@ -30,7 +35,7 @@ import {
   //   UpdateOrderController,
 } from './api';
 import { OrderEntity, OrderTypeOrmRepository } from './persistence';
-// import { OrdersSeeder } from './seeders';
+import { DevOrdersSeeder } from './seeders';
 
 @Module({
   imports: [
@@ -51,17 +56,25 @@ import { OrderEntity, OrderTypeOrmRepository } from './persistence';
       provide: OrderProvidersEnum.ORDER_REPOSITORY,
       useClass: OrderTypeOrmRepository,
     },
-    // {
-    //   provide: OrderProvidersEnum.ORDER_SEEDER,
-    //   inject: [
-    //     OrderProvidersEnum.ORDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //   ],
-    //   useFactory: (
-    //     orderRepositoy: OrderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //   ) => new OrdersSeeder(orderRepositoy, loggerService),
-    // },
+    {
+      provide: OrderProvidersEnum.ORDER_SEEDER,
+      inject: [
+        ConfigService,
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+      ],
+      useFactory: (
+        configService: ConfigService<ConfigurationType>,
+        customerRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+      ) => {
+        const env = configService.get<AppConfigType>('app').env;
+
+        return env !== 'prod'
+          ? new DevOrdersSeeder(customerRepositoy, loggerService)
+          : null;
+      },
+    },
     // {
     //   inject: [
     //     OrderProvidersEnum.ORDER_REPOSITORY,
