@@ -5,6 +5,7 @@ import { RoleProvidersEnum } from '@modules/roles/domain';
 import { UserProvidersEnum } from '@modules/users/domain';
 import { CustomerProvidersEnum } from '@modules/customers/domain';
 import { CounterProvidersEnum } from '@modules/counters/domain';
+import { OrderProvidersEnum } from '@modules/orders/domain';
 
 async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
@@ -12,17 +13,20 @@ async function bootstrap() {
   const PermissionSeeder = app.get(PermissionProvidersEnum.PERMISSION_SEEDER);
   const permissions = await PermissionSeeder.seed();
 
+  const customerSeeder = app.get(CustomerProvidersEnum.CUSTOMER_SEEDER);
+  const customers = await customerSeeder.seed();
+
   const roleSeeder = app.get(RoleProvidersEnum.ROLE_SEEDER);
   const roles = await roleSeeder.seed(permissions);
 
   const userSeeder = app.get(UserProvidersEnum.USER_SEEDER);
   const users = await userSeeder.seed(roles);
 
-  const customerSeeder = app.get(CustomerProvidersEnum.CUSTOMER_SEEDER);
-  await customerSeeder.seed();
-
   const counterSeeder = app.get(CounterProvidersEnum.COUNTER_SEEDER);
-  await counterSeeder.seed(users);
+  const counters = await counterSeeder.seed(users);
+
+  const orderSeeder = app.get(OrderProvidersEnum.ORDER_SEEDER);
+  await orderSeeder.seed(counters, customers);
 
   await app.close();
 }
