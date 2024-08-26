@@ -27,8 +27,9 @@ export class CustomerEntity implements CustomerType {
     type: 'varchar',
     length: 50,
     nullable: false,
+    name: 'type_identification',
   })
-  type_identification: string;
+  typeIdentification: string;
 
   @Column({
     type: 'varchar',
@@ -42,8 +43,9 @@ export class CustomerEntity implements CustomerType {
     type: 'varchar',
     length: 100,
     nullable: false,
+    name: 'full_name',
   })
-  full_name: string;
+  fullName: string;
 
   @Column({
     type: 'varchar',
@@ -64,8 +66,9 @@ export class CustomerEntity implements CustomerType {
     type: 'varchar',
     length: 15,
     nullable: true,
+    name: 'cell_phone',
   })
-  cell_phone: string;
+  cellPhone: string;
 
   @Column({
     type: 'varchar',

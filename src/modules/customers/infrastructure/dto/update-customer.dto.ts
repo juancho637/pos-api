@@ -6,11 +6,13 @@ import {
   IsDate,
 } from 'class-validator';
 import { CreateCustomerType } from '../../domain';
+import { Expose } from 'class-transformer';
 
 export class UpdateCustomerDto implements CreateCustomerType {
   @IsOptional()
   @IsString()
-  type_identification: string;
+  @Expose({ name: 'type_identification' })
+  typeIdentification: string;
 
   @IsOptional()
   @IsString()
@@ -18,7 +20,8 @@ export class UpdateCustomerDto implements CreateCustomerType {
 
   @IsOptional()
   @IsString()
-  full_name: string;
+  @Expose({ name: 'full_name' })
+  fullName: string;
 
   @IsOptional()
   @IsEmail()
@@ -30,7 +33,8 @@ export class UpdateCustomerDto implements CreateCustomerType {
 
   @IsOptional()
   @IsPhoneNumber(null)
-  cell_phone: string;
+  @Expose({ name: 'cell_phone' })
+  cellPhone: string;
 
   @IsOptional()
   @IsString()

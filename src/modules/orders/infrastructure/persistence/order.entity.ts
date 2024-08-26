@@ -3,15 +3,16 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { OrderType } from '../../domain';
 import { CustomerEntity } from '@modules/customers/infrastructure';
 import { CounterEntity } from '@modules/counters/infrastructure';
+import { OrderType } from '../../domain';
 
-@Entity({ name: 'roles' })
+@Entity({ name: 'orders' })
 export class OrderEntity implements OrderType {
   @PrimaryGeneratedColumn()
   id: number;
@@ -75,8 +76,10 @@ export class OrderEntity implements OrderType {
   deletedAt?: Date;
 
   @ManyToOne(() => CounterEntity, (counter) => counter.orders)
+  @JoinColumn({ name: 'counter_id' })
   counter: CounterEntity;
 
   @ManyToOne(() => CustomerEntity, (customer) => customer.orders)
+  @JoinColumn({ name: 'customer_id' })
   customer?: CustomerEntity;
 }

@@ -23,10 +23,10 @@ import {
   OrderRepositoryInterface,
   OrderFilterType,
   orderErrorsCodes,
-  CreateOrderType,
   UpdateOrderType,
 } from '../../domain';
 import { OrderEntity } from './order.entity';
+import { CreateOrderRepositoryType } from '@modules/orders/domain/types';
 
 export class OrderTypeOrmRepository
   implements OrderRepositoryInterface<OrderEntity>
@@ -106,7 +106,7 @@ export class OrderTypeOrmRepository
   }
 
   async store(
-    createOrderFields: CreateOrderType | CreateOrderType[],
+    createOrderFields: CreateOrderRepositoryType | CreateOrderRepositoryType[],
   ): Promise<OrderEntity | OrderEntity[]> {
     try {
       if (Array.isArray(createOrderFields)) {

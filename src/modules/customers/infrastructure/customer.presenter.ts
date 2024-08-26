@@ -12,24 +12,22 @@ export class CustomerPresenter {
   address: string;
   birthdate: Date;
   gender: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  created_at: Date;
+  updated_at: Date;
 
   constructor(customer: Partial<CustomerType>) {
     this.id = customer.id;
     this.status = customer.status;
-    this.type_identification = customer.type_identification;
+    this.type_identification = customer.typeIdentification;
     this.identification = customer.identification;
-    this.full_name = customer.full_name;
+    this.full_name = customer.fullName;
     this.email = customer.email;
     this.phone = customer.phone;
-    this.cell_phone = customer.cell_phone;
+    this.cell_phone = customer.cellPhone;
     this.address = customer.address;
     this.birthdate = customer.birthdate;
     this.gender = customer.gender;
-    this.updatedAt = customer.updatedAt;
-    this.createdAt = customer.createdAt;
-    this.deletedAt = customer.deletedAt;
+    this.updated_at = customer.updatedAt;
+    this.created_at = customer.createdAt;
   }
 }

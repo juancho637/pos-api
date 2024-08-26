@@ -7,6 +7,7 @@ import {
   UserType,
 } from '../../domain';
 import { RoleType } from '@modules/roles/domain';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 export class DevUsersSeeder {
   private readonly context = DevUsersSeeder.name;
@@ -43,7 +44,23 @@ export class DevUsersSeeder {
       });
     }
 
-    const users = await this.userRepository.store(usersFields);
+    const usersIds = await this.userRepository
+      .store(usersFields)
+      .then((users: UserType[]) => users.map((user) => user.id));
+
+    const users = await this.userRepository
+      .findAll({
+        pagination: { page: 1, size: 100 },
+        filters: [
+          {
+            property: 'id',
+            rule: FilterRuleEnum.IN,
+            value: usersIds.join(','),
+          },
+        ],
+        relations: ['roles'],
+      })
+      .then((users) => users.items);
 
     this.logger.debug({
       message: 'Development users seeded',

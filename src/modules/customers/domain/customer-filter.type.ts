@@ -1,12 +1,12 @@
 export type CustomerFilterType = {
   id?: number;
   status?: string;
-  type_identification?: string;
+  typeIdentification?: string;
   identification?: string;
-  full_name?: string;
+  fullName?: string;
   email?: string;
   phone?: string;
-  cell_phone?: string;
+  cellPhone?: string;
   address?: string;
   birthdate?: Date;
   gender?: string;

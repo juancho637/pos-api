@@ -1,3 +1,4 @@
+import { RolePresenter } from '@modules/roles/infrastructure';
 import { UserType } from '../domain';
 
 export class UserPresenter {
@@ -7,6 +8,7 @@ export class UserPresenter {
   username: string;
   created_at: Date;
   updated_at: Date;
+  roles?: RolePresenter[];
 
   constructor(user: Partial<UserType>) {
     this.id = user.id;
@@ -15,5 +17,7 @@ export class UserPresenter {
     this.email = user.email;
     this.created_at = user.createdAt;
     this.updated_at = user.updatedAt;
+    user.roles &&
+      (this.roles = user.roles.map((role) => new RolePresenter(role)));
   }
 }
