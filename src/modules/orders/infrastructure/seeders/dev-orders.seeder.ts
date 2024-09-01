@@ -4,6 +4,7 @@ import {
   OrderRepositoryInterface,
   OrderType,
   CreateOrderRepositoryType,
+  OrderTypeEnum,
 } from '../../domain';
 import { CounterType } from '@modules/counters/domain';
 import { CustomerType } from '@modules/customers/domain';
@@ -31,7 +32,10 @@ export class DevOrdersSeeder {
         const totalPrice = subtotalPrice + fee;
 
         ordersFields.push({
-          type: faker.helpers.arrayElement(['INVOICE', 'REMISION']),
+          type: faker.helpers.arrayElement([
+            OrderTypeEnum.INVOICE,
+            OrderTypeEnum.REMISION,
+          ]) as OrderTypeEnum,
           subtotalPrice: subtotalPrice,
           fee: fee,
           totalPrice: totalPrice,
