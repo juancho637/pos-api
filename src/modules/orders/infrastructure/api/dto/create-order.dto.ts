@@ -1,10 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-import { CreateOrderType } from '../../../domain';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { CreateOrderType, OrderTypeEnum } from '../../../domain';
 
 export class CreateOrderDto implements CreateOrderType {
   @IsNotEmpty()
-  @IsString()
-  type: string;
+  @IsEnum(OrderTypeEnum)
+  type: OrderTypeEnum;
 
   @IsNotEmpty()
   @IsNumber()

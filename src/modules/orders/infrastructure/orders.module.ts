@@ -27,14 +27,14 @@ import {
   FindAllOrdersUseCase,
   FindByOrderUseCase,
   StoreOrderUseCase,
-  //   UpdateOrderUseCase,
+  UpdateOrderUseCase,
 } from '../application';
 import {
   DeleteOrderController,
   FindAllOrdersController,
   FindByOrderController,
   StoreOrderController,
-  //   UpdateOrderController,
+  UpdateOrderController,
 } from './api';
 import { OrderEntity, OrderTypeOrmRepository } from './persistence';
 import { DevOrdersSeeder } from './seeders';
@@ -52,7 +52,7 @@ import { DevOrdersSeeder } from './seeders';
     FindAllOrdersController,
     FindByOrderController,
     StoreOrderController,
-    // UpdateOrderController,
+    UpdateOrderController,
   ],
   providers: [
     {
@@ -134,20 +134,20 @@ import { DevOrdersSeeder } from './seeders';
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     OrderProvidersEnum.ORDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
-    //   useFactory: (
-    //     orderRepositoy: OrderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new UpdateOrderUseCase(orderRepositoy, loggerService, exceptionService),
-    // },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
+      useFactory: (
+        orderRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new UpdateOrderUseCase(orderRepositoy, loggerService, exceptionService),
+    },
     {
       inject: [
         OrderProvidersEnum.ORDER_REPOSITORY,
@@ -167,7 +167,7 @@ import { DevOrdersSeeder } from './seeders';
     OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
     OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
     OrderProvidersEnum.STORE_ORDER_USE_CASE,
-    // OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
+    OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
     OrderProvidersEnum.DELETE_ORDER_USE_CASE,
   ],
 })
