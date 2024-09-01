@@ -24,13 +24,13 @@ import { CounterModule } from '@modules/counters/infrastructure';
 import { OrderProvidersEnum, OrderRepositoryInterface } from '../domain';
 import {
   FindAllOrdersUseCase,
-  //   FindByOrderUseCase,
+  FindByOrderUseCase,
   StoreOrderUseCase,
   //   UpdateOrderUseCase,
 } from '../application';
 import {
   FindAllOrdersController,
-  //   FindByOrderController,
+  FindByOrderController,
   StoreOrderController,
   //   UpdateOrderController,
 } from './api';
@@ -47,7 +47,7 @@ import { DevOrdersSeeder } from './seeders';
   ],
   controllers: [
     FindAllOrdersController,
-    // FindByOrderController,
+    FindByOrderController,
     StoreOrderController,
     // UpdateOrderController,
   ],
@@ -93,20 +93,20 @@ import { DevOrdersSeeder } from './seeders';
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     OrderProvidersEnum.ORDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
-    //   useFactory: (
-    //     orderRepositoy: OrderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new FindByOrderUseCase(orderRepositoy, loggerService, exceptionService),
-    // },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
+      useFactory: (
+        orderRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new FindByOrderUseCase(orderRepositoy, loggerService, exceptionService),
+    },
     {
       inject: [
         OrderProvidersEnum.ORDER_REPOSITORY,
@@ -148,7 +148,7 @@ import { DevOrdersSeeder } from './seeders';
   ],
   exports: [
     OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
-    // OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
+    OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
     OrderProvidersEnum.STORE_ORDER_USE_CASE,
     // OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
   ],
