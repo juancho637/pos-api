@@ -23,12 +23,14 @@ import { FindByCounterUseCase } from '@modules/counters/application';
 import { CounterModule } from '@modules/counters/infrastructure';
 import { OrderProvidersEnum, OrderRepositoryInterface } from '../domain';
 import {
+  DeleteOrderUseCase,
   FindAllOrdersUseCase,
   FindByOrderUseCase,
   StoreOrderUseCase,
   //   UpdateOrderUseCase,
 } from '../application';
 import {
+  DeleteOrderController,
   FindAllOrdersController,
   FindByOrderController,
   StoreOrderController,
@@ -46,6 +48,7 @@ import { DevOrdersSeeder } from './seeders';
     forwardRef(() => CustomerModule),
   ],
   controllers: [
+    DeleteOrderController,
     FindAllOrdersController,
     FindByOrderController,
     StoreOrderController,
@@ -145,12 +148,27 @@ import { DevOrdersSeeder } from './seeders';
     //   ) =>
     //     new UpdateOrderUseCase(orderRepositoy, loggerService, exceptionService),
     // },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.DELETE_ORDER_USE_CASE,
+      useFactory: (
+        roleRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new DeleteOrderUseCase(roleRepositoy, loggerService, exceptionService),
+    },
   ],
   exports: [
     OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
     OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
     OrderProvidersEnum.STORE_ORDER_USE_CASE,
     // OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
+    OrderProvidersEnum.DELETE_ORDER_USE_CASE,
   ],
 })
 export class OrderModule {}
