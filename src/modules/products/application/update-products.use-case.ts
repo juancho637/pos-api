@@ -6,14 +6,15 @@ import {
   ProductType,
   productErrorsCodes,
 } from '../domain';
-import { FindByCategoryUseCaseInterface } from '@modules/categories/domain';
+import { FindByCategoryUseCase } from '@modules/categories/application';
+import { FilterRuleEnum } from '@common/helpers/domain/enums';
 
 export class UpdateProductUseCase {
   private readonly context = UpdateProductUseCase.name;
 
   constructor(
     private readonly productRepository: ProductRepositoryInterface,
-    private readonly findByCategoryUseCase: FindByCategoryUseCaseInterface,
+    private readonly findByCategoryUseCase: FindByCategoryUseCase,
     private readonly logger: LoggerServiceInterface,
     private readonly exception: ExceptionServiceInterface,
   ) {}
@@ -24,7 +25,11 @@ export class UpdateProductUseCase {
   ): Promise<ProductType> {
     try {
       const category = await this.findByCategoryUseCase.run({
-        id: categoryId,
+        filter: {
+          property: 'id',
+          rule: FilterRuleEnum.EQUALS,
+          value: categoryId,
+        },
       });
 
       const product = await this.productRepository.update(id, {

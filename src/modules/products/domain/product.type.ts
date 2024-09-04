@@ -7,7 +7,7 @@ export type ProductType = {
   fee: number;
   description: string;
   type: string;
-  min_stock: number;
+  minStock: number;
   status: string;
   updatedAt: Date;
   createdAt: Date;

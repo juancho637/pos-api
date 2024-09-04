@@ -1,21 +1,19 @@
 import { CategoryPresenter } from '@modules/categories/infrastructure';
 //import { ProductType } from '../domain';'@modules/categories/infrastructure';
-import { ProductEntity } from './persistence';
-import { CategoryType } from '@modules/categories/domain';
+import { ProductType } from '../domain';
 
 export class ProductPresenter {
   id: number;
   name: string;
-  category: CategoryType;
-  //category: CategoryPresenter;
+  category: CategoryPresenter;
   fee: number;
   description: string;
   type: string;
   min_stock: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 
-  constructor(product: Partial<ProductEntity>) {
+  constructor(product: Partial<ProductType>) {
     this.id = product.id;
     this.name = product.name;
     this.category = new CategoryPresenter(product.category);
@@ -23,8 +21,8 @@ export class ProductPresenter {
     this.fee = product.fee;
     this.description = product.description;
     this.type = product.type;
-    this.min_stock = product.min_stock;
-    this.createdAt = product.createdAt;
-    this.updatedAt = product.updatedAt;
+    this.min_stock = product.minStock;
+    this.created_at = product.createdAt;
+    this.updated_at = product.updatedAt;
   }
 }

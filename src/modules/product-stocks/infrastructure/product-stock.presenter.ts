@@ -1,21 +1,18 @@
 import { ProductPresenter } from '@modules/products/infrastructure';
 import { ProviderPresenter } from '@modules/providers/infrastructure';
-//import { ProductType } from '../domain';'@modules/categories/infrastructure';
-import { ProductStockEntity } from './persistence';
-import { ProductType } from '@modules/products/domain';
-import { ProviderType } from '@modules/providers/domain';
+import { ProductStockType } from '../domain';
 
 export class ProductStockPresenter {
   id: number;
-  product: ProductType;
-  provider: ProviderType;
+  product: ProductPresenter;
+  provider: ProviderPresenter;
   code: string;
   sku: string;
   quantity: number;
   createdAt: Date;
   updatedAt: Date;
 
-  constructor(productStock: Partial<ProductStockEntity>) {
+  constructor(productStock: Partial<ProductStockType>) {
     this.id = productStock.id;
     this.product = new ProductPresenter(productStock.product);
     this.provider = new ProviderPresenter(productStock.provider);

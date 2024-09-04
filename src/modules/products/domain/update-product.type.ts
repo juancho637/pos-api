@@ -4,5 +4,5 @@ export type UpdateProductType = {
   fee?: number;
   description?: string;
   type?: string;
-  min_stock?: number;
+  minStock?: number;
 };

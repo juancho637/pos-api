@@ -32,15 +32,12 @@ import {
   StoreProductStockController,
   UpdateProductStockController,
 } from './api';
-import {
-  ProductProvidersEnum,
-  FindByProductUseCaseInterface,
-} from '@modules/products/domain';
-import {
-  ProviderProvidersEnum,
-  FindByProviderUseCaseInterface,
-} from '@modules/providers/domain';
+import { ProductProvidersEnum } from '@modules/products/domain';
+import { FindByProductUseCase } from '@modules/products/application';
+import { ProviderProvidersEnum } from '@modules/providers/domain';
+import { FindByProviderUseCase } from '@modules/providers/application';
 import { ProductModule } from '@modules/products/infrastructure';
+import { ProviderModule } from '@modules/providers/infrastructure';
 
 @Module({
   imports: [
@@ -109,8 +106,8 @@ import { ProductModule } from '@modules/products/infrastructure';
       provide: ProductStockProvidersEnum.STORE_PRODUCT_STOCK_USE_CASE,
       useFactory: (
         userRepositoy: ProductStockRepositoryInterface,
-        findByProductUseCase: FindByProductUseCaseInterface,
-        findByProviderUseCase: FindByProviderUseCaseInterface,
+        findByProductUseCase: FindByProductUseCase,
+        findByProviderUseCase: FindByProviderUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
@@ -133,8 +130,8 @@ import { ProductModule } from '@modules/products/infrastructure';
       provide: ProductStockProvidersEnum.UPDATE_PRODUCT_STOCK_USE_CASE,
       useFactory: (
         userRepositoy: ProductStockRepositoryInterface,
-        findByProductUseCase: FindByProductUseCaseInterface,
-        findByProviderUseCase: FindByProviderUseCaseInterface,
+        findByProductUseCase: FindByProductUseCase,
+        findByProviderUseCase: FindByProviderUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>

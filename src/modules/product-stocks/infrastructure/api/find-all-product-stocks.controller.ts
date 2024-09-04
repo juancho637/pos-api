@@ -21,7 +21,6 @@ import {
 import {
   ProductStockFilterType,
   ProductStockProvidersEnum,
-  ProductStockType,
   productStockErrorsCodes,
 } from '../../domain';
 import { FindAllProductStocksUseCase } from '../../application';
@@ -43,11 +42,11 @@ export class FindAllProductStocksController {
   @Get('api/productStocks')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
-    @SortingParams(['id', 'product_id', 'provider_id'])
-    sortParams?: SortingType,
-    @FilteringParams(['id', 'product_id', 'provider_id'])
+    @SortingParams<ProductStockFilterType>('id', 'productId', 'providerId')
+    sortParams?: SortingType<ProductStockFilterType>,
+    @FilteringParams('id', 'product_id', 'provider_id')
     filterParams?: FilteringType<ProductStockFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<ProductStockType>>> {
+  ): Promise<PaginatedResourceType<ProductStockPresenter>> {
     try {
       const productStocks = await this.findAllProductStocksUseCase.run({
         pagination: paginationParams,

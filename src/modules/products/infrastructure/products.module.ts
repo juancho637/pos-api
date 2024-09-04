@@ -116,7 +116,7 @@ import { CategoryModule } from '@modules/categories/infrastructure';
       provide: ProductProvidersEnum.UPDATE_PRODUCT_USE_CASE,
       useFactory: (
         userRepositoy: ProductRepositoryInterface,
-        findByCategoryUseCase: FindByCategoryUseCaseInterface,
+        findByCategoryUseCase: FindByCategoryUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
