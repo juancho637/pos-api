@@ -53,7 +53,7 @@ export class ProductEntity implements ProductType {
     type: 'real',
     nullable: false,
   })
-  min_stock: number;
+  minStock: number;
 
   @Column({
     type: 'varchar',

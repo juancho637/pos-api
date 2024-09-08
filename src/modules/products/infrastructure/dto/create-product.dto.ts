@@ -24,5 +24,5 @@ export class CreateProductDto implements CreateProductType {
 
   @IsNotEmpty()
   @IsNumber()
-  min_stock: number;
+  minStock: number;
 }
