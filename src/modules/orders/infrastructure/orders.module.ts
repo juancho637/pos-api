@@ -23,16 +23,18 @@ import { FindByCounterUseCase } from '@modules/counters/application';
 import { CounterModule } from '@modules/counters/infrastructure';
 import { OrderProvidersEnum, OrderRepositoryInterface } from '../domain';
 import {
-  //   FindAllOrdersUseCase,
-  //   FindByOrderUseCase,
+  DeleteOrderUseCase,
+  FindAllOrdersUseCase,
+  FindByOrderUseCase,
   StoreOrderUseCase,
-  //   UpdateOrderUseCase,
+  UpdateOrderUseCase,
 } from '../application';
 import {
-  //   FindAllOrdersController,
-  //   FindByOrderController,
+  DeleteOrderController,
+  FindAllOrdersController,
+  FindByOrderController,
   StoreOrderController,
-  //   UpdateOrderController,
+  UpdateOrderController,
 } from './api';
 import { OrderEntity, OrderTypeOrmRepository } from './persistence';
 import { DevOrdersSeeder } from './seeders';
@@ -46,10 +48,11 @@ import { DevOrdersSeeder } from './seeders';
     forwardRef(() => CustomerModule),
   ],
   controllers: [
-    // FindAllOrdersController,
-    // FindByOrderController,
+    DeleteOrderController,
+    FindAllOrdersController,
+    FindByOrderController,
     StoreOrderController,
-    // UpdateOrderController,
+    UpdateOrderController,
   ],
   providers: [
     {
@@ -75,38 +78,38 @@ import { DevOrdersSeeder } from './seeders';
           : null;
       },
     },
-    // {
-    //   inject: [
-    //     OrderProvidersEnum.ORDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
-    //   useFactory: (
-    //     orderRepositoy: OrderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new FindAllOrdersUseCase(
-    //       orderRepositoy,
-    //       loggerService,
-    //       exceptionService,
-    //     ),
-    // },
-    // {
-    //   inject: [
-    //     OrderProvidersEnum.ORDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
-    //   useFactory: (
-    //     orderRepositoy: OrderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new FindByOrderUseCase(orderRepositoy, loggerService, exceptionService),
-    // },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
+      useFactory: (
+        orderRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new FindAllOrdersUseCase(
+          orderRepositoy,
+          loggerService,
+          exceptionService,
+        ),
+    },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
+      useFactory: (
+        orderRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new FindByOrderUseCase(orderRepositoy, loggerService, exceptionService),
+    },
     {
       inject: [
         OrderProvidersEnum.ORDER_REPOSITORY,
@@ -131,26 +134,41 @@ import { DevOrdersSeeder } from './seeders';
           exceptionService,
         ),
     },
-    // {
-    //   inject: [
-    //     OrderProvidersEnum.ORDER_REPOSITORY,
-    //     LoggerProvidersEnum.LOGGER_SERVICE,
-    //     ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    //   ],
-    //   provide: OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
-    //   useFactory: (
-    //     orderRepositoy: OrderRepositoryInterface,
-    //     loggerService: LoggerServiceInterface,
-    //     exceptionService: ExceptionServiceInterface,
-    //   ) =>
-    //     new UpdateOrderUseCase(orderRepositoy, loggerService, exceptionService),
-    // },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
+      useFactory: (
+        orderRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new UpdateOrderUseCase(orderRepositoy, loggerService, exceptionService),
+    },
+    {
+      inject: [
+        OrderProvidersEnum.ORDER_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+        ExceptionProvidersEnum.EXCEPTION_SERVICE,
+      ],
+      provide: OrderProvidersEnum.DELETE_ORDER_USE_CASE,
+      useFactory: (
+        roleRepositoy: OrderRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+        exceptionService: ExceptionServiceInterface,
+      ) =>
+        new DeleteOrderUseCase(roleRepositoy, loggerService, exceptionService),
+    },
   ],
   exports: [
-    // OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
-    // OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
+    OrderProvidersEnum.FIND_ALL_ORDERS_USE_CASE,
+    OrderProvidersEnum.FIND_BY_ORDER_USE_CASE,
     OrderProvidersEnum.STORE_ORDER_USE_CASE,
-    // OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
+    OrderProvidersEnum.UPDATE_ORDER_USE_CASE,
+    OrderProvidersEnum.DELETE_ORDER_USE_CASE,
   ],
 })
 export class OrderModule {}

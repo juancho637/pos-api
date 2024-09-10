@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { CustomerEntity } from '@modules/customers/infrastructure';
 import { CounterEntity } from '@modules/counters/infrastructure';
-import { OrderType } from '../../domain';
+import { OrderType, OrderTypeEnum } from '../../domain';
 
 @Entity({ name: 'orders' })
 export class OrderEntity implements OrderType {
@@ -22,7 +22,7 @@ export class OrderEntity implements OrderType {
     length: 100,
     nullable: false,
   })
-  type: string;
+  type: OrderTypeEnum;
 
   @Column({
     name: 'subtotal_price',

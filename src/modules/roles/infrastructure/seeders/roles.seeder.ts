@@ -21,7 +21,9 @@ export class RolesSeeder {
       ...permissions.filter((permission) =>
         permission.name.includes('any:user'),
       ),
-      ...permissions.filter((permission) => permission.name.includes('orders')),
+      ...permissions.filter((permission) =>
+        permission.module.includes('orders'),
+      ),
     ];
 
     const sellerPermissions = [
