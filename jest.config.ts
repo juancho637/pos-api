@@ -2,15 +2,17 @@ import type { Config } from 'jest';
 
 const config: Config = {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: '../',
+  rootDir: './',
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
   collectCoverageFrom: [
     '<rootDir>/src/**/*.{ts,js}',
     '!<rootDir>/src/**/*.module.ts',
+    '!<rootDir>/src/**/*.seeder.ts',
     '!<rootDir>/dist/**',
   ],
+  testRegex: 'test/.*\\.spec\\.ts$',
   moduleNameMapper: {
     // Common
     '@common/helpers/(.*)': '<rootDir>/src/common/helpers/$1',

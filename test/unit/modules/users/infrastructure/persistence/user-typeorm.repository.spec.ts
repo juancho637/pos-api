@@ -6,28 +6,22 @@ import {
   UserTypeOrmRepository,
 } from '@modules/users/infrastructure';
 import { LoggerProvidersEnum } from '@common/adapters/logger/domain';
+import { ExceptionProvidersEnum } from '@common/adapters/exception/domain';
 import {
-  ExceptionProvidersEnum,
-  // ExceptionServiceInterface,
-} from '@common/adapters/exception/domain';
-import {
+  errorMock,
   fieldsToCreateUser,
   fieldsToUpdateUser,
   findAndCountUsersMock,
-  // internalServerErrorExceptionMock,
   paginatedUsersMock,
   userCreatedMock,
   userMock,
   userUpdatedMock,
 } from '@test/mocks';
-// import { userErrorsCodes } from '@modules/users/domain';
 import { FilterRuleEnum } from '@common/helpers/domain';
 
 describe('UserTypeOrmRepository', () => {
-  // const context = UserTypeOrmRepository.name;
   let userTypeOrmRepository: UserTypeOrmRepository;
-  let userTypeOrmRepositoryMock: Repository<UserEntity>;
-  // let exceptionServiceMock: ExceptionServiceInterface;
+  let userTypeOrmRepositoryMock: Repository<UserEntity | UserEntity[]>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -42,7 +36,7 @@ describe('UserTypeOrmRepository', () => {
           provide: ExceptionProvidersEnum.EXCEPTION_SERVICE,
           useValue: {
             internalServerErrorException: jest.fn(() => {
-              return 'Internal server error';
+              throw errorMock;
             }),
           },
         },
@@ -63,9 +57,6 @@ describe('UserTypeOrmRepository', () => {
       UserTypeOrmRepository,
     );
     userTypeOrmRepositoryMock = module.get(getRepositoryToken(UserEntity));
-    // exceptionServiceMock = module.get<ExceptionServiceInterface>(
-    //   ExceptionProvidersEnum.EXCEPTION_SERVICE,
-    // );
   });
 
   describe('Is defined', () => {
@@ -89,13 +80,11 @@ describe('UserTypeOrmRepository', () => {
     });
 
     it('should throw an error when the database throw an error', async () => {
-      const errorMock = new Error('Something went wrong');
-
       jest
         .spyOn(userTypeOrmRepositoryMock, 'findOne')
         .mockRejectedValue(errorMock);
 
-      const resp = await userTypeOrmRepository.findOneBy({
+      const resp = userTypeOrmRepository.findOneBy({
         filter: {
           property: 'id',
           rule: FilterRuleEnum.EQUALS,
@@ -103,9 +92,7 @@ describe('UserTypeOrmRepository', () => {
         },
       });
 
-      console.log('resp', resp);
-
-      expect(resp).rejects.toThrow();
+      await expect(resp).rejects.toThrow(errorMock);
     });
   });
 
@@ -127,19 +114,15 @@ describe('UserTypeOrmRepository', () => {
       expect(resp).toEqual(paginatedUsersMock);
     });
 
-    // it('should throw an error when the database throw an error', async () => {
-    //   const errorMock = new Error('Something went wrong');
+    it('should throw an error when the database throw an error', async () => {
+      jest
+        .spyOn(userTypeOrmRepositoryMock, 'findAndCount')
+        .mockRejectedValue(errorMock);
 
-    //   jest
-    //     .spyOn(userTypeOrmRepositoryMock, 'findAndCount')
-    //     .mockRejectedValue(errorMock);
+      const resp = userTypeOrmRepository.findAll({ pagination });
 
-    //   await expect(
-    //     userTypeOrmRepository.findAll({ pagination }),
-    //   ).rejects.toThrow(
-    //     internalServerErrorExceptionMock(context, userErrorsCodes.UM020),
-    //   );
-    // });
+      await expect(resp).rejects.toThrow(errorMock);
+    });
   });
 
   describe('store method', () => {
@@ -154,19 +137,26 @@ describe('UserTypeOrmRepository', () => {
       expect(resp).toEqual(userCreatedMock);
     });
 
-    // it('should throw an error when the database throw an error', async () => {
-    //   const errorMock = new Error('Something went wrong');
+    it('should call store method and return a stored users', async () => {
+      const repositorySpy = jest
+        .spyOn(userTypeOrmRepositoryMock, 'save')
+        .mockResolvedValue([userCreatedMock]);
 
-    //   jest
-    //     .spyOn(userTypeOrmRepositoryMock, 'save')
-    //     .mockRejectedValue(errorMock);
+      const resp = await userTypeOrmRepository.store([fieldsToCreateUser]);
 
-    //   await expect(
-    //     userTypeOrmRepository.store(fieldsToCreateUser),
-    //   ).rejects.toThrow(
-    //     internalServerErrorExceptionMock(context, userErrorsCodes.UM030),
-    //   );
-    // });
+      expect(repositorySpy).toHaveBeenCalledTimes(1);
+      expect(resp).toEqual([userCreatedMock]);
+    });
+
+    it('should throw an error when the database throw an error', async () => {
+      jest
+        .spyOn(userTypeOrmRepositoryMock, 'save')
+        .mockRejectedValue(errorMock);
+
+      const resp = userTypeOrmRepository.store(fieldsToCreateUser);
+
+      await expect(resp).rejects.toThrow(errorMock);
+    });
   });
 
   describe('update method', () => {
@@ -184,19 +174,18 @@ describe('UserTypeOrmRepository', () => {
       expect(resp).toEqual(userUpdatedMock);
     });
 
-    // it('should throw an error when the database throw an error', async () => {
-    //   const errorMock = new Error('Something went wrong');
+    it('should throw an error when the database throw an error', async () => {
+      jest
+        .spyOn(userTypeOrmRepositoryMock, 'save')
+        .mockRejectedValue(errorMock);
 
-    //   jest
-    //     .spyOn(userTypeOrmRepositoryMock, 'save')
-    //     .mockRejectedValue(errorMock);
+      const resp = userTypeOrmRepository.update(
+        userMock.id,
+        fieldsToUpdateUser,
+      );
 
-    //   await expect(
-    //     userTypeOrmRepository.update(userMock.id, fieldsToUpdateUser),
-    //   ).rejects.toThrow(
-    //     internalServerErrorExceptionMock(context, userErrorsCodes.UM040),
-    //   );
-    // });
+      await expect(resp).rejects.toThrow(errorMock);
+    });
   });
 
   describe('delete method', () => {
@@ -209,16 +198,14 @@ describe('UserTypeOrmRepository', () => {
       expect(resp).toEqual(userMock);
     });
 
-    // it('should throw an error when the database throw an error', async () => {
-    //   const errorMock = new Error('Something went wrong');
+    it('should throw an error when the database throw an error', async () => {
+      jest
+        .spyOn(userTypeOrmRepositoryMock, 'softRemove')
+        .mockRejectedValue(errorMock);
 
-    //   jest
-    //     .spyOn(userTypeOrmRepositoryMock, 'softRemove')
-    //     .mockRejectedValue(errorMock);
+      const resp = userTypeOrmRepository.delete(userMock.id);
 
-    //   await expect(userTypeOrmRepository.delete(userMock.id)).rejects.toThrow(
-    //     internalServerErrorExceptionMock(context, userErrorsCodes.UM050),
-    //   );
-    // });
+      await expect(resp).rejects.toThrow(errorMock);
+    });
   });
 });
