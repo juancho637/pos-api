@@ -24,7 +24,7 @@ export class StoreCategoryUseCase {
         ...createCategory,
       });
 
-      return category;
+      return category as CategoryType;
     } catch (error) {
       this.logger.error({
         message: error,

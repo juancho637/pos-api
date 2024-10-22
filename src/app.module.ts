@@ -14,7 +14,9 @@ import { CustomerModule } from '@modules/customers/infrastructure';
 import { CategoryModule } from '@modules/categories/infrastructure';
 import { CounterModule } from './modules/counters/infrastructure';
 import { ProductModule } from '@modules/products/infrastructure';
+import { ProductStockModule } from './modules/product-stocks/infrastructure';
 import { OrderModule } from '@modules/orders/infrastructure';
+import { OrderDetailModule } from './modules/order_details/infrastructure/order-detail.module';
 
 @Module({
   imports: [
@@ -36,7 +38,9 @@ import { OrderModule } from '@modules/orders/infrastructure';
     CategoryModule,
     CounterModule,
     ProductModule,
+    ProductStockModule,
     OrderModule,
+    OrderDetailModule,
   ],
 })
 export class AppModule {}

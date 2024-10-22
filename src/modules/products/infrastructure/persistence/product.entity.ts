@@ -52,6 +52,7 @@ export class ProductEntity implements ProductType {
   @Column({
     type: 'real',
     nullable: false,
+    name: 'min_stock',
   })
   minStock: number;
 
