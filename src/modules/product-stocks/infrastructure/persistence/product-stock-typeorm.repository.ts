@@ -8,6 +8,8 @@ import {
 import {
   PaginatedResourceType,
   FindAllFieldsDto,
+  FindOneByFieldsDto,
+  FilterRuleEnum,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -40,11 +42,15 @@ export class ProductStockTypeOrmRepository
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  async findOneBy(fields: ProductStockFilterType): Promise<ProductStockEntity> {
+  async findOneBy({
+    filter,
+    relations,
+  }: FindOneByFieldsDto<ProductStockFilterType>): Promise<ProductStockEntity> {
     try {
+      const where = getWhereTypeOrmHelper<ProductStockFilterType>(filter);
       const productStock = await this.productStocksRepository.findOneOrFail({
-        where: { ...fields },
-        relations: ['product', 'provider'],
+        where,
+        relations: relations,
       });
       return productStock;
     } catch (error) {
@@ -119,7 +125,9 @@ export class ProductStockTypeOrmRepository
     updateProductStockFields: UpdateProductStockRepositoryType,
   ): Promise<ProductStockEntity> {
     try {
-      const productStock = await this.findOneBy({ id });
+      const productStock = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return await this.productStocksRepository.save({
         ...productStock,
@@ -138,7 +146,9 @@ export class ProductStockTypeOrmRepository
 
   async delete(id: number): Promise<ProductStockEntity> {
     try {
-      const productStock = await this.findOneBy({ id });
+      const productStock = await this.findOneBy({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       await this.productStocksRepository.softRemove(productStock);
 

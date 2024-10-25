@@ -4,9 +4,9 @@ import {
   PaginatedResourceType,
 } from '@common/helpers/domain';
 import { OrderDetailType } from './order-detail.type';
-import { UpdateOrderDetailType } from './update-order-detail.type';
 import { OrderDetailFilterType } from './order-detail-filter.type';
 import { CreateOrderDetailRepositoryType } from './types';
+import { UpdateOrderDetailRepositoryType } from './update-order-detail-repository.type';
 
 export interface OrderDetailRepositoryInterface<
   Entity extends OrderDetailType = OrderDetailType,
@@ -24,7 +24,7 @@ export interface OrderDetailRepositoryInterface<
   ): Promise<Entity | Entity[]>;
   update(
     id: number,
-    updateOrderDetailFields: UpdateOrderDetailType,
+    updateOrderDetailFields: UpdateOrderDetailRepositoryType,
   ): Promise<Entity>;
   delete(id: number): Promise<Entity>;
 }

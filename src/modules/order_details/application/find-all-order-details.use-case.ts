@@ -44,7 +44,7 @@ export class FindAllOrderDetailsUseCase {
       });
 
       throw this.exception.internalServerErrorException({
-        message: orderDetailErrorsCodes.CNTM021,
+        message: orderDetailErrorsCodes.ODTM021,
         context: this.context,
         error,
       });

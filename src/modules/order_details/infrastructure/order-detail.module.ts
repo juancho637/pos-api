@@ -30,11 +30,11 @@ import {
   UpdateOrderDetailController,
 } from './api';
 import { ProductProvidersEnum } from '@modules/products/domain';
-import { FindByProductUseCase } from '@modules/products/application';
 import { ProviderProvidersEnum } from '@modules/providers/domain';
-import { FindByProviderUseCase } from '@modules/providers/application';
 import { ProductModule } from '@modules/products/infrastructure';
 import { ProviderModule } from '@modules/providers/infrastructure';
+import { FindByProductStockUseCase } from '@modules/product-stocks/application';
+import { FindByOrderUseCase } from '@modules/orders/application';
 
 @Module({
   imports: [
@@ -53,118 +53,118 @@ import { ProviderModule } from '@modules/providers/infrastructure';
   ],
   providers: [
     {
-      provide: OrderDetailProvidersEnum.PRODUCT_STOCK_REPOSITORY,
+      provide: OrderDetailProvidersEnum.ORDER_DETAIL_REPOSITORY,
       useClass: OrderDetailTypeOrmRepository,
     },
     {
       inject: [
-        OrderDetailProvidersEnum.PRODUCT_STOCK_REPOSITORY,
+        OrderDetailProvidersEnum.ORDER_DETAIL_REPOSITORY,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: OrderDetailProvidersEnum.FIND_ALL_PRODUCT_STOCKS_USE_CASE,
+      provide: OrderDetailProvidersEnum.FIND_ALL_ORDER_DETAILS_USE_CASE,
       useFactory: (
-        userRepositoy: OrderDetailRepositoryInterface,
+        orderDetailRepositoy: OrderDetailRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new FindAllOrderDetailsUseCase(
-          userRepositoy,
+          orderDetailRepositoy,
           loggerService,
           exceptionService,
         ),
     },
     {
       inject: [
-        OrderDetailProvidersEnum.PRODUCT_STOCK_REPOSITORY,
+        OrderDetailProvidersEnum.ORDER_DETAIL_REPOSITORY,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: OrderDetailProvidersEnum.FIND_BY_PRODUCT_STOCK_USE_CASE,
+      provide: OrderDetailProvidersEnum.FIND_BY_ORDER_DETAIL_USE_CASE,
       useFactory: (
-        userRepositoy: OrderDetailRepositoryInterface,
+        orderDetailRepositoy: OrderDetailRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new FindByOrderDetailUseCase(
-          userRepositoy,
+          orderDetailRepositoy,
           loggerService,
           exceptionService,
         ),
     },
     {
       inject: [
-        OrderDetailProvidersEnum.PRODUCT_STOCK_REPOSITORY,
+        OrderDetailProvidersEnum.ORDER_DETAIL_REPOSITORY,
         ProductProvidersEnum.FIND_BY_PRODUCT_USE_CASE,
         ProviderProvidersEnum.FIND_BY_PROVIDER_USE_CASE,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: OrderDetailProvidersEnum.STORE_PRODUCT_STOCK_USE_CASE,
+      provide: OrderDetailProvidersEnum.STORE_ORDER_DETAIL_USE_CASE,
       useFactory: (
-        userRepositoy: OrderDetailRepositoryInterface,
-        findByProductUseCase: FindByProductUseCase,
-        findByProviderUseCase: FindByProviderUseCase,
+        orderDetailRepositoy: OrderDetailRepositoryInterface,
+        findByProductStockUseCase: FindByProductStockUseCase,
+        findByOrderUseCase: FindByOrderUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreOrderDetailUseCase(
-          userRepositoy,
-          findByProductUseCase,
-          findByProviderUseCase,
+          orderDetailRepositoy,
+          findByProductStockUseCase,
+          findByOrderUseCase,
           loggerService,
           exceptionService,
         ),
     },
     {
       inject: [
-        OrderDetailProvidersEnum.PRODUCT_STOCK_REPOSITORY,
+        OrderDetailProvidersEnum.ORDER_DETAIL_REPOSITORY,
         ProductProvidersEnum.FIND_BY_PRODUCT_USE_CASE,
         ProviderProvidersEnum.FIND_BY_PROVIDER_USE_CASE,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: OrderDetailProvidersEnum.UPDATE_PRODUCT_STOCK_USE_CASE,
+      provide: OrderDetailProvidersEnum.UPDATE_ORDER_DETAIL_USE_CASE,
       useFactory: (
-        userRepositoy: OrderDetailRepositoryInterface,
-        findByProductUseCase: FindByProductUseCase,
-        findByProviderUseCase: FindByProviderUseCase,
+        orderDetailRepositoy: OrderDetailRepositoryInterface,
+        findByProductStockUseCase: FindByProductStockUseCase,
+        findByOrderUseCase: FindByOrderUseCase,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new UpdateOrderDetailUseCase(
-          userRepositoy,
-          findByProductUseCase,
-          findByProviderUseCase,
+          orderDetailRepositoy,
+          findByProductStockUseCase,
+          findByOrderUseCase,
           loggerService,
           exceptionService,
         ),
     },
     {
       inject: [
-        OrderDetailProvidersEnum.PRODUCT_STOCK_REPOSITORY,
+        OrderDetailProvidersEnum.ORDER_DETAIL_REPOSITORY,
         LoggerProvidersEnum.LOGGER_SERVICE,
         ExceptionProvidersEnum.EXCEPTION_SERVICE,
       ],
-      provide: OrderDetailProvidersEnum.DELETE_PRODUCT_STOCK_USE_CASE,
+      provide: OrderDetailProvidersEnum.DELETE_ORDER_DETAIL_USE_CASE,
       useFactory: (
-        userRepositoy: OrderDetailRepositoryInterface,
+        orderDetailRepositoy: OrderDetailRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
         new DeleteOrderDetailUseCase(
-          userRepositoy,
+          orderDetailRepositoy,
           loggerService,
           exceptionService,
         ),
     },
   ],
   exports: [
-    OrderDetailProvidersEnum.FIND_ALL_PRODUCT_STOCKS_USE_CASE,
-    OrderDetailProvidersEnum.FIND_BY_PRODUCT_STOCK_USE_CASE,
-    OrderDetailProvidersEnum.STORE_PRODUCT_STOCK_USE_CASE,
-    OrderDetailProvidersEnum.UPDATE_PRODUCT_STOCK_USE_CASE,
-    OrderDetailProvidersEnum.DELETE_PRODUCT_STOCK_USE_CASE,
+    OrderDetailProvidersEnum.FIND_ALL_ORDER_DETAILS_USE_CASE,
+    OrderDetailProvidersEnum.FIND_BY_ORDER_DETAIL_USE_CASE,
+    OrderDetailProvidersEnum.STORE_ORDER_DETAIL_USE_CASE,
+    OrderDetailProvidersEnum.UPDATE_ORDER_DETAIL_USE_CASE,
+    OrderDetailProvidersEnum.DELETE_ORDER_DETAIL_USE_CASE,
   ],
 })
 export class OrderDetailModule {}

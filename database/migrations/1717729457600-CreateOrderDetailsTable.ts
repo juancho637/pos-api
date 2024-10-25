@@ -11,7 +11,7 @@ export class CreateOrderDetailsTable1717729457600
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'counters',
+        name: 'order_details',
         columns: [
           {
             name: 'id',

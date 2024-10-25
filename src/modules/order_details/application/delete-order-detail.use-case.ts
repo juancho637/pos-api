@@ -27,7 +27,7 @@ export class DeleteOrderDetailUseCase {
       });
 
       throw this.exception.internalServerErrorException({
-        message: orderDetailErrorsCodes.CNTM051,
+        message: orderDetailErrorsCodes.ODTM051,
         context: this.context,
         error,
       });

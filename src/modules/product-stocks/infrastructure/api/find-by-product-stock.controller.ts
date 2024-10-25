@@ -13,6 +13,7 @@ import {
 } from '../../domain';
 import { FindByProductStockUseCase } from '../../application';
 import { ProductStockPresenter } from '../product-stock.presenter';
+import { FilterRuleEnum } from '@common/helpers/domain';
 
 @Controller()
 export class FindByProductStockController {
@@ -32,7 +33,9 @@ export class FindByProductStockController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProductStockPresenter> {
     try {
-      const productStock = await this.findByProductStockUseCase.run({ id });
+      const productStock = await this.findByProductStockUseCase.run({
+        filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
+      });
 
       return new ProductStockPresenter({
         ...productStock,

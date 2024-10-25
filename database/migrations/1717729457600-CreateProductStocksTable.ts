@@ -11,7 +11,7 @@ export class CreateProductStocksTable1717729457600
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'counters',
+        name: 'product_stocks',
         columns: [
           {
             name: 'id',
