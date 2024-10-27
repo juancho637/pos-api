@@ -51,16 +51,6 @@ export class CreateProductStocksTable1717729457600
             default: true,
           },
           {
-            name: 'start_time',
-            type: 'timestamp',
-            isNullable: false,
-          },
-          {
-            name: 'end_time',
-            type: 'timestamp',
-            isNullable: false,
-          },
-          {
             name: 'created_at',
             type: 'timestamp',
             isNullable: false,

@@ -17,6 +17,7 @@ export class CategoryEntity implements CategoryType {
     type: 'varchar',
     length: 50,
     nullable: false,
+    unique: true,
   })
   name: string;
 
@@ -24,7 +25,6 @@ export class CategoryEntity implements CategoryType {
     type: 'varchar',
     length: 60,
     nullable: false,
-    unique: true,
   })
   description: string;
 
@@ -32,7 +32,7 @@ export class CategoryEntity implements CategoryType {
     type: 'varchar',
     length: 400,
     nullable: false,
-    unique: true,
+    default: true,
   })
   status: string;
 

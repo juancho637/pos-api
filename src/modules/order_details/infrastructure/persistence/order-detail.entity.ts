@@ -41,6 +41,7 @@ export class OrderDetailEntity implements OrderDetailType {
   @Column({
     type: 'varchar',
     nullable: false,
+    default: true,
   })
   status: string;
 

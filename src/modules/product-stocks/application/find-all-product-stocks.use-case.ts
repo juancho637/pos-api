@@ -15,7 +15,7 @@ export class FindAllProductStocksUseCase {
   private readonly context = FindAllProductStocksUseCase.name;
 
   constructor(
-    private readonly productRepository: ProductStockRepositoryInterface,
+    private readonly productStockRepository: ProductStockRepositoryInterface,
     private readonly logger: LoggerServiceInterface,
     private readonly exception: ExceptionServiceInterface,
   ) {}
@@ -28,13 +28,13 @@ export class FindAllProductStocksUseCase {
     PaginatedResourceType<Partial<ProductStockType>>
   > {
     try {
-      const productResource = await this.productRepository.findAll({
+      const productStockResource = await this.productStockRepository.findAll({
         pagination,
         sort,
         filters,
       });
 
-      return productResource;
+      return productStockResource;
     } catch (error) {
       this.logger.error({
         message: error,

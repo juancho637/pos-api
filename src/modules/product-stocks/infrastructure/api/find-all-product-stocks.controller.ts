@@ -44,7 +44,7 @@ export class FindAllProductStocksController {
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams<ProductStockFilterType>('id', 'productId', 'providerId')
     sortParams?: SortingType<ProductStockFilterType>,
-    @FilteringParams('id', 'product_id', 'provider_id')
+    @FilteringParams('id', 'productId', 'providerId')
     filterParams?: FilteringType<ProductStockFilterType>[],
   ): Promise<PaginatedResourceType<ProductStockPresenter>> {
     try {
@@ -53,7 +53,7 @@ export class FindAllProductStocksController {
         sort: sortParams,
         filters: filterParams,
       });
-
+      console.log(productStocks.items);
       return {
         ...productStocks,
         items: productStocks.items.map(

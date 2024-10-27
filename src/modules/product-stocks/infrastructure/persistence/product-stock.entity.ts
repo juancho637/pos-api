@@ -14,7 +14,7 @@ import { ProductType } from '@modules/products/domain';
 import { ProviderEntity } from '@modules/providers/infrastructure';
 import { ProviderType } from '@modules/providers/domain';
 
-@Entity({ name: 'products' })
+@Entity({ name: 'product_stocks' })
 export class ProductStockEntity implements ProductStockType {
   @PrimaryGeneratedColumn()
   id: number;
@@ -52,6 +52,7 @@ export class ProductStockEntity implements ProductStockType {
   @Column({
     type: 'varchar',
     nullable: false,
+    default: true,
   })
   status: string;
 
