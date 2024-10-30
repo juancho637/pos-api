@@ -30,7 +30,7 @@ export class DeleteOrderDetailController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Delete('api/orderDetails/:id')
+  @Delete('api/order-details/:id')
   async run(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<OrderDetailPresenter> {

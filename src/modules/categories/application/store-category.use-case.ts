@@ -21,6 +21,7 @@ export class StoreCategoryUseCase {
   async run(createCategory: CreateCategoryType): Promise<CategoryType> {
     try {
       const category = await this.categoryRepository.store({
+        status: 'ACTIVE',
         ...createCategory,
       });
 

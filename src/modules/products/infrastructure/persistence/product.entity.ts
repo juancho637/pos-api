@@ -59,7 +59,6 @@ export class ProductEntity implements ProductType {
   @Column({
     type: 'varchar',
     nullable: false,
-    default: true,
   })
   status: string;
 

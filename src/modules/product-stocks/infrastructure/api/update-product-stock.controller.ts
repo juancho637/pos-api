@@ -35,7 +35,7 @@ export class UpdateProductStockController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Put('api/productStocks/:id')
+  @Put('api/product-stocks/:id')
   async run(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductStockDto: UpdateProductStockDto,

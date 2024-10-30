@@ -52,7 +52,6 @@ export class ProductStockEntity implements ProductStockType {
   @Column({
     type: 'varchar',
     nullable: false,
-    default: true,
   })
   status: string;
 

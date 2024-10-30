@@ -28,7 +28,7 @@ export class FindByProductStockController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Get('api/productStocks/:id')
+  @Get('api/product-stocks/:id')
   async run(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProductStockPresenter> {

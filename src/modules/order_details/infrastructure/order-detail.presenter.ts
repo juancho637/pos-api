@@ -9,8 +9,8 @@ export class OrderDetailPresenter {
   quantity: number;
   fee: number;
   price: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 
   constructor(orderDetail: Partial<OrderDetailType>) {
     this.id = orderDetail.id;
@@ -19,7 +19,7 @@ export class OrderDetailPresenter {
     this.quantity = orderDetail.quantity;
     this.fee = orderDetail.fee;
     this.price = orderDetail.price;
-    this.createdAt = orderDetail.createdAt;
-    this.updatedAt = orderDetail.updatedAt;
+    this.created_at = orderDetail.createdAt;
+    this.updated_at = orderDetail.updatedAt;
   }
 }

@@ -39,7 +39,7 @@ export class FindAllProductStocksController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Get('api/productStocks')
+  @Get('api/product-stocks')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams<ProductStockFilterType>('id', 'productId', 'providerId')
@@ -53,7 +53,7 @@ export class FindAllProductStocksController {
         sort: sortParams,
         filters: filterParams,
       });
-      console.log(productStocks.items);
+
       return {
         ...productStocks,
         items: productStocks.items.map(

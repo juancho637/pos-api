@@ -25,7 +25,7 @@ export class FindByOrderDetailController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Get('api/orderDetails/:id')
+  @Get('api/order-details/:id')
   async run(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<OrderDetailPresenter> {

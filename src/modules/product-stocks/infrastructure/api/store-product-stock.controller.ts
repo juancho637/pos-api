@@ -28,7 +28,7 @@ export class StoreProductStockController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Post('api/productStocks')
+  @Post('api/product-stocks')
   async run(
     @Body() createProductStockDto: CreateProductStockDto,
   ): Promise<ProductStockPresenter> {

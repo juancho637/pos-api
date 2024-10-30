@@ -21,7 +21,6 @@ import {
 import {
   ProductFilterType,
   ProductProvidersEnum,
-  ProductType,
   productErrorsCodes,
 } from '../../domain';
 import { FindAllProductsUseCase } from '../../application';
@@ -47,7 +46,7 @@ export class FindAllProductsController {
     sortParams?: SortingType<ProductFilterType>,
     @FilteringParams<ProductFilterType>('id', 'name', 'status')
     filterParams?: FilteringType<ProductFilterType>[],
-  ): Promise<PaginatedResourceType<Partial<ProductType>>> {
+  ): Promise<PaginatedResourceType<ProductPresenter>> {
     try {
       const products = await this.findAllProductsUseCase.run({
         pagination: paginationParams,

@@ -1,11 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
-import {
-  CreateCategoryType,
-  CategoryRepositoryInterface,
-  CategoryType,
-} from '../../domain';
+import { CategoryRepositoryInterface, CategoryType } from '../../domain';
+import { CreateCategoryRepositoryType } from '@modules/categories/domain/create-category-repository.type';
 
 export class DevCategoriesSeeder {
   private readonly context = DevCategoriesSeeder.name;
@@ -17,11 +14,12 @@ export class DevCategoriesSeeder {
   ) {}
 
   async seed(): Promise<CategoryType[]> {
-    const categoriesFields: CreateCategoryType[] = [];
+    const categoriesFields: CreateCategoryRepositoryType[] = [];
 
     categoriesFields.push({
       name: 'GENERICO',
       description: 'DESCRIPCION GENERICA',
+      status: 'ACTIVE',
     });
 
     for (let i = 0; i < 10; i++) {
@@ -30,6 +28,7 @@ export class DevCategoriesSeeder {
       categoriesFields.push({
         name: categoryInfo.productAdjective(),
         description: categoryInfo.productDescription(),
+        status: 'ACTIVE',
       });
     }
 

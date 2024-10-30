@@ -9,8 +9,8 @@ export class ProductStockPresenter {
   code: string;
   sku: string;
   quantity: number;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 
   constructor(productStock: Partial<ProductStockType>) {
     this.id = productStock.id;
@@ -19,7 +19,7 @@ export class ProductStockPresenter {
     this.code = productStock.code;
     this.sku = productStock.sku;
     this.quantity = productStock.quantity;
-    this.createdAt = productStock.createdAt;
-    this.updatedAt = productStock.updatedAt;
+    this.created_at = productStock.createdAt;
+    this.updated_at = productStock.updatedAt;
   }
 }

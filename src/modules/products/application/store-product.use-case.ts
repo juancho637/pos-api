@@ -34,6 +34,7 @@ export class StoreProductUseCase {
 
       const product = await this.productRepository.store({
         category,
+        status: 'ACTIVE',
         ...createProductFields,
       });
 

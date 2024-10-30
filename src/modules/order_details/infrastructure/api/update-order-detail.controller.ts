@@ -32,7 +32,7 @@ export class UpdateOrderDetailController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Put('api/orderDetails/:id')
+  @Put('api/order-details/:id')
   async run(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOrderDetailDto: UpdateOrderDetailDto,

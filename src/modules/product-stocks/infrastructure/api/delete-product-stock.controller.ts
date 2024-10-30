@@ -33,7 +33,7 @@ export class DeleteProductStockController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Delete('api/productStocks/:id')
+  @Delete('api/product-stocks/:id')
   async run(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProductStockPresenter> {

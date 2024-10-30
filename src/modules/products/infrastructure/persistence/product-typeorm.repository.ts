@@ -51,7 +51,7 @@ export class ProductTypeOrmRepository
 
       const product = await this.productsRepository.findOneOrFail({
         where,
-        relations: relations,
+        relations: relations || [],
       });
       return product;
     } catch (error) {

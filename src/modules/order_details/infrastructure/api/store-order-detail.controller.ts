@@ -25,7 +25,7 @@ export class StoreOrderDetailController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Post('api/orderDetails')
+  @Post('api/order-details')
   async run(
     @Body() createOrderDetailDto: CreateOrderDetailDto,
   ): Promise<OrderDetailPresenter> {

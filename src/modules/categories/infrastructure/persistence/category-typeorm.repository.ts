@@ -23,10 +23,10 @@ import {
   CategoryRepositoryInterface,
   CategoryFilterType,
   UpdateCategoryType,
-  CreateCategoryType,
   categoryErrorsCodes,
 } from '../../domain';
 import { CategoryEntity } from './category.entity';
+import { CreateCategoryRepositoryType } from '@modules/categories/domain/create-category-repository.type';
 
 export class CategoryTypeOrmRepository
   implements CategoryRepositoryInterface<CategoryEntity>
@@ -106,7 +106,7 @@ export class CategoryTypeOrmRepository
   }
 
   async store(
-    createCategoryFields: CreateCategoryType,
+    createCategoryFields: CreateCategoryRepositoryType,
   ): Promise<CategoryEntity | CategoryEntity[]> {
     try {
       return this.categoriesRepository.save(createCategoryFields);

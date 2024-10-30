@@ -39,7 +39,7 @@ export class FindAllOrderDetailsController {
     private readonly exception: ExceptionServiceInterface,
   ) {}
 
-  @Get('api/orderDetails')
+  @Get('api/order-details')
   async run(
     @PaginationParams() paginationParams?: PaginationType,
     @SortingParams<OrderDetailFilterType>('id', 'productStockId', 'orderId')
