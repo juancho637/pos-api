@@ -1,19 +1,20 @@
 version: '3'
 services:
-  pg:
-    container_name: pg
-    restart: unless-stopped
-    env_file: .env
-    image: 'postgres:13'
-    ports:
-      - '${DB_PORT:-5432}:5432'
+  postgres:
+    build:
+      context: ./postgres
+    container_name: postgres
     environment:
-      PGPASSWORD: '${DB_PASSWORD:-secret}'
       POSTGRES_DB: '${DB_DATABASE}'
       POSTGRES_USER: '${DB_USERNAME}'
       POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    ports:
+      - '${DB_PORT:-5432}:5432'
     volumes:
-      - 'pgsql:/var/lib/postgresql/data'
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - pos_net
+    restart: unless-stopped
     healthcheck:
       test:
         [
@@ -28,6 +29,23 @@ services:
       retries: 3
       timeout: 5s
 
-volumes:
-  pgsql:
-    driver: local
+  # pos:
+  #   build:
+  #     context: .
+  #     target: '${APP_ENV:-production}'
+  #   container_name: pos
+  #   restart: unless-stopped
+  #   volumes:
+  #     - .:/project
+  #   ports:
+  #     - '${APP_PORT:-3000}:3000'
+  #   environment:
+  #     NODE_ENV: production
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - pos_net
+
+networks:
+  pos_net:
+    driver: bridge
