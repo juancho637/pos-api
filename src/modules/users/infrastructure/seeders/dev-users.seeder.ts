@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import {
-  CreateUserType,
+  CreateUserRepositoryType,
   UserRepositoryInterface,
   UserType,
 } from '../../domain';
@@ -19,7 +19,7 @@ export class DevUsersSeeder {
   ) {}
 
   async seed(roles: RoleType[]): Promise<UserType[]> {
-    const usersFields: CreateUserType[] = [];
+    const usersFields: CreateUserRepositoryType[] = [];
     const password = await this.hashService.hash('password');
 
     usersFields.push({

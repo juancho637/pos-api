@@ -79,30 +79,35 @@ export class PermissionTypeOrmRepository
     pagination,
     sort,
     filters,
-  }: FindAllFieldsDto<PermissionFilterType>): Promise<
+    relations,
+  }: FindAllFieldsDto<PermissionFilterType> = {}): Promise<
     PaginatedResourceType<PermissionEntity>
   > {
     try {
-      const { page, size } = pagination;
-      const where = getWhereTypeOrmHelper(filters);
-      const order = getOrderTypeOrmHelper(sort);
+      const where = getWhereTypeOrmHelper<PermissionFilterType>(filters);
+      const order = getOrderTypeOrmHelper<PermissionFilterType>(sort);
 
-      const [Permissions, count] =
+      const { page = 1, size } = pagination || {};
+
+      const skip = size && (page - 1) * size;
+
+      const [permissions, count] =
         await this.permissionsRepository.findAndCount({
           where,
           order,
-          skip: (page - 1) * size,
+          relations,
+          skip,
           take: size,
         });
 
-      const lastPage = Math.ceil(count / size);
+      const lastPage = size ? Math.ceil(count / size) : 1;
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
-        size,
-        items: Permissions,
+        currentPage: page,
+        lastPage,
+        size: size || count,
+        items: permissions,
       };
     } catch (error) {
       this.logger.error({ message: error, context: this.context });

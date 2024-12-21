@@ -1,6 +1,9 @@
-import { UserType } from './user.type';
+import { CreateUserRepositoryType } from './create-user-repository.type';
 
-export type CreateUserType = Partial<UserType> & {
+export type CreateUserType = Omit<
+  CreateUserRepositoryType,
+  'status' | 'roles' | 'permissions'
+> & {
   rolesIds?: number[];
   permissionsIds?: number[];
 };

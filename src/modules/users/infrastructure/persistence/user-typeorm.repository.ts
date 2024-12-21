@@ -6,10 +6,10 @@ import {
   getWhereTypeOrmHelper,
 } from '@common/helpers/infrastructure';
 import {
-  PaginatedResourceType,
+  FilterRuleEnum,
   FindAllFieldsDto,
   FindOneByFieldsDto,
-  FilterRuleEnum,
+  PaginatedResourceType,
 } from '@common/helpers/domain';
 import {
   LoggerProvidersEnum,
@@ -22,9 +22,10 @@ import {
 import {
   UserRepositoryInterface,
   UserFilterType,
-  UpdateUserType,
-  CreateUserType,
+  // UpdateUserType,
   userErrorsCodes,
+  UpdateUserType,
+  CreateUserRepositoryType,
 } from '../../domain';
 import { UserEntity } from './user.entity';
 
@@ -35,11 +36,11 @@ export class UserTypeOrmRepository
 
   constructor(
     @InjectRepository(UserEntity)
-    private readonly usersRepository: Repository<UserEntity>,
+    readonly usersRepository: Repository<UserEntity>,
     @Inject(LoggerProvidersEnum.LOGGER_SERVICE)
-    private readonly logger: LoggerServiceInterface,
+    readonly logger: LoggerServiceInterface,
     @Inject(ExceptionProvidersEnum.EXCEPTION_SERVICE)
-    private readonly exception: ExceptionServiceInterface,
+    readonly exception: ExceptionServiceInterface,
   ) {}
 
   async findOneBy({
@@ -71,29 +72,32 @@ export class UserTypeOrmRepository
     sort,
     filters,
     relations,
-  }: FindAllFieldsDto<UserFilterType>): Promise<
-    PaginatedResourceType<Partial<UserEntity>>
+  }: FindAllFieldsDto<UserFilterType> = {}): Promise<
+    PaginatedResourceType<UserEntity>
   > {
     try {
-      const { page, size } = pagination;
       const where = getWhereTypeOrmHelper<UserFilterType>(filters);
       const order = getOrderTypeOrmHelper<UserFilterType>(sort);
+
+      const { page = 1, size } = pagination || {};
+
+      const skip = size && (page - 1) * size;
 
       const [users, count] = await this.usersRepository.findAndCount({
         where,
         order,
         relations,
-        skip: (page - 1) * size,
+        skip,
         take: size,
       });
 
-      const lastPage = Math.ceil(count / size);
+      const lastPage = size ? Math.ceil(count / size) : 1;
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
-        size,
+        currentPage: page,
+        lastPage,
+        size: size || count,
         items: users,
       };
     } catch (error) {
@@ -108,14 +112,14 @@ export class UserTypeOrmRepository
   }
 
   async store(
-    createUserFields: CreateUserType | CreateUserType[],
+    createUserFields: CreateUserRepositoryType | CreateUserRepositoryType[],
   ): Promise<UserEntity | UserEntity[]> {
     try {
       if (Array.isArray(createUserFields)) {
-        return this.usersRepository.save(createUserFields);
+        return await this.usersRepository.save(createUserFields);
       }
 
-      return this.usersRepository.save(createUserFields);
+      return await this.usersRepository.save(createUserFields);
     } catch (error) {
       this.logger.error({ message: error, context: this.context });
 

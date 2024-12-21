@@ -89,8 +89,8 @@ export class CustomerTypeOrmRepository
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
+        currentPage: page,
+        lastPage: lastPage,
         size,
         items: customers,
       };

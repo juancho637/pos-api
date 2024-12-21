@@ -1,6 +1,9 @@
 import { PaginatedResourceType } from '@common/helpers/domain';
-import { UserType } from '@modules/users/domain';
-import { UserEntity } from '@modules/users/infrastructure';
+import {
+  CreateUserRepositoryType,
+  CreateUserType,
+  UserType,
+} from '@modules/users/domain';
 
 export const userMock: UserType = {
   id: 1,
@@ -29,12 +32,12 @@ export const usersMock: UserType[] = [
   },
 ];
 
-export const paginatedUsersMock: PaginatedResourceType<Partial<UserType>> = {
+export const paginatedUsersMock: PaginatedResourceType<UserType> = {
   items: usersMock,
   total: usersMock.length,
-  current_page: 1,
-  last_page: 1,
-  size: 10,
+  currentPage: 1,
+  lastPage: 1,
+  size: usersMock.length,
 };
 
 export const findAndCountUsersMock: [UserType[], number] = [
@@ -42,19 +45,27 @@ export const findAndCountUsersMock: [UserType[], number] = [
   usersMock.length,
 ];
 
-export const fieldsToCreateUser = {
+export const fieldsToCreateUser: CreateUserType = {
   name: 'example',
   username: 'example',
   email: 'example@mail.com',
   password: 'password',
 };
 
-export const userCreatedMock: UserEntity = {
-  id: 1,
+export const fieldsToCreateUserRepository: CreateUserRepositoryType = {
   ...fieldsToCreateUser,
   status: 'ACTIVE',
+};
+
+export const userCreatedMock: UserType = {
+  id: 1,
+  ...fieldsToCreateUserRepository,
   createdAt: new Date(),
   updatedAt: new Date(),
+};
+
+export const userDeletedMock: UserType = {
+  ...userCreatedMock,
   deletedAt: new Date(),
 };
 

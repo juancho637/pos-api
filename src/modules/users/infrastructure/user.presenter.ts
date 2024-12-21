@@ -10,7 +10,7 @@ export class UserPresenter {
   updated_at: Date;
   roles?: RolePresenter[];
 
-  constructor(user: Partial<UserType>) {
+  constructor(user: UserType) {
     this.id = user.id;
     this.name = user.name;
     this.username = user.username;

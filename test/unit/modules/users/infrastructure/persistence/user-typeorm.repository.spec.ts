@@ -9,7 +9,7 @@ import { LoggerProvidersEnum } from '@common/adapters/logger/domain';
 import { ExceptionProvidersEnum } from '@common/adapters/exception/domain';
 import {
   errorMock,
-  fieldsToCreateUser,
+  fieldsToCreateUserRepository,
   fieldsToUpdateUser,
   findAndCountUsersMock,
   paginatedUsersMock,
@@ -18,10 +18,11 @@ import {
   userUpdatedMock,
 } from '@test/mocks';
 import { FilterRuleEnum } from '@common/helpers/domain';
+import { UserType } from '@modules/users/domain';
 
 describe('UserTypeOrmRepository', () => {
   let userTypeOrmRepository: UserTypeOrmRepository;
-  let userTypeOrmRepositoryMock: Repository<UserEntity | UserEntity[]>;
+  let userTypeOrmRepositoryMock: Repository<UserType | UserType[]>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -69,14 +70,14 @@ describe('UserTypeOrmRepository', () => {
   describe('findOneBy method', () => {
     it('should call findOneBy method and return a user by id', async () => {
       const repositorySpy = jest.spyOn(userTypeOrmRepositoryMock, 'findOne');
-      const { id } = userMock as UserEntity;
+      const { id } = userMock;
 
       const resp = await userTypeOrmRepository.findOneBy({
         filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
       });
 
       expect(repositorySpy).toHaveBeenCalledTimes(1);
-      expect(resp).toEqual(userMock as UserEntity);
+      expect(resp).toEqual(userMock);
     });
 
     it('should throw an error when the database throw an error', async () => {
@@ -97,18 +98,13 @@ describe('UserTypeOrmRepository', () => {
   });
 
   describe('findAll method', () => {
-    const pagination = {
-      page: 1,
-      size: 10,
-    };
-
     it('should call findAll method and return all users', async () => {
       const repositorySpy = jest.spyOn(
         userTypeOrmRepositoryMock,
         'findAndCount',
       );
 
-      const resp = await userTypeOrmRepository.findAll({ pagination });
+      const resp = await userTypeOrmRepository.findAll();
 
       expect(repositorySpy).toHaveBeenCalledTimes(1);
       expect(resp).toEqual(paginatedUsersMock);
@@ -119,7 +115,7 @@ describe('UserTypeOrmRepository', () => {
         .spyOn(userTypeOrmRepositoryMock, 'findAndCount')
         .mockRejectedValue(errorMock);
 
-      const resp = userTypeOrmRepository.findAll({ pagination });
+      const resp = userTypeOrmRepository.findAll();
 
       await expect(resp).rejects.toThrow(errorMock);
     });
@@ -131,7 +127,9 @@ describe('UserTypeOrmRepository', () => {
         .spyOn(userTypeOrmRepositoryMock, 'save')
         .mockResolvedValue(userCreatedMock);
 
-      const resp = await userTypeOrmRepository.store(fieldsToCreateUser);
+      const resp = await userTypeOrmRepository.store(
+        fieldsToCreateUserRepository,
+      );
 
       expect(repositorySpy).toHaveBeenCalledTimes(1);
       expect(resp).toEqual(userCreatedMock);
@@ -142,7 +140,9 @@ describe('UserTypeOrmRepository', () => {
         .spyOn(userTypeOrmRepositoryMock, 'save')
         .mockResolvedValue([userCreatedMock]);
 
-      const resp = await userTypeOrmRepository.store([fieldsToCreateUser]);
+      const resp = await userTypeOrmRepository.store([
+        fieldsToCreateUserRepository,
+      ]);
 
       expect(repositorySpy).toHaveBeenCalledTimes(1);
       expect(resp).toEqual([userCreatedMock]);
@@ -153,7 +153,7 @@ describe('UserTypeOrmRepository', () => {
         .spyOn(userTypeOrmRepositoryMock, 'save')
         .mockRejectedValue(errorMock);
 
-      const resp = userTypeOrmRepository.store(fieldsToCreateUser);
+      const resp = userTypeOrmRepository.store(fieldsToCreateUserRepository);
 
       await expect(resp).rejects.toThrow(errorMock);
     });

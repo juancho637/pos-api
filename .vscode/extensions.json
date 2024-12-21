@@ -9,6 +9,7 @@
     "usernamehw.errorlens",
     "kisstkondoros.vscode-codemetrics",
     "rogerchi.vsce-gitkeep",
-    "orta.vscode-jest"
+    "orta.vscode-jest",
+    "aykutsarac.jsoncrack-vscode"
   ]
 }

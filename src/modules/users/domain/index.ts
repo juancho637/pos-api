@@ -1,3 +1,4 @@
+export * from './create-user-repository.type';
 export * from './create-user.type';
 export * from './update-user.type';
 export * from './user-errors.codes';

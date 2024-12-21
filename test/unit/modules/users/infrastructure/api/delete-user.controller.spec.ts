@@ -59,7 +59,7 @@ describe('DeleteUserController', () => {
   });
 
   describe('Controller', () => {
-    it('should call run method and return a UserPresenter', async () => {
+    it('should call run method and return a deleted user', async () => {
       const useCaseSpy = jest.spyOn(deleteUserUseCase, 'run');
 
       const resp = await deleteUserController.run(userMock.id);

@@ -39,7 +39,7 @@ export class UserEntity implements UserType {
     length: 100,
     nullable: true,
   })
-  email: string;
+  email?: string;
 
   @Column({
     type: 'varchar',

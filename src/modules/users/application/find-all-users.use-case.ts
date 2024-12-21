@@ -25,8 +25,8 @@ export class FindAllUsersUseCase {
     sort,
     filters,
     relations,
-  }: FindAllFieldsDto<UserFilterType>): Promise<
-    PaginatedResourceType<Partial<UserType>>
+  }: FindAllFieldsDto<UserFilterType> = {}): Promise<
+    PaginatedResourceType<UserType>
   > {
     try {
       const userResource = await this.userRepository.findAll({
