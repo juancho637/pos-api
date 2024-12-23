@@ -1,0 +1,22 @@
+meta {
+  name: SignIn
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{URL}}/api/auth/sign-in
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "username": "admin",
+    "password": "password"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("JWT_TOKEN", res.body.data.accessToken);
+}
