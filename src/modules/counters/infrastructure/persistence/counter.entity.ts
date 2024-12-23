@@ -31,14 +31,14 @@ export class CounterEntity implements CounterType {
   status: string;
 
   @Column({
-    type: 'datetime',
+    type: 'timestamptz',
     name: 'start_time',
     nullable: false,
   })
   startTime: Date;
 
   @Column({
-    type: 'datetime',
+    type: 'timestamptz',
     name: 'end_time',
     nullable: false,
   })
