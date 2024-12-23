@@ -1,7 +1,7 @@
 import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import {
-  CreateUserType,
+  CreateUserRepositoryType,
   UserRepositoryInterface,
   UserType,
 } from '../../domain';
@@ -18,10 +18,10 @@ export class ProdUsersSeeder {
 
   async seed(roles: RoleType[]): Promise<UserType[]> {
     const password = await this.hashService.hash('password');
-    const usersFields: CreateUserType[] = [
+    const usersFields: CreateUserRepositoryType[] = [
       {
         name: 'Admin User',
-        username: 'damin',
+        username: 'admin',
         email: 'admin@admin.com',
         password: password,
         status: 'ACTIVE',

@@ -70,6 +70,7 @@ export class CategoryTypeOrmRepository
     pagination,
     sort,
     filters,
+    relations,
   }: FindAllFieldsDto<CategoryFilterType>): Promise<
     PaginatedResourceType<Partial<CategoryEntity>>
   > {
@@ -83,14 +84,15 @@ export class CategoryTypeOrmRepository
         order,
         skip: (page - 1) * size,
         take: size,
+        relations: relations || [],
       });
 
       const lastPage = Math.ceil(count / size);
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
+        currentPage: page,
+        lastPage: lastPage,
         size,
         items: categories,
       };

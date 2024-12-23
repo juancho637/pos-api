@@ -70,28 +70,33 @@ export class RoleTypeOrmRepository
     pagination,
     sort,
     filters,
-  }: FindAllFieldsDto<RoleFilterType>): Promise<
+    relations,
+  }: FindAllFieldsDto<RoleFilterType> = {}): Promise<
     PaginatedResourceType<RoleEntity>
   > {
     try {
-      const { page, size } = pagination;
-      const where = getWhereTypeOrmHelper(filters);
-      const order = getOrderTypeOrmHelper(sort);
+      const where = getWhereTypeOrmHelper<RoleFilterType>(filters);
+      const order = getOrderTypeOrmHelper<RoleFilterType>(sort);
+
+      const { page = 1, size } = pagination || {};
+
+      const skip = size && (page - 1) * size;
 
       const [roles, count] = await this.rolesRepository.findAndCount({
         where,
         order,
-        skip: (page - 1) * size,
+        relations,
+        skip,
         take: size,
       });
 
-      const lastPage = Math.ceil(count / size);
+      const lastPage = size ? Math.ceil(count / size) : 1;
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
-        size,
+        currentPage: page,
+        lastPage,
+        size: size || count,
         items: roles,
       };
     } catch (error) {

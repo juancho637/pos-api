@@ -79,15 +79,15 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       ],
       useFactory: (
         configService: ConfigService<ConfigurationType>,
-        userRepositoy: UserRepositoryInterface,
+        userRepository: UserRepositoryInterface,
         hashService: HashServiceInterface,
         loggerService: LoggerServiceInterface,
       ) => {
         const env = configService.get<AppConfigType>('app').env;
 
         return env !== 'prod'
-          ? new DevUsersSeeder(userRepositoy, hashService, loggerService)
-          : new ProdUsersSeeder(userRepositoy, hashService, loggerService);
+          ? new DevUsersSeeder(userRepository, hashService, loggerService)
+          : new ProdUsersSeeder(userRepository, hashService, loggerService);
       },
     },
     {
@@ -98,11 +98,15 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       ],
       provide: UserProvidersEnum.FIND_ALL_USERS_USE_CASE,
       useFactory: (
-        userRepositoy: UserRepositoryInterface,
+        userRepository: UserRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindAllUsersUseCase(userRepositoy, loggerService, exceptionService),
+        new FindAllUsersUseCase(
+          userRepository,
+          loggerService,
+          exceptionService,
+        ),
     },
     {
       inject: [
@@ -112,11 +116,11 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       ],
       provide: UserProvidersEnum.FIND_BY_USER_USE_CASE,
       useFactory: (
-        userRepositoy: UserRepositoryInterface,
+        userRepository: UserRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new FindByUserUseCase(userRepositoy, loggerService, exceptionService),
+        new FindByUserUseCase(userRepository, loggerService, exceptionService),
     },
     {
       inject: [
@@ -129,7 +133,7 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       ],
       provide: UserProvidersEnum.STORE_USER_USE_CASE,
       useFactory: (
-        userRepositoy: UserRepositoryInterface,
+        userRepository: UserRepositoryInterface,
         findAllRolesUseCase: FindAllRolesUseCase,
         findAllPermissionsUseCase: FindAllPermissionsUseCase,
         hashService: HashServiceInterface,
@@ -137,7 +141,7 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
         exceptionService: ExceptionServiceInterface,
       ) =>
         new StoreUserUseCase(
-          userRepositoy,
+          userRepository,
           findAllRolesUseCase,
           findAllPermissionsUseCase,
           hashService,
@@ -153,11 +157,11 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       ],
       provide: UserProvidersEnum.UPDATE_USER_USE_CASE,
       useFactory: (
-        userRepositoy: UserRepositoryInterface,
+        userRepository: UserRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new UpdateUserUseCase(userRepositoy, loggerService, exceptionService),
+        new UpdateUserUseCase(userRepository, loggerService, exceptionService),
     },
     {
       inject: [
@@ -167,11 +171,11 @@ import { PermissionProvidersEnum } from '@modules/permissions/domain';
       ],
       provide: UserProvidersEnum.DELETE_USER_USE_CASE,
       useFactory: (
-        userRepositoy: UserRepositoryInterface,
+        userRepository: UserRepositoryInterface,
         loggerService: LoggerServiceInterface,
         exceptionService: ExceptionServiceInterface,
       ) =>
-        new DeleteUserUseCase(userRepositoy, loggerService, exceptionService),
+        new DeleteUserUseCase(userRepository, loggerService, exceptionService),
     },
   ],
   exports: [

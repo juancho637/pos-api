@@ -27,35 +27,9 @@ export class StoreUserUseCase {
     try {
       const { rolesIds, permissionsIds, ...createUserFields } = createUser;
 
-      if (rolesIds && rolesIds.length !== 0) {
-        createUserFields['roles'] = await this.findAllRolesUseCase
-          .run({
-            pagination: { page: 1, size: 100 },
-            filters: [
-              {
-                property: 'id',
-                value: rolesIds.join(','),
-                rule: FilterRuleEnum.IN,
-              },
-            ],
-          })
-          .then((roles) => roles.items);
-      }
-
-      if (permissionsIds && permissionsIds.length !== 0) {
-        createUserFields['permissions'] = await this.findAllPermissionsUseCase
-          .run({
-            pagination: { page: 1, size: 100 },
-            filters: [
-              {
-                property: 'id',
-                value: permissionsIds.join(','),
-                rule: FilterRuleEnum.IN,
-              },
-            ],
-          })
-          .then((permissions) => permissions.items);
-      }
+      createUserFields['roles'] = this.validateRoles(rolesIds);
+      createUserFields['permissions'] =
+        this.validatePermissions(permissionsIds);
 
       const hashPassword = await this.hashService.hash(createUser.password);
 
@@ -78,5 +52,41 @@ export class StoreUserUseCase {
         error,
       });
     }
+  }
+
+  private async validateRoles(rolesIds: number[]) {
+    if (!Array.isArray(rolesIds)) {
+      return;
+    }
+
+    return await this.findAllRolesUseCase
+      .run({
+        filters: [
+          {
+            property: 'id',
+            value: rolesIds.join(','),
+            rule: FilterRuleEnum.IN,
+          },
+        ],
+      })
+      .then((roles) => roles.items);
+  }
+
+  private async validatePermissions(permissionsIds: number[]) {
+    if (!Array.isArray(permissionsIds)) {
+      return;
+    }
+
+    return await this.findAllPermissionsUseCase
+      .run({
+        filters: [
+          {
+            property: 'id',
+            value: permissionsIds.join(','),
+            rule: FilterRuleEnum.IN,
+          },
+        ],
+      })
+      .then((permissions) => permissions.items);
   }
 }

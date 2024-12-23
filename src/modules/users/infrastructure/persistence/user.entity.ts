@@ -39,7 +39,7 @@ export class UserEntity implements UserType {
     length: 100,
     nullable: true,
   })
-  email: string;
+  email?: string;
 
   @Column({
     type: 'varchar',
@@ -85,7 +85,7 @@ export class UserEntity implements UserType {
       referencedColumnName: 'id',
     },
   })
-  roles: RoleEntity[];
+  roles?: RoleEntity[];
 
   @ManyToMany(() => PermissionEntity, (permission) => permission.users)
   @JoinTable({
@@ -99,8 +99,8 @@ export class UserEntity implements UserType {
       referencedColumnName: 'id',
     },
   })
-  permissions: PermissionEntity[];
+  permissions?: PermissionEntity[];
 
   @OneToMany(() => CounterEntity, (counter) => counter.user)
-  counters: CounterEntity[];
+  counters?: CounterEntity[];
 }

@@ -401,3 +401,5 @@ dist
 
 # Sqlite
 database/*.sqlite
+
+postgres_data

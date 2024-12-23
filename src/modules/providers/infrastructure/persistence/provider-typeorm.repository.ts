@@ -89,8 +89,8 @@ export class ProviderTypeOrmRepository
 
       return {
         total: count,
-        current_page: page,
-        last_page: lastPage,
+        currentPage: page,
+        lastPage: lastPage,
         size,
         items: providers,
       };

@@ -3,7 +3,6 @@ import {
   FilteringType,
   PaginationType,
   SortingType,
-  PaginatedResourceType,
 } from '@common/helpers/domain';
 import {
   PaginationParams,
@@ -23,10 +22,15 @@ import {
   UserFilterType,
   UserPermissionsEnum,
   UserProvidersEnum,
+  UserType,
   userErrorsCodes,
 } from '../../domain';
 import { FindAllUsersUseCase } from '../../application';
 import { UserPresenter } from '../user.presenter';
+import {
+  paginatedResourceHelper,
+  PaginatedResourcePresenter,
+} from '@common/helpers/application';
 
 @Controller()
 export class FindAllUsersController {
@@ -49,7 +53,7 @@ export class FindAllUsersController {
     sortParams?: SortingType<UserFilterType>,
     @FilteringParams<UserFilterType>('id', 'email', 'name', 'username')
     filterParams?: FilteringType<UserFilterType>[],
-  ): Promise<PaginatedResourceType<UserPresenter>> {
+  ): Promise<PaginatedResourcePresenter<UserPresenter>> {
     try {
       const users = await this.findAllUsersUseCase.run({
         pagination: paginationParams,
@@ -57,10 +61,10 @@ export class FindAllUsersController {
         filters: filterParams,
       });
 
-      return {
-        ...users,
-        items: users.items.map((user) => new UserPresenter(user)),
-      };
+      return paginatedResourceHelper<UserType, UserPresenter>(
+        users,
+        UserPresenter,
+      );
     } catch (error) {
       this.logger.error({
         message: error,

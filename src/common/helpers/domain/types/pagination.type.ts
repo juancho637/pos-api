@@ -1,4 +1,4 @@
 export type PaginationType = {
   page: number;
-  size: number;
+  size?: number;
 };
