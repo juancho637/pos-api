@@ -23,8 +23,9 @@ export class DevUsersSeeder {
     const password = await this.hashService.hash('password');
 
     usersFields.push({
-      name: 'Juan David Garcia',
-      username: 'juancho',
+      name: 'Admin User',
+      username: 'admin',
+      email: 'admin@admin.com',
       password: password,
       status: 'ACTIVE',
       roles: roles.filter((role) => role.name === 'admin'),

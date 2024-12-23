@@ -21,7 +21,7 @@ export class ProdUsersSeeder {
     const usersFields: CreateUserRepositoryType[] = [
       {
         name: 'Admin User',
-        username: 'damin',
+        username: 'admin',
         email: 'admin@admin.com',
         password: password,
         status: 'ACTIVE',
