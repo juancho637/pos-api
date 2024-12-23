@@ -44,13 +44,23 @@ describe('StoreUserUseCase', () => {
         {
           provide: RoleProvidersEnum.FIND_ALL_ROLES_USE_CASE,
           useValue: {
-            findAllRolesUseCase: jest.fn(),
+            run: jest.fn().mockResolvedValue({
+              items: [
+                { id: 1, name: 'Admin' },
+                { id: 2, name: 'User' },
+              ],
+            }),
           },
         },
         {
           provide: PermissionProvidersEnum.FIND_ALL_PERMISSIONS_USE_CASE,
           useValue: {
-            findAllPermissionsUseCase: jest.fn(),
+            run: jest.fn().mockResolvedValue({
+              items: [
+                { id: 1, name: 'Read' },
+                { id: 2, name: 'Write' },
+              ],
+            }),
           },
         },
         {
