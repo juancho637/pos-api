@@ -86,12 +86,14 @@ describe('UpdateUserController', () => {
 
       jest.spyOn(updateUserUseCase, 'run').mockRejectedValue(errorMock);
 
-      await expect(updateUserController.run(id, updateUserDto)).rejects.toThrow(
-        internalServerErrorExceptionMock({
-          context,
-          message: userErrorsCodes.UM042,
-        }),
-      );
+      const resp = updateUserController.run(id, updateUserDto);
+
+      const throwMock = internalServerErrorExceptionMock({
+        context,
+        message: userErrorsCodes.UM042,
+      });
+
+      await expect(resp).rejects.toThrow(throwMock);
     });
   });
 });

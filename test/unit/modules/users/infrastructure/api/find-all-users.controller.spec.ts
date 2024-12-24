@@ -73,12 +73,12 @@ describe('FindAllUsersController', () => {
 
       const resp = await findAllUsersController.run();
 
-      expect(resp).toEqual(
-        paginatedResourceHelper<UserType, UserPresenter>(
-          paginatedUsersMock,
-          UserPresenter,
-        ),
+      const paginated = paginatedResourceHelper<UserType, UserPresenter>(
+        paginatedUsersMock,
+        UserPresenter,
       );
+
+      expect(resp).toEqual(paginated);
       expect(useCaseSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -87,12 +87,14 @@ describe('FindAllUsersController', () => {
 
       jest.spyOn(findAllUsersUseCase, 'run').mockRejectedValue(errorMock);
 
-      await expect(findAllUsersController.run()).rejects.toThrow(
-        internalServerErrorExceptionMock({
-          context,
-          message: userErrorsCodes.UM022,
-        }),
-      );
+      const resp = findAllUsersController.run();
+
+      const throwMock = internalServerErrorExceptionMock({
+        context,
+        message: userErrorsCodes.UM022,
+      });
+
+      await expect(resp).rejects.toThrow(throwMock);
     });
   });
 });

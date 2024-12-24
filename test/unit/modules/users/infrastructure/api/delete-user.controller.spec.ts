@@ -73,12 +73,14 @@ describe('DeleteUserController', () => {
 
       jest.spyOn(deleteUserUseCase, 'run').mockRejectedValue(errorMock);
 
-      await expect(deleteUserController.run(userMock.id)).rejects.toThrow(
-        internalServerErrorExceptionMock({
-          context,
-          message: userErrorsCodes.UM052,
-        }),
-      );
+      const resp = deleteUserController.run(userMock.id);
+
+      const throwMock = internalServerErrorExceptionMock({
+        context,
+        message: userErrorsCodes.UM052,
+      });
+
+      await expect(resp).rejects.toThrow(throwMock);
     });
   });
 });

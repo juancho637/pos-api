@@ -85,6 +85,21 @@ describe('StoreUserController', () => {
       );
     });
 
+    it('should throw an error when the use case throws an error', async () => {
+      const errorMock = new Error('Something went wrong');
+
+      jest.spyOn(storeUserUseCase, 'run').mockRejectedValue(errorMock);
+
+      const resp = storeUserController.run(createUserDtoMock);
+
+      const throwMock = internalServerErrorExceptionMock({
+        context,
+        message: userErrorsCodes.UM032,
+      });
+
+      await expect(resp).rejects.toThrow(throwMock);
+    });
+
     // it('should throw a BadRequestException if DTO validation fails (missing required fields)', async () => {
     //   await expect(
     //     storeUserController.run(createUserDtoMockTofailWithEmptyFields),

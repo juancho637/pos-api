@@ -66,10 +66,12 @@ describe('FindByUserController', () => {
 
       const resp = await findByUserController.run(id);
 
-      expect(resp).toEqual(new UserPresenter(userMock));
-      expect(useCaseSpy).toHaveBeenCalledWith({
+      const calledWith = {
         filter: { property: 'id', rule: FilterRuleEnum.EQUALS, value: id },
-      });
+      };
+
+      expect(resp).toEqual(new UserPresenter(userMock));
+      expect(useCaseSpy).toHaveBeenCalledWith(calledWith);
       expect(useCaseSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -79,12 +81,14 @@ describe('FindByUserController', () => {
 
       jest.spyOn(findByUserUseCase, 'run').mockRejectedValue(errorMock);
 
-      await expect(findByUserController.run(id)).rejects.toThrow(
-        internalServerErrorExceptionMock({
-          context,
-          message: userErrorsCodes.UM012,
-        }),
-      );
+      const resp = findByUserController.run(id);
+
+      const throwMock = internalServerErrorExceptionMock({
+        context,
+        message: userErrorsCodes.UM012,
+      });
+
+      await expect(resp).rejects.toThrow(throwMock);
     });
   });
 });
