@@ -7,7 +7,7 @@ import {
   DeleteUserController,
   UserPresenter,
 } from '@modules/users/infrastructure';
-import { userMock, internalServerErrorExceptionMock } from '@test/mocks';
+import { internalServerErrorExceptionMock, userMockDeleted } from '@test/mocks';
 
 describe('DeleteUserController', () => {
   const context = 'DeleteUserController';
@@ -21,7 +21,7 @@ describe('DeleteUserController', () => {
         {
           provide: UserProvidersEnum.DELETE_USER_USE_CASE,
           useValue: {
-            run: jest.fn().mockResolvedValue(userMock),
+            run: jest.fn().mockResolvedValue(userMockDeleted),
           },
         },
         {
@@ -62,9 +62,9 @@ describe('DeleteUserController', () => {
     it('should call run method and return a deleted user', async () => {
       const useCaseSpy = jest.spyOn(deleteUserUseCase, 'run');
 
-      const resp = await deleteUserController.run(userMock.id);
+      const resp = await deleteUserController.run(userMockDeleted.id);
 
-      expect(resp).toEqual(new UserPresenter(userMock));
+      expect(resp).toEqual(new UserPresenter(userMockDeleted));
       expect(useCaseSpy).toHaveBeenCalledTimes(1);
     });
 
@@ -73,7 +73,9 @@ describe('DeleteUserController', () => {
 
       jest.spyOn(deleteUserUseCase, 'run').mockRejectedValue(errorMock);
 
-      await expect(deleteUserController.run(userMock.id)).rejects.toThrow(
+      await expect(
+        deleteUserController.run(userMockDeleted.id),
+      ).rejects.toThrow(
         internalServerErrorExceptionMock({
           context,
           message: userErrorsCodes.UM052,

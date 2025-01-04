@@ -9,6 +9,10 @@ export const userMock: UserType = {
   status: 'ACTIVE',
   createdAt: new Date(),
   updatedAt: new Date(),
+};
+
+export const userMockDeleted: UserType = {
+  ...userMock,
   deletedAt: new Date(),
 };
 

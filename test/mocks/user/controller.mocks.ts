@@ -1,5 +1,6 @@
 import { CreateUserDto } from '@modules/users/infrastructure/dto';
 import { UserPresenter } from '@modules/users/infrastructure';
+import { userMock } from './common.mocks';
 
 export const createUserDtoMock: CreateUserDto = {
   name: 'John Doe',
@@ -12,10 +13,7 @@ export const createUserDtoMock: CreateUserDto = {
 
 export const createUserDtoMockTofailWithoutRolesAndPermissions: CreateUserDto =
   {
-    name: 'John Doe',
-    username: 'johndoe',
-    email: 'john.doe@gmail.com',
-    password: 'securepassword',
+    ...createUserDtoMock,
     rolesIds: [],
     permissionsIds: [],
   };
@@ -30,11 +28,5 @@ export const createUserDtoMockTofailWithEmptyFields: CreateUserDto = {
 };
 
 export const userPresenterMock: UserPresenter = new UserPresenter({
-  id: 1,
-  name: 'John Doe',
-  username: 'johndoe',
-  email: 'john.doe@gmail.com',
-  status: 'ACTIVE',
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  ...userMock,
 });
