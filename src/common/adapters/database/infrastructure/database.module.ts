@@ -14,5 +14,6 @@ import { TypeOrmConfigService } from './typeorm-config.service';
       useClass: TypeOrmConfigService,
     }),
   ],
+  exports: [TypeOrmModule],
 })
 export class DatabaseModule {}
