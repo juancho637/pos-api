@@ -32,15 +32,17 @@ services:
   # pos:
   #   build:
   #     context: .
-  #     target: '${APP_ENV:-production}'
+  #     target: '${APP_ENV:-dev}'
   #   container_name: pos
   #   restart: unless-stopped
+  #   env_file: .env
   #   volumes:
-  #     - .:/project
+  #     - .:/project/src
+  #     - node_modules:/project/node_modules
   #   ports:
   #     - '${APP_PORT:-3000}:3000'
   #   environment:
-  #     NODE_ENV: production
+  #     NODE_ENV: '${APP_ENV:-dev}'
   #   depends_on:
   #     - postgres
   #   networks:
