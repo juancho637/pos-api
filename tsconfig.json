@@ -1,4 +1,9 @@
 {
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  },
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
@@ -30,8 +35,11 @@
       "@modules/categories/*": ["./src/modules/categories/*"],
       "@modules/providers/*": ["./src/modules/providers/*"],
       "@modules/customers/*": ["./src/modules/customers/*"],
+      "@modules/products/*": ["./src/modules/products/*"],
+      "@modules/product-stocks/*": ["./src/modules/product-stocks/*"],
       "@modules/counters/*": ["./src/modules/counters/*"],
       "@modules/orders/*": ["./src/modules/orders/*"],
+      "@modules/order-details/*": ["./src/modules/order-details/*"],
 
 
       // Tests
