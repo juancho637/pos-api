@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { HashServiceInterface } from '@common/adapters/hash/domain';
 import { LoggerServiceInterface } from '@common/adapters/logger/domain';
 import { CategoryRepositoryInterface, CategoryType } from '../../domain';
 import { CreateCategoryRepositoryType } from '@modules/categories/domain/create-category-repository.type';
@@ -9,7 +8,6 @@ export class DevCategoriesSeeder {
 
   constructor(
     private readonly categoryRepository: CategoryRepositoryInterface,
-    private readonly hashService: HashServiceInterface,
     private readonly logger: LoggerServiceInterface,
   ) {}
 

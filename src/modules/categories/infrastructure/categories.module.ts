@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   HashProvidersEnum,
@@ -14,6 +15,10 @@ import {
   ExceptionProvidersEnum,
   ExceptionServiceInterface,
 } from '@common/adapters/exception/domain';
+import {
+  AppConfigType,
+  ConfigurationType,
+} from '@common/adapters/configuration/domain';
 import { ExceptionModule } from '@common/adapters/exception/infrastructure';
 import { CategoryProvidersEnum, CategoryRepositoryInterface } from '../domain';
 import {
@@ -31,6 +36,7 @@ import {
   StoreCategoryController,
   UpdateCategoryController,
 } from './api';
+import { DevCategoriesSeeder } from './seeders';
 
 @Module({
   imports: [
@@ -50,6 +56,25 @@ import {
     {
       provide: CategoryProvidersEnum.CATEGORY_REPOSITORY,
       useClass: CategoryTypeOrmRepository,
+    },
+    {
+      provide: CategoryProvidersEnum.CATEGORY_SEEDER,
+      inject: [
+        ConfigService,
+        CategoryProvidersEnum.CATEGORY_REPOSITORY,
+        LoggerProvidersEnum.LOGGER_SERVICE,
+      ],
+      useFactory: (
+        configService: ConfigService<ConfigurationType>,
+        categoryRepositoy: CategoryRepositoryInterface,
+        loggerService: LoggerServiceInterface,
+      ) => {
+        const env = configService.get<AppConfigType>('app').env;
+
+        return env !== 'prod'
+          ? new DevCategoriesSeeder(categoryRepositoy, loggerService)
+          : null;
+      },
     },
     {
       inject: [
