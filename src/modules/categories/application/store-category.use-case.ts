@@ -21,10 +21,11 @@ export class StoreCategoryUseCase {
   async run(createCategory: CreateCategoryType): Promise<CategoryType> {
     try {
       const category = await this.categoryRepository.store({
+        status: 'ACTIVE',
         ...createCategory,
       });
 
-      return category;
+      return category as CategoryType;
     } catch (error) {
       this.logger.error({
         message: error,

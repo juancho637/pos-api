@@ -26,6 +26,7 @@ export class CreateCategoriesTable1715004916423 implements MigrationInterface {
             name: 'status',
             type: 'varchar',
             isNullable: false,
+            default: true,
           },
           {
             name: 'created_at',
