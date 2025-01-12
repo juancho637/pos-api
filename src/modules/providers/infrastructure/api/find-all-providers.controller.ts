@@ -49,10 +49,20 @@ export class FindAllProvidersController {
     filterParams?: FilteringType<ProviderFilterType>[],
   ): Promise<PaginatedResourceType<Partial<ProviderType>>> {
     try {
+      this.logger.log({
+        message: 'start finding all providers',
+        context: this.context,
+      });
+
       const providers = await this.findAllProvidersUseCase.run({
         pagination: paginationParams,
         sort: sortParams,
         filters: filterParams,
+      });
+
+      this.logger.log({
+        message: `end finding all providers with ${JSON.stringify(providers)}`,
+        context: this.context,
       });
 
       return {
